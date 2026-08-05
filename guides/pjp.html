@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script src="../js/auth-guard.js"></script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PJP — Journey Planning — Bizom Help Center</title>
+<meta name="description" content="How to create a Permanent Journey Plan (PJP) in Bizom so field reps get a structured, consistent beat schedule." />
+<link rel="icon" href="../assets/img/logo/bizom-logo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css" />
+</head>
+<body data-guide="pjp">
+
+<div class="reading-progress"></div>
+
+<header class="site-header">
+  <div class="container">
+    <a href="../index.html" class="brand">
+      <img src="../assets/img/logo/bizom-logo.png" alt="Bizom" />
+    </a>
+    <nav class="main-nav" id="main-nav"></nav>
+    <div class="header-actions">
+      <div class="header-search-wrap">
+        <div class="header-search">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          <input id="header-search-input" type="text" placeholder="Search guides…" autocomplete="off" />
+        </div>
+        <div class="search-panel" id="header-search-panel"></div>
+      </div>
+      <button id="logout-btn" class="icon-btn" title="Log out" aria-label="Log out"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg></button>
+      <a href="mailto:support@mobisytechnologies.zohodesk.in" class="btn btn-primary btn-sm">Contact Support</a>
+      <button class="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+  <div class="guide-shell">
+
+    <aside class="guide-sidebar">
+      <div id="sidebar-nav-container"></div>
+      <div class="sidebar-card">
+        <h5>Still stuck?</h5>
+        <p>Our implementation team can walk you through this live.</p>
+        <a href="mailto:support@mobisytechnologies.zohodesk.in" class="btn btn-primary btn-sm" style="width:100%;">Contact Support</a>
+      </div>
+    </aside>
+
+    <main class="guide-main">
+      <div class="breadcrumb">
+        <a href="../index.html">Home</a>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 6 6 6-6 6"/></svg>
+        <span class="current">PJP — Journey Planning</span>
+      </div>
+
+      <div class="guide-header">
+        <span class="module-tag accent-blue" style="display:inline-block;">FIELD FORCE</span>
+        <h1>PJP (Permanent Journey Planning)</h1>
+        <p class="lead">A Permanent Journey Plan is a pre-defined schedule of which outlets a salesman visits on which days — the backbone of structured, consistent outlet coverage.</p>
+      </div>
+
+      <div class="guide-meta-row">
+        <div class="meta-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg> 4 min read</div>
+        <div class="meta-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg> Web &amp; MDM</div>
+        <div class="meta-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 20V10M18 20V4M6 20v-4"/></svg> Admin access needed</div>
+      </div>
+
+      <div class="toc-box">
+        <h5>On this page</h5>
+        <ol>
+          <li><a href="#create-pjp">Create a new PJP</a></li>
+          <li><a href="#mdm-pjp">Bulk upload via MDM</a></li>
+        </ol>
+      </div>
+
+      <article class="guide-content">
+
+        <div class="callout callout-note">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>
+          <p><strong>Before you start</strong>The salesman must already exist as a user, their beats must be created, and outlets must be mapped to those beats. See <a class="inline-link" href="beat-creation.html">Beat Creation &amp; Assigning</a> if you haven't done this yet.</p>
+        </div>
+
+        <h2 id="create-pjp">Steps to create a new PJP</h2>
+        <ol class="step-list">
+          <li><h4>Navigate to PJP</h4><p>Go to Admin Panel → PJP → Journey Plans → Add PJP.</p></li>
+          <li><h4>Select the user</h4>
+            <div class="data-table-wrap">
+              <table class="data-table">
+                <thead><tr><th>Field</th><th>What it means</th><th>Required</th></tr></thead>
+                <tbody>
+                  <tr><td><strong>User</strong></td><td>The salesman/field user this PJP is for</td><td>✅ Yes</td></tr>
+                  <tr><td><strong>Effective From</strong></td><td>Start date of the PJP</td><td>✅ Yes</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </li>
+          <li><h4>Define the schedule</h4><p>Assign beats to specific days of the week or month.</p>
+            <div class="data-table-wrap">
+              <table class="data-table">
+                <thead><tr><th>Field</th><th>What it means</th><th>Required</th></tr></thead>
+                <tbody>
+                  <tr><td><strong>Day</strong></td><td>Monday / Tuesday / Wednesday, etc.</td><td>✅ Yes</td></tr>
+                  <tr><td><strong>Beat</strong></td><td>The beat assigned for that day</td><td>✅ Yes</td></tr>
+                  <tr><td><strong>Visit Frequency</strong></td><td>Weekly / Fortnightly / Monthly</td><td>✅ Yes</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <figure class="shot">
+              <img src="../assets/img/screenshots/g2-image14.png" alt="Example PJP schedule mapping beats to days" loading="lazy" />
+              <figcaption>Example: a weekly PJP schedule</figcaption>
+            </figure>
+          </li>
+        </ol>
+
+        <h2 id="mdm-pjp">Bulk upload via MDM</h2>
+        <p>Setting up PJPs for a whole team? Use the PJP MDM instead of creating them one at a time.</p>
+        <div class="data-table-wrap">
+          <table class="data-table">
+            <thead><tr><th>#</th><th>Step</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>Download the MDM template for PJP</td></tr>
+              <tr><td>2</td><td>Fill in user, beat, day, and frequency details</td></tr>
+              <tr><td>3</td><td>Upload via Admin → MDM Upload</td></tr>
+              <tr><td>4</td><td>Verify upload status and fix any errors</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="download-grid">
+          <a class="download-card" href="../assets/downloads/pjp-mdm-template.xls" download>
+            <span class="dl-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 21h16"/></svg></span>
+            <span class="dl-info"><strong>PJP MDM Template</strong><span>.XLS · Ready to fill and upload</span></span>
+            <span class="dl-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M7 17 17 7M7 7h10v10"/></svg></span>
+          </a>
+        </div>
+
+        <div class="helpful-box">
+          <p>Was this guide helpful?</p>
+          <div class="helpful-actions">
+            <button aria-label="Yes, helpful"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M7 10v11M2 12v7a2 2 0 0 0 2 2h11.5a2 2 0 0 0 2-1.6l1.4-7A2 2 0 0 0 17 10H13V5a2 2 0 0 0-4 0v1.5L7 10Z"/></svg></button>
+            <button aria-label="No, not helpful"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M17 14V3M22 12V5a2 2 0 0 0-2-2H8.5a2 2 0 0 0-2 1.6l-1.4 7A2 2 0 0 0 7 14h4v5a2 2 0 0 0 4 0v-1.5l4-3.5Z"/></svg></button>
+          </div>
+        </div>
+
+      </article>
+
+      <div id="related-guides"></div>
+
+      <div class="guide-footer-nav">
+        <a href="attendance.html"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></span><span><span class="label">Previous</span>Attendance &amp; Shift Timing</span></a>
+        <a href="user-targets.html" class="to-next"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span><span><span class="label">Next Guide</span>User Targets</span></a>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-bottom">
+      <span>© 2026 Bizom · Mobisy Technologies. All rights reserved.</span>
+      <span>Internal help center — for Bizom client teams</span>
+    </div>
+  </div>
+</footer>
+
+<script src="../js/main.js"></script>
+</body>
+</html>

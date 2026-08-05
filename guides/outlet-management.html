@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script src="../js/auth-guard.js"></script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Outlet Management — Bizom Help Center</title>
+<meta name="description" content="How to add and edit outlets in Bizom via the web, app and MDM bulk upload." />
+<link rel="icon" href="../assets/img/logo/bizom-logo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css" />
+</head>
+<body data-guide="outlet-management">
+
+<div class="reading-progress"></div>
+
+<header class="site-header">
+  <div class="container">
+    <a href="../index.html" class="brand">
+      <img src="../assets/img/logo/bizom-logo.png" alt="Bizom" />
+    </a>
+    <nav class="main-nav" id="main-nav"></nav>
+    <div class="header-actions">
+      <div class="header-search-wrap">
+        <div class="header-search">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          <input id="header-search-input" type="text" placeholder="Search guides…" autocomplete="off" />
+        </div>
+        <div class="search-panel" id="header-search-panel"></div>
+      </div>
+      <button id="logout-btn" class="icon-btn" title="Log out" aria-label="Log out"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg></button>
+      <a href="mailto:support@mobisytechnologies.zohodesk.in" class="btn btn-primary btn-sm">Contact Support</a>
+      <button class="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+  <div class="guide-shell">
+
+    <aside class="guide-sidebar">
+      <div id="sidebar-nav-container"></div>
+      <div class="sidebar-card">
+        <h5>Still stuck?</h5>
+        <p>Our implementation team can walk you through this live.</p>
+        <a href="mailto:support@mobisytechnologies.zohodesk.in" class="btn btn-primary btn-sm" style="width:100%;">Contact Support</a>
+      </div>
+    </aside>
+
+    <main class="guide-main">
+      <div class="breadcrumb">
+        <a href="../index.html">Home</a>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 6 6 6-6 6"/></svg>
+        <span class="current">Outlet Management</span>
+      </div>
+
+      <div class="guide-header">
+        <span class="module-tag accent-blue" style="display:inline-block;">OUTLETS</span>
+        <h1>Outlet Management</h1>
+        <p class="lead">Add new outlets and edit existing ones through the app, the web dashboard, or in bulk with an MDM upload — plus how to customise the Add Outlet form for your own fields.</p>
+      </div>
+
+      <div class="guide-meta-row">
+        <div class="meta-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg> 6 min read</div>
+        <div class="meta-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg> Web, App &amp; MDM</div>
+        <div class="meta-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 20V10M18 20V4M6 20v-4"/></svg> Beginner friendly</div>
+      </div>
+
+      <div class="toc-box">
+        <h5>On this page</h5>
+        <ol>
+          <li><a href="#customise-form">Customise the Add Outlet form</a></li>
+          <li><a href="#rename-fields">Rename existing fields</a></li>
+          <li><a href="#mdm-outlet">Add outlets in bulk via MDM</a></li>
+          <li><a href="#update-outlet">Updating outlets via MDM</a></li>
+        </ol>
+      </div>
+
+      <article class="guide-content">
+
+        <h2 id="customise-form">1. Customise the Add Outlet form</h2>
+        <p>The Add Outlet / Edit Outlet screen is fully customisable — even fields in the standard outlets table can be renamed, reordered, made mandatory, or hidden. This is controlled from the <strong>Basic Outlet Form</strong>.</p>
+        <p>From this form you can:</p>
+        <ul>
+          <li>Rename existing fields</li>
+          <li>Add basic outlet fields that aren't configured yet</li>
+          <li>Remove fields you don't need</li>
+          <li>Change the order fields appear in</li>
+          <li>Add input validation for any field</li>
+          <li>Make a field mandatory, editable, or read-only</li>
+        </ul>
+
+        <ol class="step-list">
+          <li><h4>Log in to the Bizom web portal</h4><p>Use your admin credentials.</p></li>
+          <li><h4>Go to Account → Settings</h4></li>
+          <li><h4>Open the Form Settings tab</h4></li>
+          <li><h4>Click Basic Outlet Form</h4><p>This opens the field configuration screen shown below.</p></li>
+        </ol>
+
+        <figure class="shot">
+          <img src="../assets/img/screenshots/image1.png" alt="Basic Outlet Form settings screen in Bizom" loading="lazy" />
+          <figcaption>Basic Outlet Form — Settings → Form Settings → Basic Outlet Form</figcaption>
+        </figure>
+
+        <div class="data-table-wrap">
+          <table class="data-table">
+            <thead><tr><th>Field</th><th>What it does</th></tr></thead>
+            <tbody>
+              <tr><td><code>Outlet Columns</code></td><td>Dropdown of extra columns available to add to the Add Outlet screen. Use <strong>Add Column</strong> to bring one in.</td></tr>
+              <tr><td><code>Column Name</code></td><td>The underlying column name in the Bizom outlets table.</td></tr>
+              <tr><td><code>Column Alias</code></td><td>The label shown on the Add Outlet screen — this is what you rename.</td></tr>
+              <tr><td><code>Sequence</code></td><td>Controls the order the field appears in, e.g. Address right after Name.</td></tr>
+              <tr><td><code>Type</code></td><td>The kind of data the field accepts.</td></tr>
+              <tr><td><code>Regex</code></td><td>An optional pattern used to validate what's typed in. Pair it with an Error Message.</td></tr>
+              <tr><td><code>Error Message</code></td><td>Shown when the entered value fails the regex validation.</td></tr>
+              <tr><td><code>Required</code></td><td>Tick to make the field mandatory.</td></tr>
+              <tr><td><code>For Device</code></td><td>Tick to also show this field on the mobile app.</td></tr>
+              <tr><td><code>Editable</code></td><td>Tick to let users type into this field.</td></tr>
+              <tr><td><code>Action</code></td><td>Click the <strong>−</strong> icon to remove a field.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="rename-fields">2. Rename existing fields</h2>
+        <p>You can relabel any field on the Add Outlet / Edit Outlet screen without touching the underlying data.</p>
+        <ol class="step-list">
+          <li><h4>Open the Basic Outlet Form</h4></li>
+          <li><h4>Update the Column Alias</h4><p>For example, changing "Address" to "Outlet Address".</p>
+            <figure class="shot">
+              <img src="../assets/img/screenshots/image2.png" alt="Renaming a field's Column Alias in the Basic Outlet Form" loading="lazy" />
+              <figcaption>Renaming a field via its Column Alias</figcaption>
+            </figure>
+          </li>
+          <li><h4>Click Update</h4><p>You'll see "Basic Outlet Form is Updated". The new label now appears wherever the field is shown.</p></li>
+        </ol>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+          <figure class="shot">
+            <img src="../assets/img/screenshots/image3.png" alt="Renamed field visible on the Add Outlet screen" loading="lazy" />
+            <figcaption>Reflected on Add Outlet</figcaption>
+          </figure>
+          <figure class="shot">
+            <img src="../assets/img/screenshots/image4.png" alt="Renamed field visible on the Edit Outlet screen" loading="lazy" />
+            <figcaption>Reflected on Edit Outlet</figcaption>
+          </figure>
+        </div>
+
+        <h2 id="mdm-outlet">3. Add outlets in bulk via MDM</h2>
+        <p>For onboarding many outlets at once, use the Outlets MDM upload instead of adding them one by one on the web.</p>
+        <ol class="step-list">
+          <li><h4>Go to your MDM listing</h4><p>Navigate to <code>yourcompanyurl.bizom.in/mdms</code></p></li>
+          <li><h4>Search for "Outlets MDM upload"</h4></li>
+          <li><h4>Download the template and fill in the mandatory fields</h4></li>
+          <li><h4>Upload the filled file and review the validation results</h4></li>
+        </ol>
+
+        <div class="callout callout-tip">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 18h6M10 22h4M12 2a6 6 0 0 0-4 10.5c.7.6 1 1.3 1 2.5h6c0-1.2.3-1.9 1-2.5A6 6 0 0 0 12 2Z"/></svg>
+          <p><strong>Sample file</strong>Always start from the downloaded template rather than building your own — required column names are specific to your Bizom instance.</p>
+        </div>
+
+        <details class="field-ref">
+          <summary>Mandatory fields for the Outlets MDM</summary>
+          <div class="field-ref-body">
+            <div class="data-table-wrap">
+              <table class="data-table">
+                <thead><tr><th>Field</th><th>Notes</th></tr></thead>
+                <tbody>
+                  <tr><td><code>name</code></td><td>Outlet name, max 255 characters.</td></tr>
+                  <tr><td><code>address</code></td><td>Max 500 characters.</td></tr>
+                  <tr><td><code>area_id</code> &amp; name</td><td>Must exist in the Areas table — create the area first if it's new.</td></tr>
+                  <tr><td><code>city_id</code> &amp; name</td><td>Must exist in the Cities table and belong to the correct district.</td></tr>
+                  <tr><td><code>district_id</code> &amp; name</td><td>Must exist in Districts and belong to the correct state.</td></tr>
+                  <tr><td><code>state_id</code> &amp; name</td><td>Must exist in the States table.</td></tr>
+                  <tr><td><code>outlet_type</code></td><td>e.g. Grocery, Departmental Store, Modern Trade, Pharmacy, etc.</td></tr>
+                  <tr><td><code>outlet_categories</code></td><td>Business category tagging for the outlet.</td></tr>
+                  <tr><td><code>phoneno</code></td><td>Must be a valid phone number.</td></tr>
+                  <tr><td><code>pin</code></td><td>Numeric; validated against the area/town if pincode mapping is enabled.</td></tr>
+                  <tr><td><code>erp_id</code></td><td>Optional — only needed if you integrate with an external ERP.</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p style="margin-top:14px;">This is the essential subset — the full template has 100+ optional columns (GST, banking, KYC, credit terms, etc.) for advanced use cases. Ask support for the complete field reference if you need one of those.</p>
+          </div>
+        </details>
+
+        <h2 id="update-outlet">4. Updating outlets via MDM</h2>
+        <p>The same MDM area supports bulk updates to outlets you've already created — useful for correcting addresses, re-mapping areas, changing outlet status, or fixing contact details at scale.</p>
+        <ol class="step-list">
+          <li><h4>Go to <code>yourcompanyurl.bizom.in/mdms</code> and open "Update Outlets"</h4></li>
+          <li><h4>Include the outlet's <code>id</code></h4><p>This is mandatory for an update — it's how Bizom knows which record to change. Only the columns you fill in get updated; leave the rest blank.</p></li>
+          <li><h4>Upload and confirm</h4><p>Errors are shown row-by-row so you can fix and re-upload just the failed rows.</p></li>
+        </ol>
+
+        <div class="callout callout-note">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>
+          <p><strong>Note</strong>Some fields — like an outlet's warehouse mapping — can't be changed through this update MDM. Reassignment flows (like <code>appendareaID</code> / <code>removeareaID</code>) exist for specific cases; contact support if you're not sure which applies to you.</p>
+        </div>
+
+        <div class="helpful-box">
+          <p>Was this guide helpful?</p>
+          <div class="helpful-actions">
+            <button aria-label="Yes, helpful"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M7 10v11M2 12v7a2 2 0 0 0 2 2h11.5a2 2 0 0 0 2-1.6l1.4-7A2 2 0 0 0 17 10H13V5a2 2 0 0 0-4 0v1.5L7 10Z"/></svg></button>
+            <button aria-label="No, not helpful"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M17 14V3M22 12V5a2 2 0 0 0-2-2H8.5a2 2 0 0 0-2 1.6l-1.4 7A2 2 0 0 0 7 14h4v5a2 2 0 0 0 4 0v-1.5l4-3.5Z"/></svg></button>
+          </div>
+        </div>
+
+      </article>
+
+      <div id="related-guides"></div>
+
+      <div class="guide-footer-nav">
+        <a href="../index.html"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></span><span><span class="label">Back to</span>All Guides</span></a>
+        <a href="distributor-warehouse.html" class="to-next"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span><span><span class="label">Next Guide</span>Distributor &amp; Warehouse</span></a>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-bottom">
+      <span>© 2026 Bizom · Mobisy Technologies. All rights reserved.</span>
+      <span>Internal help center — for Bizom client teams</span>
+    </div>
+  </div>
+</footer>
+
+<script src="../js/main.js"></script>
+</body>
+</html>

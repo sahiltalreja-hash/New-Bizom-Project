@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script src="js/auth-guard.js"></script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Search — Bizom Help Center</title>
+<meta name="description" content="Search every Bizom Help Center guide." />
+<link rel="icon" href="assets/img/logo/bizom-logo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<div class="reading-progress"></div>
+
+<header class="site-header">
+  <div class="container">
+    <a href="index.html" class="brand">
+      <img src="assets/img/logo/bizom-logo.png" alt="Bizom" />
+    </a>
+    <nav class="main-nav" id="main-nav"></nav>
+    <div class="header-actions">
+      <div class="header-search-wrap">
+        <div class="header-search">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          <input id="header-search-input" type="text" placeholder="Search guides…" autocomplete="off" />
+        </div>
+        <div class="search-panel" id="header-search-panel"></div>
+      </div>
+      <button id="logout-btn" class="icon-btn" title="Log out" aria-label="Log out"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg></button>
+      <a href="mailto:support@mobisytechnologies.zohodesk.in" class="btn btn-primary btn-sm">Contact Support</a>
+      <button class="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<section class="search-hero">
+  <div class="container">
+    <span class="kicker">Search</span>
+    <h1>Search the Help Center</h1>
+    <div class="search-page-bar">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      <input id="search-page-input" type="text" placeholder="Try “create a scheme” or “add outlet”…" autocomplete="off" />
+      <button id="search-page-btn" class="btn btn-primary">Search</button>
+    </div>
+    <div class="search-filters" id="search-filters"></div>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0;">
+  <div class="container">
+    <p class="search-meta" id="search-meta"></p>
+    <div class="search-results-list" id="search-results-list"></div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-bottom">
+      <span>© 2026 Bizom · Mobisy Technologies. All rights reserved.</span>
+      <span>Internal help center — for Bizom client teams</span>
+    </div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>

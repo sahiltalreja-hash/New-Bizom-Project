@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script src="../js/auth-guard.js"></script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Beat Creation &amp; Assigning — Bizom Help Center</title>
+<meta name="description" content="How to create beats and map them to areas in Bizom, via the web and via MDM." />
+<link rel="icon" href="../assets/img/logo/bizom-logo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css" />
+</head>
+<body data-guide="beat-creation">
+
+<div class="reading-progress"></div>
+
+<header class="site-header">
+  <div class="container">
+    <a href="../index.html" class="brand">
+      <img src="../assets/img/logo/bizom-logo.png" alt="Bizom" />
+    </a>
+    <nav class="main-nav" id="main-nav"></nav>
+    <div class="header-actions">
+      <div class="header-search-wrap">
+        <div class="header-search">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          <input id="header-search-input" type="text" placeholder="Search guides…" autocomplete="off" />
+        </div>
+        <div class="search-panel" id="header-search-panel"></div>
+      </div>
+      <button id="logout-btn" class="icon-btn" title="Log out" aria-label="Log out"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg></button>
+      <a href="mailto:support@mobisytechnologies.zohodesk.in" class="btn btn-primary btn-sm">Contact Support</a>
+      <button class="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+  <div class="guide-shell">
+
+    <aside class="guide-sidebar">
+      <div id="sidebar-nav-container"></div>
+      <div class="sidebar-card">
+        <h5>Still stuck?</h5>
+        <p>Our implementation team can walk you through this live.</p>
+        <a href="mailto:support@mobisytechnologies.zohodesk.in" class="btn btn-primary btn-sm" style="width:100%;">Contact Support</a>
+      </div>
+    </aside>
+
+    <main class="guide-main">
+      <div class="breadcrumb">
+        <a href="../index.html">Home</a>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 6 6 6-6 6"/></svg>
+        <span class="current">Beat Creation &amp; Assigning</span>
+      </div>
+
+      <div class="guide-header">
+        <span class="module-tag accent-sky" style="display:inline-block;">FIELD OPERATIONS</span>
+        <h1>Beat Creation &amp; Assigning</h1>
+        <p class="lead">A beat is the route a salesperson follows — the outlets they visit, in order, on a given day. Set these up correctly and your team's daily journey plans build themselves.</p>
+      </div>
+
+      <div class="guide-meta-row">
+        <div class="meta-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg> 3 min read</div>
+        <div class="meta-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg> Web &amp; MDM</div>
+        <div class="meta-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 20V10M18 20V4M6 20v-4"/></svg> Beginner friendly</div>
+      </div>
+
+      <div class="toc-box">
+        <h5>On this page</h5>
+        <ol>
+          <li><a href="#create-beat">Create a beat</a></li>
+          <li><a href="#mdm-beat">Beat MDM templates</a></li>
+          <li><a href="#which-template">Which template should you use?</a></li>
+          <li><a href="#assign-beats">Assigning beats to users</a></li>
+        </ol>
+      </div>
+
+      <article class="guide-content">
+
+        <h2 id="create-beat">1. Create a beat</h2>
+        <ol class="step-list">
+          <li><h4>Open the Add Beat form</h4><p>Go to <code>yourcompanyurl.bizom.in/beats/add</code></p></li>
+          <li><h4>Fill in the details</h4>
+            <div class="data-table-wrap">
+              <table class="data-table">
+                <thead><tr><th>Field</th><th>What to enter</th></tr></thead>
+                <tbody>
+                  <tr><td><strong>Beat Name</strong></td><td>Name of the beat you want to create.</td></tr>
+                  <tr><td><strong>Area</strong></td><td>The area this beat belongs to.</td></tr>
+                  <tr><td><strong>ERP ID</strong></td><td>Optional — only if your system uses ERP integration.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </li>
+          <li><h4>Submit the form to save the new beat</h4></li>
+        </ol>
+
+        <h2 id="mdm-beat">2. Beat MDM templates</h2>
+        <p>Two MDM templates cover beat management:</p>
+        <div class="data-table-wrap">
+          <table class="data-table">
+            <thead><tr><th>Template</th><th>Purpose</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Beats</strong></td><td>Upload and update beats in bulk.</td></tr>
+              <tr><td><strong>Beat Area Mapping</strong></td><td>Map beats to areas.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="download-grid">
+          <a class="download-card" href="../assets/downloads/beats-mdm-template.xls" download>
+            <span class="dl-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 21h16"/></svg></span>
+            <span class="dl-info"><strong>Beats MDM Template</strong><span>.XLS · Ready to fill and upload</span></span>
+            <span class="dl-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M7 17 17 7M7 7h10v10"/></svg></span>
+          </a>
+        </div>
+
+        <h2 id="which-template">3. Which template should you use?</h2>
+        <div class="data-table-wrap">
+          <table class="data-table">
+            <thead><tr><th>You want to…</th><th>Use this MDM</th></tr></thead>
+            <tbody>
+              <tr><td>Add new beats in bulk</td><td><span class="tag">Beats</span></td></tr>
+              <tr><td>Map beats to areas</td><td><span class="tag">Beat Area Mapping</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout callout-tip">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 18h6M10 22h4M12 2a6 6 0 0 0-4 10.5c.7.6 1 1.3 1 2.5h6c0-1.2.3-1.9 1-2.5A6 6 0 0 0 12 2Z"/></svg>
+          <p><strong>Tip</strong>Set up your areas before your beats — a beat always maps to an area, so creating them in that order avoids rework.</p>
+        </div>
+
+        <h2 id="assign-beats">4. Assigning beats to users</h2>
+        <p>Creating a beat is only half the job — it needs outlets mapped to it, and a salesperson assigned to cover it.</p>
+        <figure class="shot">
+          <img src="../assets/img/screenshots/g2-image15.png" alt="Assigning beats to a user" loading="lazy" />
+          <figcaption>Beats sit between areas and the users who cover them</figcaption>
+        </figure>
+        <ol class="step-list">
+          <li><h4>Create the beat via MDM</h4><p>Use the <strong>Beats</strong> MDM template (see above) if you haven't already.</p></li>
+          <li><h4>Map outlets to the beat</h4><p>Use the <strong>Map outlets to beats</strong> MDM. You only need to enter the <code>Outlet ID</code> and <code>Beat ID</code> to map them.</p></li>
+          <li><h4>Assign the beat to a user</h4><p>Once outlets are mapped, assign the beat to the salesperson who'll cover it from the <strong>PJP</strong> screen — this is also where you set which days of the week they visit it.</p></li>
+        </ol>
+
+        <div class="helpful-box">
+          <p>Was this guide helpful?</p>
+          <div class="helpful-actions">
+            <button aria-label="Yes, helpful"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M7 10v11M2 12v7a2 2 0 0 0 2 2h11.5a2 2 0 0 0 2-1.6l1.4-7A2 2 0 0 0 17 10H13V5a2 2 0 0 0-4 0v1.5L7 10Z"/></svg></button>
+            <button aria-label="No, not helpful"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M17 14V3M22 12V5a2 2 0 0 0-2-2H8.5a2 2 0 0 0-2 1.6l-1.4 7A2 2 0 0 0 7 14h4v5a2 2 0 0 0 4 0v-1.5l4-3.5Z"/></svg></button>
+          </div>
+        </div>
+
+      </article>
+
+      <div id="related-guides"></div>
+
+      <div class="guide-footer-nav">
+        <a href="area-creation.html"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></span><span><span class="label">Previous</span>Area Creation &amp; Assigning</span></a>
+        <a href="outlet-categories.html" class="to-next"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span><span><span class="label">Next Guide</span>Outlet Categories</span></a>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-bottom">
+      <span>© 2026 Bizom · Mobisy Technologies. All rights reserved.</span>
+      <span>Internal help center — for Bizom client teams</span>
+    </div>
+  </div>
+</footer>
+
+<script src="../js/main.js"></script>
+</body>
+</html>

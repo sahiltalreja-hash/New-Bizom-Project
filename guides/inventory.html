@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script src="../js/auth-guard.js"></script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Inventory — Bizom Help Center</title>
+<meta name="description" content="How to view, price, audit and upload inventory in Bizom, via the web and via MDM." />
+<link rel="icon" href="../assets/img/logo/bizom-logo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css" />
+</head>
+<body data-guide="inventory">
+
+<div class="reading-progress"></div>
+
+<header class="site-header">
+  <div class="container">
+    <a href="../index.html" class="brand">
+      <img src="../assets/img/logo/bizom-logo.png" alt="Bizom" />
+    </a>
+    <nav class="main-nav" id="main-nav"></nav>
+    <div class="header-actions">
+      <div class="header-search-wrap">
+        <div class="header-search">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          <input id="header-search-input" type="text" placeholder="Search guides…" autocomplete="off" />
+        </div>
+        <div class="search-panel" id="header-search-panel"></div>
+      </div>
+      <button id="logout-btn" class="icon-btn" title="Log out" aria-label="Log out"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg></button>
+      <a href="mailto:support@mobisytechnologies.zohodesk.in" class="btn btn-primary btn-sm">Contact Support</a>
+      <button class="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+  <div class="guide-shell">
+
+    <aside class="guide-sidebar">
+      <div id="sidebar-nav-container"></div>
+      <div class="sidebar-card">
+        <h5>Still stuck?</h5>
+        <p>Our implementation team can walk you through this live.</p>
+        <a href="mailto:support@mobisytechnologies.zohodesk.in" class="btn btn-primary btn-sm" style="width:100%;">Contact Support</a>
+      </div>
+    </aside>
+
+    <main class="guide-main">
+      <div class="breadcrumb">
+        <a href="../index.html">Home</a>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 6 6 6-6 6"/></svg>
+        <span class="current">Inventory</span>
+      </div>
+
+      <div class="guide-header">
+        <span class="module-tag accent-amber" style="display:inline-block;">STOCK &amp; PRICING</span>
+        <h1>Inventory</h1>
+        <p class="lead">View stock across your network, set warehouse-specific pricing, reconcile counts with an audit, add fresh stock, and bulk-upload inventory via MDM.</p>
+      </div>
+
+      <div class="guide-meta-row">
+        <div class="meta-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg> 8 min read</div>
+        <div class="meta-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg> Web &amp; MDM</div>
+        <div class="meta-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 20V10M18 20V4M6 20v-4"/></svg> Warehouse/Distributor Manager+</div>
+      </div>
+
+      <div class="toc-box">
+        <h5>On this page</h5>
+        <ol>
+          <li><a href="#view-inventory">Viewing inventory</a></li>
+          <li><a href="#depot-price">Depot-wise pricing via MDM</a></li>
+          <li><a href="#inventory-audit">Inventory audit</a></li>
+          <li><a href="#add-inventory">Adding inventory</a></li>
+          <li><a href="#mdm-inventory">Bulk upload via MDM</a></li>
+        </ol>
+      </div>
+
+      <article class="guide-content">
+
+        <h2 id="view-inventory">1. Viewing inventory</h2>
+        <p>All inventory and its mappings live on the Inventory page, where you can activate/deactivate products and check in-transit stock.</p>
+        <ol class="step-list">
+          <li><h4>Log in to the web as admin</h4></li>
+          <li><h4>Go to <code>.../inventories</code></h4></li>
+          <li><h4>Apply filters</h4><p>Zone, Subzone, Warehouse/Distributor and Inventory Status. Click <strong>Download</strong> to export the results as a .csv.</p></li>
+          <li><h4>Deactivate a product if needed</h4><p>Click <strong>Deactivate</strong> against the specific SKU.</p></li>
+        </ol>
+        <figure class="shot">
+          <img src="../assets/img/screenshots/image18.png" alt="Inventory page showing filters and in-transit stock" loading="lazy" />
+          <figcaption>Inventory page — filters and in-transit stock</figcaption>
+        </figure>
+        <p>To see transactions for a distributor or inventory location for the day, head to <code>/inventories/inventorytransactionreport</code>.</p>
+
+        <h2 id="depot-price">2. Depot-wise pricing via MDM</h2>
+        <p>You can set a different MRP, price and VAT for the same SKU across different warehouses or distributors — useful when pricing varies by outlet category, distributor, or region.</p>
+
+        <div class="callout callout-note">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>
+          <p><strong>Before you start</strong>Both the warehouses/distributors and the SKUs involved must already exist in Bizom.</p>
+        </div>
+
+        <ol class="step-list">
+          <li><h4>Open the MDM listing</h4><p>Go to <code>http://&lt;DomainName&gt;.bizom.in/mdms</code></p>
+            <figure class="shot">
+              <img src="../assets/img/screenshots/image19.png" alt="MDM listing page" loading="lazy" />
+              <figcaption>All MDM templates</figcaption>
+            </figure>
+          </li>
+          <li><h4>Click Upload on "Inventory MDM upload and set depot price"</h4></li>
+          <li><h4>Download the sample spreadsheet, fill it, and select it back</h4>
+            <figure class="shot">
+              <img src="../assets/img/screenshots/image20.png" alt="Uploading the filled depot price MDM spreadsheet" loading="lazy" />
+              <figcaption>Selecting the filled template for validation</figcaption>
+            </figure>
+          </li>
+          <li><h4>Fix any validation errors, then click Save data</h4><p>Nothing saves until every error is resolved.</p></li>
+          <li><h4>View what was uploaded</h4><p>Click the Inventory tab, pick the zone and distributor, or check <code>.../inventories/inventorytransactionreport</code> directly.</p>
+            <figure class="shot">
+              <img src="../assets/img/screenshots/image21.png" alt="Viewing uploaded depot-wise inventory" loading="lazy" />
+              <figcaption>Confirming the upload on the Inventory tab</figcaption>
+            </figure>
+          </li>
+        </ol>
+
+        <div class="download-grid">
+          <a class="download-card" href="../assets/downloads/inventory-upload-depot-price-mdm-template.xls" download>
+            <span class="dl-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 21h16"/></svg></span>
+            <span class="dl-info"><strong>Inventory Upload &amp; Depot Price Template</strong><span>.XLS · Ready to fill and upload</span></span>
+            <span class="dl-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M7 17 17 7M7 7h10v10"/></svg></span>
+          </a>
+        </div>
+
+        <details class="field-ref">
+          <summary>Key columns for depot-wise MRP &amp; price</summary>
+          <div class="field-ref-body">
+            <div class="data-table-wrap">
+              <table class="data-table">
+                <thead><tr><th>Column</th><th>Description</th></tr></thead>
+                <tbody>
+                  <tr><td><code>skunit_id</code></td><td>SKU you're pricing.</td></tr>
+                  <tr><td><code>warehouse_id</code></td><td>Warehouse/distributor this price applies to.</td></tr>
+                  <tr><td><code>mrp</code></td><td>MRP of the SKU at this warehouse.</td></tr>
+                  <tr><td><code>price</code></td><td>Price of the SKU (inclusive of GST) at this warehouse.</td></tr>
+                  <tr><td><code>focussku</code></td><td>1 if this is a focus SKU, else 0.</td></tr>
+                  <tr><td><code>availableinventory(cases/pieces)</code></td><td>Stock available, split by cases and pieces.</td></tr>
+                  <tr><td><code>batch_id</code> / <code>batch_name</code></td><td>Batch reference, if the SKU is batch-tracked. If you set a batch name, its expiry date is required too.</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p style="margin-top:14px;"><strong>Good to know:</strong> once an MRP/price mapping is uploaded for a warehouse, it can't be edited by re-uploading — changes to existing mappings will error out with the affected <code>warehouse_id</code>/<code>skunit_id</code>.</p>
+          </div>
+        </details>
+
+        <h3>Two ways to use this MDM</h3>
+        <ul>
+          <li><strong>New SKU or new warehouse:</strong> every time you add either one, upload its inventory so it appears on the order screen (upload as 0 if the actual count isn't known yet, just to make the SKU orderable).</li>
+          <li><strong>Different pricing per distributor/outlet type:</strong> use the same MDM with <code>entitytype</code> set to warehouses, outlet_types, outlet_categories, warehousecategories or warehousebusinesstype, and <code>entitytype ID</code> set to 0 for "all" or a specific ID for one segment.</li>
+        </ul>
+
+        <div class="download-grid">
+          <a class="download-card" href="../assets/downloads/set-depot-mrp-price-vat-mdm-template.xls" download>
+            <span class="dl-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 21h16"/></svg></span>
+            <span class="dl-info"><strong>Set Depot MRP, Price &amp; VAT Template</strong><span>.XLS · One warehouse at a time</span></span>
+            <span class="dl-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M7 17 17 7M7 7h10v10"/></svg></span>
+          </a>
+          <a class="download-card" href="../assets/downloads/mrp-vat-price-by-entity-level-mdm-template.xls" download>
+            <span class="dl-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 21h16"/></svg></span>
+            <span class="dl-info"><strong>MRP/VAT/Price by Entity Level Template</strong><span>.XLS · Outlet type, category or warehouse level</span></span>
+            <span class="dl-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M7 17 17 7M7 7h10v10"/></svg></span>
+          </a>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px;">
+          <figure class="shot">
+            <img src="../assets/img/screenshots/image24.png" alt="Example: different pricing per outlet for the same distributor" loading="lazy" />
+            <figcaption>Per-outlet pricing example</figcaption>
+          </figure>
+          <figure class="shot">
+            <img src="../assets/img/screenshots/image25.png" alt="Example: pricing by outlet category" loading="lazy" />
+            <figcaption>Per-outlet-category pricing</figcaption>
+          </figure>
+          <figure class="shot">
+            <img src="../assets/img/screenshots/image26.png" alt="Example: warehouse-level primary pricing" loading="lazy" />
+            <figcaption>Per-distributor primary pricing</figcaption>
+          </figure>
+        </div>
+
+        <h2 id="inventory-audit">3. Inventory audit</h2>
+        <p>Inventory audit reconciles what Bizom shows against physical stock — for direct/counter sales made outside Bizom, returns received outside Bizom, or stock moving from saleable to non-saleable (damaged, expired, lost).</p>
+        <p>It tracks four levels of stock at each warehouse: <strong>Current</strong>, <strong>Incoming</strong>, <strong>Outgoing</strong>, and lets you set the <strong>Closing</strong> stock.</p>
+
+        <div class="callout callout-tip">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 18h6M10 22h4M12 2a6 6 0 0 0-4 10.5c.7.6 1 1.3 1 2.5h6c0-1.2.3-1.9 1-2.5A6 6 0 0 0 12 2Z"/></svg>
+          <p><strong>Before you start</strong>Add your audit reasons at <code>/reasons/add</code> using the category "inventory_audit" — you'll need to select one to complete an audit.</p>
+          <figure class="shot" style="margin-top:12px; margin-bottom:0;">
+            <img src="../assets/img/screenshots/image27.png" alt="Adding inventory audit reasons" loading="lazy" />
+            <figcaption>Adding audit reasons</figcaption>
+          </figure>
+        </div>
+
+        <ol class="step-list">
+          <li><h4>Log in as Admin, Warehouse Manager or Distributor Manager</h4></li>
+          <li><h4>Go to <code>.../inventories/inventoryaudit</code></h4><p>A New vs Old UI toggle sits at the top-right — your preference is remembered across logins.</p>
+            <figure class="shot">
+              <img src="../assets/img/screenshots/image28.png" alt="Inventory Audit page" loading="lazy" />
+              <figcaption>Inventory Audit page</figcaption>
+            </figure>
+          </li>
+          <li><h4>Filter and choose Saleable or NonSaleable stock</h4><p>Zone, Subzone, Warehouse/Distributor. Saleable is selected by default.</p></li>
+          <li><h4>Review and update the closing stock per SKU</h4><p>Increases show in amber, decreases in red. SKUs with multiple batches appear as separate lines. The footer totals lines changed and the overall value impact.</p></li>
+          <li><h4>Pick a reason and click Complete Audit</h4><p>You'll see a confirmation with total variance, SKUs updated, and adjusted lines before it's final.</p>
+            <figure class="shot">
+              <img src="../assets/img/screenshots/image29.png" alt="Completing an inventory audit" loading="lazy" />
+              <figcaption>Completing the audit</figcaption>
+            </figure>
+            <figure class="shot">
+              <img src="../assets/img/screenshots/image30.png" alt="Inventory audit confirmation summary" loading="lazy" />
+              <figcaption>Confirmation summary before finalising</figcaption>
+            </figure>
+          </li>
+        </ol>
+
+        <h2 id="add-inventory">4. Adding inventory</h2>
+        <p>Use this when new stock physically arrives and needs to be added against a batch.</p>
+        <ol class="step-list">
+          <li><h4>Go to <code>.../inventories/add</code></h4><p>The same Old UI / New UI toggle applies here.</p></li>
+          <li><h4>Apply your usual filters (Zone, Subzone, etc.)</h4></li>
+          <li><h4>Select or create a batch</h4><p>Quantity can only be entered once a batch is chosen — Bizom will alert you if you try to enter quantity first.</p>
+            <figure class="shot">
+              <img src="../assets/img/screenshots/image31.png" alt="Selecting a batch and entering quantity" loading="lazy" />
+              <figcaption>Batch selection and quantity entry</figcaption>
+            </figure>
+          </li>
+          <li><h4>Click Submit Inventory</h4>
+            <figure class="shot">
+              <img src="../assets/img/screenshots/image32.png" alt="Submitting inventory addition" loading="lazy" />
+              <figcaption>Submit Inventory</figcaption>
+            </figure>
+          </li>
+          <li><h4>Confirm the addition</h4><p>Enter the Invoice ID, confirm the seller (auto-selected if Bill-to-Ship-to is in use), optionally attach a document (PDF, JPG or PNG), then click Submit.</p>
+            <figure class="shot">
+              <img src="../assets/img/screenshots/image33.png" alt="Confirm Inventory Addition popup" loading="lazy" />
+              <figcaption>Confirm Inventory Addition</figcaption>
+            </figure>
+          </li>
+        </ol>
+
+        <h2 id="mdm-inventory">5. Bulk inventory upload via MDM</h2>
+        <p>For onboarding stock across many SKUs and warehouses at once, use the Inventory MDM upload instead of the web form.</p>
+        <ol class="step-list">
+          <li><h4>Search "Inventory mdm upload" under MDMs</h4><p>Go to <code>yourcompanyurl.bizom.in/mdms</code></p></li>
+          <li><h4>Download the template and fill it in</h4><p>Column headers are based on what your instance needs.</p>
+            <figure class="shot">
+              <img src="../assets/img/screenshots/image34.png" alt="Inventory MDM template headers" loading="lazy" />
+              <figcaption>Template headers to fill</figcaption>
+            </figure>
+          </li>
+          <li><h4>Group rows by warehouse ID</h4><p>Each <code>warehouse_id</code> is unique — list every SKU's details underneath it.</p>
+            <figure class="shot">
+              <img src="../assets/img/screenshots/image35.png" alt="Example filled inventory MDM rows grouped by warehouse" loading="lazy" />
+              <figcaption>Example: rows grouped by warehouse</figcaption>
+            </figure>
+          </li>
+          <li><h4>Save as Excel and upload</h4><p>Choose the file in the browser and submit.</p></li>
+        </ol>
+
+        <details class="field-ref">
+          <summary>Key fields for the Inventory MDM</summary>
+          <div class="field-ref-body">
+            <div class="data-table-wrap">
+              <table class="data-table">
+                <thead><tr><th>Field</th><th>Notes</th></tr></thead>
+                <tbody>
+                  <tr><td><code>Warehouse_ID</code></td><td>Bizom ID of the warehouse/distributor you're uploading stock for.</td></tr>
+                  <tr><td><code>Skunit_ID</code></td><td>Bizom ID of the SKU.</td></tr>
+                  <tr><td><code>Availableinventory(cases)</code></td><td>Stock in cases. Upload 0 if the real count is unknown yet — this still makes the SKU orderable.</td></tr>
+                  <tr><td><code>Availableinventory(units)</code></td><td>Stock in units.</td></tr>
+                  <tr><td><code>Alert Level</code></td><td>Threshold below which a low-inventory warning is shown.</td></tr>
+                  <tr><td><code>Is Active</code></td><td><code>1</code> to activate/add the SKU at this warehouse, <code>0</code> to deactivate it.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </details>
+
+        <div class="helpful-box">
+          <p>Was this guide helpful?</p>
+          <div class="helpful-actions">
+            <button aria-label="Yes, helpful"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M7 10v11M2 12v7a2 2 0 0 0 2 2h11.5a2 2 0 0 0 2-1.6l1.4-7A2 2 0 0 0 17 10H13V5a2 2 0 0 0-4 0v1.5L7 10Z"/></svg></button>
+            <button aria-label="No, not helpful"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M17 14V3M22 12V5a2 2 0 0 0-2-2H8.5a2 2 0 0 0-2 1.6l-1.4 7A2 2 0 0 0 7 14h4v5a2 2 0 0 0 4 0v-1.5l4-3.5Z"/></svg></button>
+          </div>
+        </div>
+
+      </article>
+
+      <div id="related-guides"></div>
+
+      <div class="guide-footer-nav">
+        <a href="pops.html"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></span><span><span class="label">Previous</span>POPs (Marketing Collateral)</span></a>
+        <a href="grn.html" class="to-next"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span><span><span class="label">Next Guide</span>GRN (Goods Received Note)</span></a>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-bottom">
+      <span>© 2026 Bizom · Mobisy Technologies. All rights reserved.</span>
+      <span>Internal help center — for Bizom client teams</span>
+    </div>
+  </div>
+</footer>
+
+<script src="../js/main.js"></script>
+</body>
+</html>

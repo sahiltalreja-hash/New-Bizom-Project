@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script src="../js/auth-guard.js"></script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Attendance &amp; Shift Timing — Bizom Help Center</title>
+<meta name="description" content="How to configure shift timings and attendance windows for roles and designations in Bizom." />
+<link rel="icon" href="../assets/img/logo/bizom-logo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css" />
+</head>
+<body data-guide="attendance">
+
+<div class="reading-progress"></div>
+
+<header class="site-header">
+  <div class="container">
+    <a href="../index.html" class="brand">
+      <img src="../assets/img/logo/bizom-logo.png" alt="Bizom" />
+    </a>
+    <nav class="main-nav" id="main-nav"></nav>
+    <div class="header-actions">
+      <div class="header-search-wrap">
+        <div class="header-search">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          <input id="header-search-input" type="text" placeholder="Search guides…" autocomplete="off" />
+        </div>
+        <div class="search-panel" id="header-search-panel"></div>
+      </div>
+      <button id="logout-btn" class="icon-btn" title="Log out" aria-label="Log out"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg></button>
+      <a href="mailto:support@mobisytechnologies.zohodesk.in" class="btn btn-primary btn-sm">Contact Support</a>
+      <button class="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+  <div class="guide-shell">
+
+    <aside class="guide-sidebar">
+      <div id="sidebar-nav-container"></div>
+      <div class="sidebar-card">
+        <h5>Still stuck?</h5>
+        <p>Our implementation team can walk you through this live.</p>
+        <a href="mailto:support@mobisytechnologies.zohodesk.in" class="btn btn-primary btn-sm" style="width:100%;">Contact Support</a>
+      </div>
+    </aside>
+
+    <main class="guide-main">
+      <div class="breadcrumb">
+        <a href="../index.html">Home</a>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 6 6 6-6 6"/></svg>
+        <span class="current">Attendance &amp; Shift Timing</span>
+      </div>
+
+      <div class="guide-header">
+        <span class="module-tag accent-amber" style="display:inline-block;">FIELD FORCE</span>
+        <h1>Attendance &amp; Shift Timing</h1>
+        <p class="lead">Attendance timing is controlled through Shift Timings configuration — and you can set it differently per role or designation.</p>
+      </div>
+
+      <div class="guide-meta-row">
+        <div class="meta-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg> 3 min read</div>
+        <div class="meta-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg> Web</div>
+        <div class="meta-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 20V10M18 20V4M6 20v-4"/></svg> Admin access needed</div>
+      </div>
+
+      <div class="toc-box">
+        <h5>On this page</h5>
+        <ol>
+          <li><a href="#what-you-configure">What you can configure</a></li>
+          <li><a href="#change-timing">Steps to change attendance timing</a></li>
+        </ol>
+      </div>
+
+      <article class="guide-content">
+
+        <h2 id="what-you-configure">What you can configure</h2>
+        <div class="data-table-wrap">
+          <table class="data-table">
+            <thead><tr><th>Setting</th><th>What it controls</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Shift Start Time</strong></td><td>The time from which attendance (login) is valid</td></tr>
+              <tr><td><strong>Shift End Time</strong></td><td>The time until which attendance (logout) is valid</td></tr>
+              <tr><td><strong>Login Window</strong></td><td>Earliest time a user can mark attendance</td></tr>
+              <tr><td><strong>Logout Window</strong></td><td>Latest time a user can mark logout</td></tr>
+              <tr><td><strong>Weekly Off</strong></td><td>Days marked as non-working</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="change-timing">Steps to change attendance timing</h2>
+        <ol class="step-list">
+          <li><h4>Go to the Admin Panel</h4><p>Navigate to Admin → Settings → Attendance Settings on the Bizom web portal.</p></li>
+          <li><h4>Select the shift</h4><p>Find the existing shift assigned to the role/designation you want to update.</p></li>
+          <li><h4>Edit the timing</h4><p>Click Edit and update the login start/end window and the shift start and end time.</p>
+            <figure class="shot">
+              <img src="../assets/img/screenshots/g2-image2.png" alt="Editing shift timing settings" loading="lazy" />
+              <figcaption>Editing a shift's timing window</figcaption>
+            </figure>
+          </li>
+          <li><h4>Save</h4><p>Click Save to apply the changes.</p></li>
+          <li><h4>Verify</h4><p>Confirm the updated timings reflect correctly for the assigned roles, designations and users.</p></li>
+        </ol>
+
+        <div class="callout callout-tip">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 18h6M10 22h4M12 2a6 6 0 0 0-4 10.5c.7.6 1 1.3 1 2.5h6c0-1.2.3-1.9 1-2.5A6 6 0 0 0 12 2Z"/></svg>
+          <p><strong>Tip</strong>Shift timings can be configured differently per role or designation — so Salesmen and Managers can run on entirely different schedules.</p>
+        </div>
+
+        <div class="helpful-box">
+          <p>Was this guide helpful?</p>
+          <div class="helpful-actions">
+            <button aria-label="Yes, helpful"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M7 10v11M2 12v7a2 2 0 0 0 2 2h11.5a2 2 0 0 0 2-1.6l1.4-7A2 2 0 0 0 17 10H13V5a2 2 0 0 0-4 0v1.5L7 10Z"/></svg></button>
+            <button aria-label="No, not helpful"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M17 14V3M22 12V5a2 2 0 0 0-2-2H8.5a2 2 0 0 0-2 1.6l-1.4 7A2 2 0 0 0 7 14h4v5a2 2 0 0 0 4 0v-1.5l4-3.5Z"/></svg></button>
+          </div>
+        </div>
+
+      </article>
+
+      <div id="related-guides"></div>
+
+      <div class="guide-footer-nav">
+        <a href="user-workflows.html"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></span><span><span class="label">Previous</span>User Workflows</span></a>
+        <a href="pjp.html" class="to-next"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span><span><span class="label">Next Guide</span>PJP — Journey Planning</span></a>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-bottom">
+      <span>© 2026 Bizom · Mobisy Technologies. All rights reserved.</span>
+      <span>Internal help center — for Bizom client teams</span>
+    </div>
+  </div>
+</footer>
+
+<script src="../js/main.js"></script>
+</body>
+</html>

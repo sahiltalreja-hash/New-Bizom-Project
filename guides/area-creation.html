@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script src="../js/auth-guard.js"></script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Area Creation &amp; Assigning — Bizom Help Center</title>
+<meta name="description" content="How to create areas in the geography master and assign them, plus the MDM templates for bulk area management." />
+<link rel="icon" href="../assets/img/logo/bizom-logo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css" />
+</head>
+<body data-guide="area-creation">
+
+<div class="reading-progress"></div>
+
+<header class="site-header">
+  <div class="container">
+    <a href="../index.html" class="brand">
+      <img src="../assets/img/logo/bizom-logo.png" alt="Bizom" />
+    </a>
+    <nav class="main-nav" id="main-nav"></nav>
+    <div class="header-actions">
+      <div class="header-search-wrap">
+        <div class="header-search">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          <input id="header-search-input" type="text" placeholder="Search guides…" autocomplete="off" />
+        </div>
+        <div class="search-panel" id="header-search-panel"></div>
+      </div>
+      <button id="logout-btn" class="icon-btn" title="Log out" aria-label="Log out"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg></button>
+      <a href="mailto:support@mobisytechnologies.zohodesk.in" class="btn btn-primary btn-sm">Contact Support</a>
+      <button class="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+  <div class="guide-shell">
+
+    <aside class="guide-sidebar">
+      <div id="sidebar-nav-container"></div>
+      <div class="sidebar-card">
+        <h5>Still stuck?</h5>
+        <p>Our implementation team can walk you through this live.</p>
+        <a href="mailto:support@mobisytechnologies.zohodesk.in" class="btn btn-primary btn-sm" style="width:100%;">Contact Support</a>
+      </div>
+    </aside>
+
+    <main class="guide-main">
+      <div class="breadcrumb">
+        <a href="../index.html">Home</a>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 6 6 6-6 6"/></svg>
+        <span class="current">Area Creation &amp; Assigning</span>
+      </div>
+
+      <div class="guide-header">
+        <span class="module-tag accent-violet" style="display:inline-block;">GEOGRAPHY</span>
+        <h1>Area Creation &amp; Assigning</h1>
+        <p class="lead">Areas sit between your warehouse/distributor and your beats — get this layer right and beat planning, scheme assignment and reporting all fall into place.</p>
+      </div>
+
+      <div class="guide-meta-row">
+        <div class="meta-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg> 3 min read</div>
+        <div class="meta-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg> Web &amp; MDM</div>
+        <div class="meta-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 20V10M18 20V4M6 20v-4"/></svg> Beginner friendly</div>
+      </div>
+
+      <div class="toc-box">
+        <h5>On this page</h5>
+        <ol>
+          <li><a href="#create-area">Create an area</a></li>
+          <li><a href="#mdm-area">Area MDM templates</a></li>
+          <li><a href="#which-template">Which template should you use?</a></li>
+        </ol>
+      </div>
+
+      <article class="guide-content">
+
+        <h2 id="create-area">1. Create an area in the geography master</h2>
+        <ol class="step-list">
+          <li><h4>Open the Add Area form</h4><p>Go to <code>yourcompanyurl.bizom.in/areas/add</code></p></li>
+          <li><h4>Fill in the details</h4>
+            <div class="data-table-wrap">
+              <table class="data-table">
+                <thead><tr><th>Field</th><th>What to enter</th></tr></thead>
+                <tbody>
+                  <tr><td><strong>Area Name</strong></td><td>Name of the area you want to create.</td></tr>
+                  <tr><td><strong>Zone / Subzone</strong></td><td>The zone or subzone this area belongs to.</td></tr>
+                  <tr><td><strong>Warehouse / Distributor</strong></td><td>The warehouse assigned to this area.</td></tr>
+                  <tr><td><strong>ERP ID</strong></td><td>Optional — only if your system uses ERP integration.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </li>
+          <li><h4>Submit the form</h4><p>The new area is saved and immediately available for beat mapping and outlet assignment.</p></li>
+        </ol>
+
+        <div class="callout callout-tip">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 18h6M10 22h4M12 2a6 6 0 0 0-4 10.5c.7.6 1 1.3 1 2.5h6c0-1.2.3-1.9 1-2.5A6 6 0 0 0 12 2Z"/></svg>
+          <p><strong>Tip</strong>Creating a lot of areas at once? Use the MDM bulk upload below instead of adding them one by one.</p>
+        </div>
+
+        <h2 id="mdm-area">2. Area MDM templates</h2>
+        <p>Four MDM templates cover everything related to area management:</p>
+        <div class="data-table-wrap">
+          <table class="data-table">
+            <thead><tr><th>#</th><th>Template</th><th>Purpose</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td><strong>Areas</strong></td><td>Upload new areas in bulk.</td></tr>
+              <tr><td>2</td><td><strong>Area Update</strong></td><td>Update an existing area's warehouse mapping and active status.</td></tr>
+              <tr><td>3</td><td><strong>Beat Area Mapping</strong></td><td>Map beats to areas.</td></tr>
+              <tr><td>4</td><td><strong>Transfer Areas</strong></td><td>Transfer areas within a DSM zone.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="which-template">3. Which template should you use?</h2>
+        <div class="data-table-wrap">
+          <table class="data-table">
+            <thead><tr><th>You want to…</th><th>Use this MDM</th></tr></thead>
+            <tbody>
+              <tr><td>Add new areas in bulk</td><td><span class="tag">Areas</span></td></tr>
+              <tr><td>Update existing areas</td><td><span class="tag">Area Update</span></td></tr>
+              <tr><td>Map beats to areas</td><td><span class="tag">Beat Area Mapping</span></td></tr>
+              <tr><td>Transfer areas across zones</td><td><span class="tag">Transfer Areas</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="download-grid">
+          <a class="download-card" href="../assets/downloads/areas-mdm-template.xls" download>
+            <span class="dl-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 21h16"/></svg></span>
+            <span class="dl-info"><strong>Areas MDM Template</strong><span>.XLS · Ready to fill and upload</span></span>
+            <span class="dl-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M7 17 17 7M7 7h10v10"/></svg></span>
+          </a>
+        </div>
+
+        <div class="helpful-box">
+          <p>Was this guide helpful?</p>
+          <div class="helpful-actions">
+            <button aria-label="Yes, helpful"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M7 10v11M2 12v7a2 2 0 0 0 2 2h11.5a2 2 0 0 0 2-1.6l1.4-7A2 2 0 0 0 17 10H13V5a2 2 0 0 0-4 0v1.5L7 10Z"/></svg></button>
+            <button aria-label="No, not helpful"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M17 14V3M22 12V5a2 2 0 0 0-2-2H8.5a2 2 0 0 0-2 1.6l-1.4 7A2 2 0 0 0 7 14h4v5a2 2 0 0 0 4 0v-1.5l4-3.5Z"/></svg></button>
+          </div>
+        </div>
+
+      </article>
+
+      <div id="related-guides"></div>
+
+      <div class="guide-footer-nav">
+        <a href="geography-master.html"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></span><span><span class="label">Previous</span>Zones, Cities, States &amp; Districts</span></a>
+        <a href="beat-creation.html" class="to-next"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span><span><span class="label">Next Guide</span>Beat Creation &amp; Assigning</span></a>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-bottom">
+      <span>© 2026 Bizom · Mobisy Technologies. All rights reserved.</span>
+      <span>Internal help center — for Bizom client teams</span>
+    </div>
+  </div>
+</footer>
+
+<script src="../js/main.js"></script>
+</body>
+</html>

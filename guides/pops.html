@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script src="../js/auth-guard.js"></script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>POPs (Marketing Collateral) — Bizom Help Center</title>
+<meta name="description" content="How to upload and view POPs — images, videos, PDFs and hyperlinks — in the Bizom app." />
+<link rel="icon" href="../assets/img/logo/bizom-logo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css" />
+</head>
+<body data-guide="pops">
+
+<div class="reading-progress"></div>
+
+<header class="site-header">
+  <div class="container">
+    <a href="../index.html" class="brand">
+      <img src="../assets/img/logo/bizom-logo.png" alt="Bizom" />
+    </a>
+    <nav class="main-nav" id="main-nav"></nav>
+    <div class="header-actions">
+      <div class="header-search-wrap">
+        <div class="header-search">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          <input id="header-search-input" type="text" placeholder="Search guides…" autocomplete="off" />
+        </div>
+        <div class="search-panel" id="header-search-panel"></div>
+      </div>
+      <button id="logout-btn" class="icon-btn" title="Log out" aria-label="Log out"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg></button>
+      <a href="mailto:support@mobisytechnologies.zohodesk.in" class="btn btn-primary btn-sm">Contact Support</a>
+      <button class="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+  <div class="guide-shell">
+
+    <aside class="guide-sidebar">
+      <div id="sidebar-nav-container"></div>
+      <div class="sidebar-card">
+        <h5>Still stuck?</h5>
+        <p>Our implementation team can walk you through this live.</p>
+        <a href="mailto:support@mobisytechnologies.zohodesk.in" class="btn btn-primary btn-sm" style="width:100%;">Contact Support</a>
+      </div>
+    </aside>
+
+    <main class="guide-main">
+      <div class="breadcrumb">
+        <a href="../index.html">Home</a>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 6 6 6-6 6"/></svg>
+        <span class="current">POPs</span>
+      </div>
+
+      <div class="guide-header">
+        <span class="module-tag accent-sky" style="display:inline-block;">FIELD FORCE</span>
+        <h1>POPs (Marketing Collateral)</h1>
+        <p class="lead">POPs are images, videos, PDFs and links used to market products or push company communication — targets, launches, KPIs — straight to the app before or after attendance.</p>
+      </div>
+
+      <div class="guide-meta-row">
+        <div class="meta-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg> 5 min read</div>
+        <div class="meta-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg> Web &amp; App</div>
+        <div class="meta-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 20V10M18 20V4M6 20v-4"/></svg> Admin access needed</div>
+      </div>
+
+      <div class="toc-box">
+        <h5>On this page</h5>
+        <ol>
+          <li><a href="#adding-pops">Adding a POP</a></li>
+          <li><a href="#viewing-pops">Viewing POPs in the app</a></li>
+        </ol>
+      </div>
+
+      <article class="guide-content">
+
+        <p>POPs (Point of Purchase / Point of Presence materials) support your sales team with brochures, sale sheets, product visuals or company announcements. They can be:</p>
+        <ul>
+          <li>An image (TIFF, JPEG, GIF, PNG)</li>
+          <li>A PDF</li>
+          <li>A hyperlink (web URL)</li>
+          <li>A video</li>
+        </ul>
+
+        <h2 id="adding-pops">1. Adding a POP</h2>
+        <p>To show up in the app, a POP first needs to be uploaded to the Bizom portal. Log in as admin and follow these steps:</p>
+        <ol class="step-list">
+          <li><h4>Open List Pops</h4><p>From Products, select <strong>List Pops</strong> (under the More menu if it's not visible directly), or go to <code>/pops</code>.</p></li>
+          <li><h4>Click "Add Pop"</h4></li>
+          <li><h4>Fill in the pop details</h4>
+            <div class="data-table-wrap">
+              <table class="data-table">
+                <thead><tr><th>Field</th><th>What it means</th></tr></thead>
+                <tbody>
+                  <tr><td><strong>Name</strong></td><td>Name of the pop</td></tr>
+                  <tr><td><strong>Collateral Type</strong></td><td>Image / Video / PDF / Thumbnail / Hyperlink</td></tr>
+                  <tr><td><strong>Level</strong></td><td>Where it applies: Company / Zone / Subzone / Business Unit / Warehouse / Distributor / Area / Outlet / User / Role</td></tr>
+                  <tr><td><strong>Zone / User</strong></td><td>Select the specific zone or user, depending on the level chosen</td></tr>
+                  <tr><td><strong>Show Attendance</strong></td><td>Tick to show this pop <em>before</em> marking attendance (off by default)</td></tr>
+                  <tr><td><strong>Start / End Date</strong></td><td>The date range this pop is shown in the app</td></tr>
+                  <tr><td><strong>Upload Pop</strong></td><td>Choose the file to upload</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <figure class="shot">
+              <img src="../assets/img/screenshots/g2-image4.png" alt="Adding a new POP with details" loading="lazy" />
+              <figcaption>Add Pop screen</figcaption>
+            </figure>
+          </li>
+          <li><h4>Click Submit</h4><p>You'll see "The pop has been saved".</p></li>
+        </ol>
+
+        <div class="callout callout-note">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>
+          <p><strong>Note</strong>Existing pops are listed in the <code>pops</code> table. You can also assign pops in bulk via a generic upload to the <code>popassignees</code> table.</p>
+        </div>
+
+        <h2 id="viewing-pops">2. Viewing POPs in the app</h2>
+        <p>Pops assigned to a level under your company are viewable in the app — either before or after marking attendance, depending on the <strong>Show Attendance</strong> setting.</p>
+        <div class="callout callout-tip">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 18h6M10 22h4M12 2a6 6 0 0 0-4 10.5c.7.6 1 1.3 1 2.5h6c0-1.2.3-1.9 1-2.5A6 6 0 0 0 12 2Z"/></svg>
+          <p><strong>Before you start</strong>The Pops workflow must be enabled for the app user, and the pops themselves must already be uploaded.</p>
+        </div>
+
+        <h3>After marking attendance</h3>
+        <p>Leave <strong>Show Attendance</strong> unticked while adding the pop to make it appear only after attendance is marked.</p>
+        <ol class="step-list">
+          <li><h4>Log in to the app and mark attendance</h4></li>
+          <li><h4>Open Pop from the side menu</h4><p>All pops uploaded for you are listed here.</p>
+            <figure class="shot">
+              <img src="../assets/img/screenshots/g2-image5.png" alt="POPs list in the mobile app side menu" loading="lazy" />
+              <figcaption>Pops listed in the app</figcaption>
+            </figure>
+          </li>
+          <li><h4>Tap a pop to open it</h4><p>You'll be asked which app to open the file with.</p>
+            <figure class="shot">
+              <img src="../assets/img/screenshots/g2-image6.png" alt="App chooser to open a POP file" loading="lazy" />
+              <figcaption>Choosing how to open the file</figcaption>
+            </figure>
+          </li>
+          <li><h4>The pop displays</h4>
+            <figure class="shot">
+              <img src="../assets/img/screenshots/g2-image7.jpeg" alt="A POP file displayed in the app" loading="lazy" />
+              <figcaption>Pop content displayed</figcaption>
+            </figure>
+          </li>
+        </ol>
+
+        <h3>Before marking attendance</h3>
+        <p>Companies often use this to showcase the current month's targets, new product launches, user manuals, KPI dashboards, or safety precautions before a rep starts their day.</p>
+        <ol class="step-list">
+          <li><h4>Log in to the app</h4><p>You're redirected straight to the Pops screen.</p>
+            <figure class="shot">
+              <img src="../assets/img/screenshots/g2-image8.png" alt="Pops screen shown before marking attendance" loading="lazy" />
+              <figcaption>Pops shown before attendance</figcaption>
+            </figure>
+          </li>
+          <li><h4>Tap a pop to view it</h4>
+            <figure class="shot">
+              <img src="../assets/img/screenshots/g2-image9.png" alt="Viewing a POP before marking attendance" loading="lazy" />
+              <figcaption>Viewing a pop</figcaption>
+            </figure>
+          </li>
+          <li><h4>Continue to attendance</h4><p>Tap the back arrow to return to the Pops screen, or tap <strong>Next</strong> to move on to marking attendance. Pops set to show after attendance are still available once you've logged in.</p></li>
+        </ol>
+
+        <div class="helpful-box">
+          <p>Was this guide helpful?</p>
+          <div class="helpful-actions">
+            <button aria-label="Yes, helpful"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M7 10v11M2 12v7a2 2 0 0 0 2 2h11.5a2 2 0 0 0 2-1.6l1.4-7A2 2 0 0 0 17 10H13V5a2 2 0 0 0-4 0v1.5L7 10Z"/></svg></button>
+            <button aria-label="No, not helpful"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M17 14V3M22 12V5a2 2 0 0 0-2-2H8.5a2 2 0 0 0-2 1.6l-1.4 7A2 2 0 0 0 7 14h4v5a2 2 0 0 0 4 0v-1.5l4-3.5Z"/></svg></button>
+          </div>
+        </div>
+
+      </article>
+
+      <div id="related-guides"></div>
+
+      <div class="guide-footer-nav">
+        <a href="activity-forms.html"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></span><span><span class="label">Previous</span>Activity Forms</span></a>
+        <a href="inventory.html" class="to-next"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span><span><span class="label">Next Guide</span>Inventory</span></a>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-bottom">
+      <span>© 2026 Bizom · Mobisy Technologies. All rights reserved.</span>
+      <span>Internal help center — for Bizom client teams</span>
+    </div>
+  </div>
+</footer>
+
+<script src="../js/main.js"></script>
+</body>
+</html>

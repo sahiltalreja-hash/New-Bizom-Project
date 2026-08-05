@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script src="../js/auth-guard.js"></script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SKU Upload &amp; Update — Bizom Help Center</title>
+<meta name="description" content="How to add, search, update and price SKUs in Bizom, one at a time or via MDM bulk upload." />
+<link rel="icon" href="../assets/img/logo/bizom-logo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css" />
+</head>
+<body data-guide="sku-management">
+
+<div class="reading-progress"></div>
+
+<header class="site-header">
+  <div class="container">
+    <a href="../index.html" class="brand">
+      <img src="../assets/img/logo/bizom-logo.png" alt="Bizom" />
+    </a>
+    <nav class="main-nav" id="main-nav"></nav>
+    <div class="header-actions">
+      <div class="header-search-wrap">
+        <div class="header-search">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          <input id="header-search-input" type="text" placeholder="Search guides…" autocomplete="off" />
+        </div>
+        <div class="search-panel" id="header-search-panel"></div>
+      </div>
+      <button id="logout-btn" class="icon-btn" title="Log out" aria-label="Log out"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg></button>
+      <a href="mailto:support@mobisytechnologies.zohodesk.in" class="btn btn-primary btn-sm">Contact Support</a>
+      <button class="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+  <div class="guide-shell">
+
+    <aside class="guide-sidebar">
+      <div id="sidebar-nav-container"></div>
+      <div class="sidebar-card">
+        <h5>Still stuck?</h5>
+        <p>Our implementation team can walk you through this live.</p>
+        <a href="mailto:support@mobisytechnologies.zohodesk.in" class="btn btn-primary btn-sm" style="width:100%;">Contact Support</a>
+      </div>
+    </aside>
+
+    <main class="guide-main">
+      <div class="breadcrumb">
+        <a href="../index.html">Home</a>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 6 6 6-6 6"/></svg>
+        <span class="current">SKU Upload &amp; Update</span>
+      </div>
+
+      <div class="guide-header">
+        <span class="module-tag accent-indigo" style="display:inline-block;">PRODUCT MASTER</span>
+        <h1>SKU Upload &amp; Update</h1>
+        <p class="lead">Create new SKUs one at a time or in bulk, keep existing ones up to date, and manage warehouse-specific pricing separately from the core product record.</p>
+      </div>
+
+      <div class="guide-meta-row">
+        <div class="meta-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg> 4 min read</div>
+        <div class="meta-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg> Web &amp; MDM</div>
+        <div class="meta-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 20V10M18 20V4M6 20v-4"/></svg> Admin access needed</div>
+      </div>
+
+      <div class="toc-box">
+        <h5>On this page</h5>
+        <ol>
+          <li><a href="#add-sku">Add a new SKU</a></li>
+          <li><a href="#bulk-sku">Bulk upload SKUs via MDM</a></li>
+          <li><a href="#update-sku">Update / edit an existing SKU</a></li>
+          <li><a href="#sku-pricing">Update SKU pricing</a></li>
+          <li><a href="#search-sku">View / search existing SKUs</a></li>
+        </ol>
+      </div>
+
+      <article class="guide-content">
+
+        <h2 id="add-sku">1. Add a new SKU (single entry)</h2>
+        <p>You can create one SKU at a time from the Add SKU screen at <code>/skunits/add</code>.</p>
+
+        <h3>What you'll need</h3>
+        <div class="data-table-wrap">
+          <table class="data-table">
+            <thead><tr><th>Group</th><th>Fields</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Basic Info</strong></td><td>SKU Name, SKU Code</td></tr>
+              <tr><td><strong>Classification</strong></td><td>Category, Sub-category, Brand, Sub-brand</td></tr>
+              <tr><td><strong>Variants</strong></td><td>Size, Packaging, Sub-pack, Serve Size</td></tr>
+              <tr><td><strong>Pricing</strong></td><td>MRP, Landing Price (LP), GST %</td></tr>
+              <tr><td><strong>Units</strong></td><td>Units per Case, Units per Inner Case</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout callout-tip">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 18h6M10 22h4M12 2a6 6 0 0 0-4 10.5c.7.6 1 1.3 1 2.5h6c0-1.2.3-1.9 1-2.5A6 6 0 0 0 12 2Z"/></svg>
+          <p><strong>Before you add one</strong>Search existing SKUs first (see below) to avoid creating duplicates.</p>
+        </div>
+
+        <h2 id="bulk-sku">2. Bulk upload SKUs via MDM (recommended for large volumes)</h2>
+        <p>Onboarding your full catalogue? Use the SKU MDM instead of adding SKUs one by one.</p>
+        <ol class="step-list">
+          <li><h4>Navigate to MDMs → SKunits MDM upload</h4><p>Found under the MDMs section of the Bizom portal.</p></li>
+          <li><h4>Download the template file</h4></li>
+          <li><h4>Fill in SKU details</h4><p>Name, code, category, brand, MRP, GST, and the rest of the fields listed above.</p></li>
+          <li><h4>Upload the filled file back</h4></li>
+        </ol>
+        <div class="callout callout-warn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 9v4M12 17h.01M10.3 3.9 2.7 18a2 2 0 0 0 1.7 3h15.2a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>
+          <p><strong>Note</strong>Always use the downloaded template — custom formats may cause upload failures.</p>
+        </div>
+
+        <h2 id="update-sku">3. Update / edit an existing SKU</h2>
+        <p>To update a SKU's name, category, brand, status or other details:</p>
+        <ol class="step-list">
+          <li><h4>Search for the SKU by name or code</h4></li>
+          <li><h4>Open the record and edit the required fields</h4></li>
+          <li><h4>Save changes</h4></li>
+        </ol>
+        <p>Updating many SKUs at once? Use the <strong>Skunits MDM update</strong> template the same way as the bulk upload above.</p>
+
+        <h2 id="sku-pricing">4. Update SKU pricing</h2>
+        <p>MRP, Landing Price (LP), Min LP, Max LP and the Focus SKU flag are managed separately from the core SKU record — per warehouse, under <strong>SKU Pricing</strong>, since the same SKU can be priced differently at each warehouse or distributor.</p>
+
+        <h2 id="search-sku">5. View / search existing SKUs</h2>
+        <p>Before adding a new SKU, search existing ones to avoid duplicates:</p>
+        <ol class="step-list">
+          <li><h4>Go to Product Master → SKU Units</h4></li>
+          <li><h4>Use the search/filter to find a SKU by name or code</h4></li>
+        </ol>
+
+        <div class="helpful-box">
+          <p>Was this guide helpful?</p>
+          <div class="helpful-actions">
+            <button aria-label="Yes, helpful"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M7 10v11M2 12v7a2 2 0 0 0 2 2h11.5a2 2 0 0 0 2-1.6l1.4-7A2 2 0 0 0 17 10H13V5a2 2 0 0 0-4 0v1.5L7 10Z"/></svg></button>
+            <button aria-label="No, not helpful"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M17 14V3M22 12V5a2 2 0 0 0-2-2H8.5a2 2 0 0 0-2 1.6l-1.4 7A2 2 0 0 0 7 14h4v5a2 2 0 0 0 4 0v-1.5l4-3.5Z"/></svg></button>
+          </div>
+        </div>
+
+      </article>
+
+      <div id="related-guides"></div>
+
+      <div class="guide-footer-nav">
+        <a href="outlet-categories.html"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></span><span><span class="label">Previous</span>Outlet Categories</span></a>
+        <a href="sizes-variants-categories.html" class="to-next"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span><span><span class="label">Next Guide</span>Sizes, Variants &amp; Categories</span></a>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-bottom">
+      <span>© 2026 Bizom · Mobisy Technologies. All rights reserved.</span>
+      <span>Internal help center — for Bizom client teams</span>
+    </div>
+  </div>
+</footer>
+
+<script src="../js/main.js"></script>
+</body>
+</html>

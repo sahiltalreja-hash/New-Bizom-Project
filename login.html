@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sign In — Bizom Help Center</title>
+<meta name="robots" content="noindex, nofollow" />
+<link rel="icon" href="assets/img/logo/bizom-logo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<section class="hero" style="min-height:100vh; padding:0; display:flex; align-items:center; justify-content:center;">
+  <div class="container" style="max-width:440px;">
+    <div style="position:relative; z-index:2; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.14); backdrop-filter:blur(16px); border-radius:var(--radius-lg); padding:40px; box-shadow:var(--shadow-lg);">
+
+      <div style="text-align:center; margin-bottom:28px;">
+        <img src="assets/img/logo/bizom-logo.png" alt="Bizom" style="height:34px; margin:0 auto 20px; filter:brightness(0) invert(1);" />
+        <h1 style="font-size:22px; margin-bottom:6px;">Sign in to the Help Center</h1>
+        <p style="color:rgba(255,255,255,0.6); font-size:14px; margin:0;">This site is restricted to Bizom clients. Use the credentials we sent you.</p>
+      </div>
+
+      <form id="login-form" novalidate>
+        <div style="margin-bottom:16px;">
+          <label for="username" style="display:block; font-size:13px; font-weight:600; color:rgba(255,255,255,0.75); margin-bottom:7px;">Username</label>
+          <input id="username" name="username" type="text" autocomplete="username" required
+            style="width:100%; padding:12px 16px; border-radius:10px; border:1px solid rgba(255,255,255,0.18); background:rgba(255,255,255,0.06); color:#fff; font-size:15px; outline:none;" />
+        </div>
+        <div style="margin-bottom:8px;">
+          <label for="password" style="display:block; font-size:13px; font-weight:600; color:rgba(255,255,255,0.75); margin-bottom:7px;">Password</label>
+          <input id="password" name="password" type="password" autocomplete="current-password" required
+            style="width:100%; padding:12px 16px; border-radius:10px; border:1px solid rgba(255,255,255,0.18); background:rgba(255,255,255,0.06); color:#fff; font-size:15px; outline:none;" />
+        </div>
+
+        <p id="login-error" style="display:none; color:#ff9d9d; font-size:13.5px; font-weight:600; margin:10px 0 0;">Incorrect username or password. Please try again.</p>
+
+        <button type="submit" class="btn btn-primary" style="width:100%; margin-top:22px; padding:13px 22px;">Sign In</button>
+      </form>
+
+      <p style="text-align:center; font-size:13px; color:rgba(255,255,255,0.5); margin:22px 0 0;">
+        Don't have access? <a href="mailto:support@mobisytechnologies.zohodesk.in" style="color:var(--mint); font-weight:600;">Contact support</a>
+      </p>
+
+    </div>
+  </div>
+</section>
+
+<script src="js/auth-guard.js"></script>
+<script>
+  document.getElementById("username").focus();
+
+  document.getElementById("login-form").addEventListener("submit", function (e) {
+    e.preventDefault();
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value;
+    const errorEl = document.getElementById("login-error");
+
+    if (window.bizomTryLogin(username, password)) {
+      const params = new URLSearchParams(window.location.search);
+      // URLSearchParams.get() already decodes once — don't decode again here,
+      // or a path containing "%20" (e.g. a space in a folder name) breaks.
+      const next = params.get("next");
+      window.location.href = next || "index.html";
+    } else {
+      errorEl.style.display = "block";
+    }
+  });
+</script>
+</body>
+</html>

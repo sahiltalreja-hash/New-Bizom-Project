@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script src="../js/auth-guard.js"></script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>User Targets — Bizom Help Center</title>
+<meta name="description" content="How to set, view and track sales targets for users in Bizom, via the web and via MDM." />
+<link rel="icon" href="../assets/img/logo/bizom-logo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css" />
+</head>
+<body data-guide="user-targets">
+
+<div class="reading-progress"></div>
+
+<header class="site-header">
+  <div class="container">
+    <a href="../index.html" class="brand">
+      <img src="../assets/img/logo/bizom-logo.png" alt="Bizom" />
+    </a>
+    <nav class="main-nav" id="main-nav"></nav>
+    <div class="header-actions">
+      <div class="header-search-wrap">
+        <div class="header-search">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          <input id="header-search-input" type="text" placeholder="Search guides…" autocomplete="off" />
+        </div>
+        <div class="search-panel" id="header-search-panel"></div>
+      </div>
+      <button id="logout-btn" class="icon-btn" title="Log out" aria-label="Log out"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg></button>
+      <a href="mailto:support@mobisytechnologies.zohodesk.in" class="btn btn-primary btn-sm">Contact Support</a>
+      <button class="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+  <div class="guide-shell">
+
+    <aside class="guide-sidebar">
+      <div id="sidebar-nav-container"></div>
+      <div class="sidebar-card">
+        <h5>Still stuck?</h5>
+        <p>Our implementation team can walk you through this live.</p>
+        <a href="mailto:support@mobisytechnologies.zohodesk.in" class="btn btn-primary btn-sm" style="width:100%;">Contact Support</a>
+      </div>
+    </aside>
+
+    <main class="guide-main">
+      <div class="breadcrumb">
+        <a href="../index.html">Home</a>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 6 6 6-6 6"/></svg>
+        <span class="current">User Targets</span>
+      </div>
+
+      <div class="guide-header">
+        <span class="module-tag accent-violet" style="display:inline-block;">FIELD FORCE</span>
+        <h1>User Targets</h1>
+        <p class="lead">Targets can be set for users over a given period to improve sales performance — for example, sell 1,000 cases across outlets this month to hit a bonus.</p>
+      </div>
+
+      <div class="guide-meta-row">
+        <div class="meta-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg> 5 min read</div>
+        <div class="meta-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg> Web &amp; MDM</div>
+        <div class="meta-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 20V10M18 20V4M6 20v-4"/></svg> Admin access needed</div>
+      </div>
+
+      <div class="toc-box">
+        <h5>On this page</h5>
+        <ol>
+          <li><a href="#new-target">Setting a new target</a></li>
+          <li><a href="#target-achievement">Target Achievement</a></li>
+          <li><a href="#mdm-targets">Bulk upload via MDM</a></li>
+        </ol>
+      </div>
+
+      <article class="guide-content">
+
+        <h2 id="new-target">Setting a new target</h2>
+        <p>Follow these steps to view and set a target for a user from the portal.</p>
+        <ol class="step-list">
+          <li><h4>Open the user's page</h4><p>Go to <code>http://&lt;DomainName&gt;.bizom.in/users/view/user_id</code> — for example, <code>http://stagingtraining.bizom.in/users/view/17</code>.</p></li>
+          <li><h4>Click "New Target"</h4>
+            <figure class="shot">
+              <img src="../assets/img/screenshots/g3-image6.png" alt="Setting a new target for a user" loading="lazy" />
+              <figcaption>New Target on the user's page</figcaption>
+            </figure>
+          </li>
+          <li><h4>Enter the SKU to set the target for</h4></li>
+          <li><h4>Review existing targets</h4><p>Click <strong>Manage Targets</strong>, then <strong>View</strong>, to see every target already uploaded for this user.</p>
+            <figure class="shot">
+              <img src="../assets/img/screenshots/g3-image7.png" alt="Viewing targets set for a user" loading="lazy" />
+              <figcaption>Manage Targets → View</figcaption>
+            </figure>
+          </li>
+        </ol>
+
+        <h2 id="target-achievement">Target Achievement</h2>
+        <p>Once orders are placed and fulfilled, targets are considered achieved. Achievement against a target can be reviewed per user, for any date range.</p>
+        <ol class="step-list">
+          <li><h4>Open the user's page</h4><p>Same URL as above: <code>http://&lt;DomainName&gt;.bizom.in/users/view/UserId</code>.</p></li>
+          <li><h4>Select a date range</h4></li>
+          <li><h4>Click Update</h4><p>The user's achievement for that date range is displayed.</p>
+            <figure class="shot">
+              <img src="../assets/img/screenshots/g3-image8.png" alt="Target Achievement view for a user" loading="lazy" />
+              <figcaption>Target Achievement</figcaption>
+            </figure>
+          </li>
+        </ol>
+
+        <h2 id="mdm-targets">Bulk upload via MDM</h2>
+        <p>Setting targets for many users and SKUs at once? Use the User Targets MDM.</p>
+
+        <details class="field-ref">
+          <summary>Key fields for the User Targets MDM</summary>
+          <div class="field-ref-body">
+            <div class="data-table-wrap">
+              <table class="data-table">
+                <thead><tr><th>Field</th><th>Notes</th></tr></thead>
+                <tbody>
+                  <tr><td><code>user_id</code></td><td>Mandatory. Must exist and be active in the system.</td></tr>
+                  <tr><td><code>skunit_id</code></td><td>Mandatory. The SKU the target applies to — must exist and be active.</td></tr>
+                  <tr><td><code>quantity</code></td><td>Target quantity, in cases. Mandatory when <code>skunit_id</code> is set.</td></tr>
+                  <tr><td><code>startdate</code> / <code>enddate</code></td><td>Both mandatory, in YYYY-MM-DD format. The start date can't fall after the end date, and the two can't overlap with an existing target for the same user and SKU.</td></tr>
+                  <tr><td><code>is_active</code></td><td>Boolean. New inactive-target entries aren't allowed.</td></tr>
+                  <tr><td><code>dropsize</code>, <code>totalcalls</code>, <code>percentproductivecall</code></td><td>Optional productivity metrics tied to the target period.</td></tr>
+                  <tr><td><code>uniqueskuperaccounts</code>, <code>uniqueoutlettarget</code></td><td>Optional reach-based target metrics.</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p style="margin-top:14px;"><strong>Not supported:</strong> amount-based targets — <code>amount</code> is accepted in the sheet but there's no functional support for it yet.</p>
+          </div>
+        </details>
+
+        <div class="callout callout-warn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 9v4M12 17h.01M10.3 3.9 2.7 18a2 2 0 0 0 1.7 3h15.2a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>
+          <p><strong>Common validation errors</strong>Overlapping date ranges for the same user + SKU, an inactive SKU or user, and a quantity entered without a matching <code>skunit_id</code> are the most frequent upload failures — the row-level error will name the exact user/SKU/date conflict.</p>
+        </div>
+
+        <div class="helpful-box">
+          <p>Was this guide helpful?</p>
+          <div class="helpful-actions">
+            <button aria-label="Yes, helpful"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M7 10v11M2 12v7a2 2 0 0 0 2 2h11.5a2 2 0 0 0 2-1.6l1.4-7A2 2 0 0 0 17 10H13V5a2 2 0 0 0-4 0v1.5L7 10Z"/></svg></button>
+            <button aria-label="No, not helpful"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M17 14V3M22 12V5a2 2 0 0 0-2-2H8.5a2 2 0 0 0-2 1.6l-1.4 7A2 2 0 0 0 7 14h4v5a2 2 0 0 0 4 0v-1.5l4-3.5Z"/></svg></button>
+          </div>
+        </div>
+
+      </article>
+
+      <div id="related-guides"></div>
+
+      <div class="guide-footer-nav">
+        <a href="pjp.html"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></span><span><span class="label">Previous</span>PJP — Journey Planning</span></a>
+        <a href="generic-forms.html" class="to-next"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span><span><span class="label">Next Guide</span>Generic Forms</span></a>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-bottom">
+      <span>© 2026 Bizom · Mobisy Technologies. All rights reserved.</span>
+      <span>Internal help center — for Bizom client teams</span>
+    </div>
+  </div>
+</footer>
+
+<script src="../js/main.js"></script>
+</body>
+</html>

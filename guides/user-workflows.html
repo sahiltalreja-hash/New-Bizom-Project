@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script src="../js/auth-guard.js"></script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>User Workflows — Bizom Help Center</title>
+<meta name="description" content="What Master User Workflows are in Bizom and how to switch a feature on or off for a user." />
+<link rel="icon" href="../assets/img/logo/bizom-logo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css" />
+</head>
+<body data-guide="user-workflows">
+
+<div class="reading-progress"></div>
+
+<header class="site-header">
+  <div class="container">
+    <a href="../index.html" class="brand">
+      <img src="../assets/img/logo/bizom-logo.png" alt="Bizom" />
+    </a>
+    <nav class="main-nav" id="main-nav"></nav>
+    <div class="header-actions">
+      <div class="header-search-wrap">
+        <div class="header-search">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          <input id="header-search-input" type="text" placeholder="Search guides…" autocomplete="off" />
+        </div>
+        <div class="search-panel" id="header-search-panel"></div>
+      </div>
+      <button id="logout-btn" class="icon-btn" title="Log out" aria-label="Log out"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg></button>
+      <a href="mailto:support@mobisytechnologies.zohodesk.in" class="btn btn-primary btn-sm">Contact Support</a>
+      <button class="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+  <div class="guide-shell">
+
+    <aside class="guide-sidebar">
+      <div id="sidebar-nav-container"></div>
+      <div class="sidebar-card">
+        <h5>Still stuck?</h5>
+        <p>Our implementation team can walk you through this live.</p>
+        <a href="mailto:support@mobisytechnologies.zohodesk.in" class="btn btn-primary btn-sm" style="width:100%;">Contact Support</a>
+      </div>
+    </aside>
+
+    <main class="guide-main">
+      <div class="breadcrumb">
+        <a href="../index.html">Home</a>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 6 6 6-6 6"/></svg>
+        <span class="current">User Workflows</span>
+      </div>
+
+      <div class="guide-header">
+        <span class="module-tag accent-sky" style="display:inline-block;">PRODUCT MASTER</span>
+        <h1>User Workflows</h1>
+        <p class="lead">Master User Workflows are platform-level feature toggles — the master switches that decide which modules a user can even see, before roles and permissions get involved.</p>
+      </div>
+
+      <div class="guide-meta-row">
+        <div class="meta-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg> 3 min read</div>
+        <div class="meta-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg> Web &amp; MDM</div>
+        <div class="meta-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 20V10M18 20V4M6 20v-4"/></svg> Admin access needed</div>
+      </div>
+
+      <div class="toc-box">
+        <h5>On this page</h5>
+        <ol>
+          <li><a href="#what-are-workflows">What are Master User Workflows?</a></li>
+          <li><a href="#update-web">Updating via the user edit page</a></li>
+          <li><a href="#mdm-workflows">Updating via MDM</a></li>
+        </ol>
+      </div>
+
+      <article class="guide-content">
+
+        <h2 id="what-are-workflows">What are Master User Workflows?</h2>
+        <p>Think of them as master switches at the platform level. Each workflow corresponds to a feature — Attendance, Sale, Order, Claims, and more. If a workflow is turned off, that feature is unavailable to the user entirely, regardless of their role.</p>
+
+        <h3>Common workflows</h3>
+        <div class="data-table-wrap">
+          <table class="data-table">
+            <thead><tr><th>Workflow</th><th>Controls</th></tr></thead>
+            <tbody>
+              <tr><td><code>attendance</code></td><td>Attendance marking on the app</td></tr>
+              <tr><td><code>attendanceimage</code></td><td>Photo capture during attendance</td></tr>
+              <tr><td><code>sale</code></td><td>Secondary sales transactions</td></tr>
+              <tr><td><code>order</code></td><td>Order placement by field users</td></tr>
+              <tr><td><code>claims</code></td><td>Expense / travel claims</td></tr>
+              <tr><td><code>beatplanning</code></td><td>PJP / tour program planning</td></tr>
+              <tr><td><code>lms</code></td><td>Lead Management System</td></tr>
+              <tr><td><code>tasks</code></td><td>Task module for field users</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <figure class="shot">
+          <img src="../assets/img/screenshots/g3-image4.png" alt="List of Master User Workflows" loading="lazy" />
+          <figcaption>Master User Workflows — platform-level toggles</figcaption>
+        </figure>
+
+        <h2 id="update-web">Updating via the user edit page</h2>
+        <p>The simplest way to switch a workflow on or off for one user is directly from their user record — open the user, find the Workflows section, and toggle the feature you need.</p>
+
+        <h2 id="mdm-workflows">Updating via MDM</h2>
+        <p>Changing workflows for many users at once? Use the Upload/Update User Workflow MDM.</p>
+
+        <div class="download-grid">
+          <a class="download-card" href="../assets/downloads/user-workflow-mdm-template.xls" download>
+            <span class="dl-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 21h16"/></svg></span>
+            <span class="dl-info"><strong>User Workflow MDM Template</strong><span>.XLS · Ready to fill and upload</span></span>
+            <span class="dl-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M7 17 17 7M7 7h10v10"/></svg></span>
+          </a>
+        </div>
+
+        <ol class="step-list">
+          <li><h4>Download the template</h4></li>
+          <li><h4>Enter the User ID</h4><p>One row per user you're updating.</p></li>
+          <li><h4>Enter <code>1</code> in the workflow column</h4><p>Against whichever workflow (e.g. <code>attendance</code>, <code>claims</code>) you want to switch on for that user.</p>
+            <figure class="shot">
+              <img src="../assets/img/screenshots/g3-image5.png" alt="Filled user workflow MDM template" loading="lazy" />
+              <figcaption>User ID + workflow column set to 1</figcaption>
+            </figure>
+          </li>
+          <li><h4>Upload via <code>/mdms</code></h4></li>
+        </ol>
+
+        <div class="callout callout-tip">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 18h6M10 22h4M12 2a6 6 0 0 0-4 10.5c.7.6 1 1.3 1 2.5h6c0-1.2.3-1.9 1-2.5A6 6 0 0 0 12 2Z"/></svg>
+          <p><strong>Tip</strong>If a feature you've configured (a form, a scheme, a target) isn't showing up on the app for a user, check the relevant workflow here first — it's a common root cause.</p>
+        </div>
+
+        <div class="helpful-box">
+          <p>Was this guide helpful?</p>
+          <div class="helpful-actions">
+            <button aria-label="Yes, helpful"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M7 10v11M2 12v7a2 2 0 0 0 2 2h11.5a2 2 0 0 0 2-1.6l1.4-7A2 2 0 0 0 17 10H13V5a2 2 0 0 0-4 0v1.5L7 10Z"/></svg></button>
+            <button aria-label="No, not helpful"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M17 14V3M22 12V5a2 2 0 0 0-2-2H8.5a2 2 0 0 0-2 1.6l-1.4 7A2 2 0 0 0 7 14h4v5a2 2 0 0 0 4 0v-1.5l4-3.5Z"/></svg></button>
+          </div>
+        </div>
+
+      </article>
+
+      <div id="related-guides"></div>
+
+      <div class="guide-footer-nav">
+        <a href="user-management.html"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></span><span><span class="label">Previous</span>User Creation &amp; Update</span></a>
+        <a href="attendance.html" class="to-next"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span><span><span class="label">Next Guide</span>Attendance &amp; Shift Timing</span></a>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-bottom">
+      <span>© 2026 Bizom · Mobisy Technologies. All rights reserved.</span>
+      <span>Internal help center — for Bizom client teams</span>
+    </div>
+  </div>
+</footer>
+
+<script src="../js/main.js"></script>
+</body>
+</html>
