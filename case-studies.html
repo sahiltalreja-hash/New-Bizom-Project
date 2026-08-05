@@ -31,9 +31,9 @@
 
 <section class="hero">
   <div class="container">
-    <div class="hero-eyebrow"><span class="dot"></span> Admin preview · not yet visible to clients</div>
+    <div class="hero-eyebrow"><span class="dot"></span> Visibility controlled from Admin → Site Settings</div>
     <h1>Real Intelligence, <span>proven in the field</span></h1>
-    <p class="lead">A handful of Bizom case studies — real deployments, real numbers. This page is admin-only for now; we'll open it up to everyone once the set is bigger.</p>
+    <p class="lead">A handful of Bizom case studies — real deployments, real numbers.</p>
   </div>
 </section>
 
@@ -127,7 +127,7 @@
   <div class="container">
     <div class="callout callout-note">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>
-      <p><strong>Admin note</strong>This page is currently only reachable by admins (hidden from the nav for everyone else, and it redirects non-admins home even with a direct link). Once we're ready to publish it more broadly, that gate comes out.</p>
+      <p><strong>Admin note</strong>Who can see this page — hidden entirely, admins only, or everyone — is controlled from <a href="admin.html">Admin → Site Settings</a>. Admins can always preview it here regardless of that setting.</p>
     </div>
   </div>
 </section>
@@ -143,7 +143,7 @@
 
 <script src="js/main.js"></script>
 <script>
-  window.bizomRequireAdmin();
+  window.bizomRequireCaseStudiesAccess();
 </script>
 </body>
 </html>

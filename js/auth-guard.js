@@ -26,10 +26,19 @@ const SEED_USERS = {
   "demo": { password: "ChangeMe123", role: "customer" },
 };
 
+// SITE_SETTINGS controls feature visibility. caseStudiesVisibility:
+//   "hidden" - nobody sees the Case Studies nav link, not even admins
+//   "admin"  - only admins see it (default)
+//   "public" - everyone signed in sees it
+const SITE_SETTINGS = {
+  caseStudiesVisibility: "admin",
+};
+
 const AUTH_KEY = "bizom_help_center_auth";
 const AUTH_USER_KEY = "bizom_help_center_auth_user";
 const AUTH_ROLE_KEY = "bizom_help_center_auth_role";
 const CUSTOM_USERS_KEY = "bizom_help_center_custom_users";
+const CUSTOM_SETTINGS_KEY = "bizom_help_center_custom_settings";
 
 const ROLE_LABELS = { admin: "Admin", mobisy: "Mobisy", customer: "Customer" };
 
@@ -49,6 +58,22 @@ function setCustomUsers(obj) {
 // admin can "edit" a seed user locally without touching this file.
 function getAllUsers() {
   return Object.assign({}, SEED_USERS, getCustomUsers());
+}
+
+function getCustomSettings() {
+  try {
+    return JSON.parse(window.localStorage.getItem(CUSTOM_SETTINGS_KEY) || "{}");
+  } catch (e) {
+    return {};
+  }
+}
+
+function setCustomSettings(obj) {
+  window.localStorage.setItem(CUSTOM_SETTINGS_KEY, JSON.stringify(obj));
+}
+
+function getEffectiveSettings() {
+  return Object.assign({}, SITE_SETTINGS, getCustomSettings());
 }
 
 function isAuthed() {
@@ -99,6 +124,18 @@ window.bizomCurrentUser = function () {
   return { username: currentUsername(), role: currentRole() };
 };
 
+window.bizomGetSettings = function () {
+  return getEffectiveSettings();
+};
+
+// Sets one or more site settings locally (merged into the custom-settings
+// override, same pattern as bizomAddUser). Publish via admin.html to bake
+// it into this file for everyone.
+window.bizomSetSettings = function (partial) {
+  const current = getCustomSettings();
+  setCustomSettings(Object.assign({}, current, partial));
+};
+
 window.bizomLogout = function () {
   try {
     window.localStorage.removeItem(AUTH_KEY);
@@ -127,6 +164,19 @@ window.bizomRequireAdmin = function () {
   }
 };
 
+// Redirects away from case-studies.html unless the visitor is allowed to
+// see it: admins can always reach it (so they can manage/preview it even
+// while it's hidden or admin-only), everyone else only when the site
+// setting is "public".
+window.bizomRequireCaseStudiesAccess = function () {
+  if (!isAuthed()) return; // runGuard() below already sends them to login
+  if (currentRole() === "admin") return;
+  const settings = getEffectiveSettings();
+  if (settings.caseStudiesVisibility !== "public") {
+    window.location.replace(homeUrl());
+  }
+};
+
 window.bizomListUsers = function () {
   const seed = SEED_USERS;
   const custom = getCustomUsers();
@@ -134,12 +184,15 @@ window.bizomListUsers = function () {
   return Object.keys(all)
     .sort()
     .map(function (username) {
+      const isSeed = Object.prototype.hasOwnProperty.call(seed, username);
+      const isCustom = Object.prototype.hasOwnProperty.call(custom, username);
       return {
         username: username,
         role: all[username].role || "customer",
         roleLabel: ROLE_LABELS[all[username].role] || all[username].role,
-        isSeed: Object.prototype.hasOwnProperty.call(seed, username),
-        isCustom: Object.prototype.hasOwnProperty.call(custom, username),
+        isSeed: isSeed,
+        isCustom: isCustom,
+        overridden: isSeed && isCustom,
       };
     });
 };
@@ -150,6 +203,23 @@ window.bizomAddUser = function (username, password, role) {
   if (!username || !password) return { ok: false, error: "Username and password are both required." };
   if (!ROLE_LABELS[role]) return { ok: false, error: "Pick a valid role." };
   if (getAllUsers()[username]) return { ok: false, error: "That username already exists." };
+  const custom = getCustomUsers();
+  custom[username] = { password: password, role: role };
+  setCustomUsers(custom);
+  return { ok: true };
+};
+
+// Changes a user's password and/or role. Works for seed users too — it
+// saves a custom override (same mechanism admin.html already uses), which
+// takes precedence over the seed entry of the same name. Leave newPassword
+// empty to keep the current password.
+window.bizomUpdateUser = function (username, newPassword, newRole) {
+  const all = getAllUsers();
+  const existing = all[username];
+  if (!existing) return { ok: false, error: "User not found." };
+  if (newRole && !ROLE_LABELS[newRole]) return { ok: false, error: "Pick a valid role." };
+  const role = newRole || existing.role;
+  const password = (newPassword || "").trim() || existing.password;
   const custom = getCustomUsers();
   custom[username] = { password: password, role: role };
   setCustomUsers(custom);
@@ -180,7 +250,7 @@ window.bizomExportAuthGuardFile = async function () {
   const source = await resp.text();
 
   const all = getAllUsers();
-  const lines = Object.keys(all)
+  const userLines = Object.keys(all)
     .sort()
     .map(function (username) {
       const u = all[username];
@@ -188,9 +258,15 @@ window.bizomExportAuthGuardFile = async function () {
       const pwd = String(u.password).replace(/\\/g, "\\\\").replace(/"/g, '\\"');
       return '  "' + uname + '": { password: "' + pwd + '", role: "' + u.role + '" },';
     });
-  const block = "const SEED_USERS = {\n" + lines.join("\n") + "\n};";
+  const userBlock = "const SEED_USERS = {\n" + userLines.join("\n") + "\n};";
 
-  return source.replace(/const SEED_USERS = \{[\s\S]*?\n\};/, block);
+  const settings = getEffectiveSettings();
+  const settingsBlock =
+    "const SITE_SETTINGS = {\n  caseStudiesVisibility: \"" + settings.caseStudiesVisibility + "\",\n};";
+
+  return source
+    .replace(/const SEED_USERS = \{[\s\S]*?\n\};/, userBlock)
+    .replace(/const SITE_SETTINGS = \{[\s\S]*?\n\};/, settingsBlock);
 };
 
 // ---------------- Guard: redirect immediately if not authenticated --------

@@ -133,6 +133,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initBackToTop();
   initSearchResultsPage();
   initLogout();
+  initHotspots();
 });
 
 function isGuidePage() {
@@ -176,11 +177,15 @@ function renderMainNav() {
 
   const isAdminPage = /\/?admin\.html$/.test(location.pathname);
   const isCaseStudiesPage = /\/?case-studies\.html$/.test(location.pathname);
-  const showAdminNavItems = !!(window.bizomIsAdmin && window.bizomIsAdmin());
-  const caseStudiesLink = showAdminNavItems
+  const isAdminUser = !!(window.bizomIsAdmin && window.bizomIsAdmin());
+  const siteSettings = window.bizomGetSettings ? window.bizomGetSettings() : { caseStudiesVisibility: "admin" };
+  const showCaseStudies =
+    siteSettings.caseStudiesVisibility === "public" ||
+    (isAdminUser && siteSettings.caseStudiesVisibility !== "hidden");
+  const caseStudiesLink = showCaseStudies
     ? `<a href="${resolveUrl("case-studies.html")}"${isCaseStudiesPage ? ' class="active"' : ""}>Case Studies</a>`
     : "";
-  const adminLink = showAdminNavItems
+  const adminLink = isAdminUser
     ? `<a href="${resolveUrl("admin.html")}"${isAdminPage ? ' class="active"' : ""}>Admin</a>`
     : "";
 
@@ -573,6 +578,42 @@ function initBackToTop() {
   document.body.appendChild(btn);
   window.addEventListener("scroll", () => btn.classList.toggle("show", window.scrollY > 500));
   btn.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+}
+
+// ---------------- Screenshot hotspots ----------------
+// Reusable annotation markers for screenshots. Markup pattern:
+//   <div class="shot-hotspot-wrap">
+//     <img ... />
+//     <button class="hotspot" style="top:22%;left:68%;">1</button>
+//     <div class="hotspot-tip" style="top:22%;left:68%;">Explanation…</div>
+//   </div>
+// Add pairs of .hotspot / .hotspot-tip (adjacent siblings) as needed — no
+// JS changes required, this just wires up the click-to-open behaviour.
+function initHotspots() {
+  const dots = document.querySelectorAll(".hotspot");
+  if (!dots.length) return;
+
+  function closeAll() {
+    document.querySelectorAll(".hotspot-tip.open").forEach(t => t.classList.remove("open"));
+    document.querySelectorAll(".hotspot.active").forEach(d => d.classList.remove("active"));
+  }
+
+  dots.forEach(dot => {
+    const tip = dot.nextElementSibling;
+    if (!tip || !tip.classList.contains("hotspot-tip")) return;
+    dot.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const wasOpen = tip.classList.contains("open");
+      closeAll();
+      if (!wasOpen) {
+        tip.classList.add("open");
+        dot.classList.add("active");
+      }
+    });
+    tip.addEventListener("click", (e) => e.stopPropagation());
+  });
+
+  document.addEventListener("click", closeAll);
 }
 
 // ---------------- Logout ----------------

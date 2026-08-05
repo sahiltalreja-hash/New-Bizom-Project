@@ -37,9 +37,11 @@
     <p id="signed-in-as" style="color:var(--text-secondary); font-size:14.5px;"></p>
   </div>
 
+  <div class="admin-stats" id="admin-stats"></div>
+
   <div class="callout callout-note">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>
-    <p><strong>How this works</strong>Users you add here are saved in <em>this browser only</em> — there's no shared server. To make a new login work on other computers, use "Publish changes" below after adding them, then commit and push the downloaded file.</p>
+    <p><strong>How this works</strong>Changes you make here (users, edits, site settings) are saved in <em>this browser only</em> until you publish. Use "Publish" at the bottom — either straight to GitHub (if connected) or as a file you commit and push yourself.</p>
   </div>
 
   <section class="admin-section">
@@ -81,10 +83,38 @@
   </section>
 
   <section class="admin-section">
-    <h2>Publish changes</h2>
-    <p class="section-desc">Bakes every current user (including anyone you just added) into a fresh copy of <code>js/auth-guard.js</code>. Save it over the existing file, then commit and push — that's what makes new logins work for everyone, on any computer.</p>
-    <button id="export-btn" class="btn btn-ghost">Download updated auth-guard.js</button>
-    <p id="export-msg" class="inline-msg"></p>
+    <h2>Site settings</h2>
+    <p class="section-desc">Who can see the Case Studies page.</p>
+    <div class="segmented" id="case-studies-visibility-toggle">
+      <button type="button" data-value="hidden">Hidden</button>
+      <button type="button" data-value="admin">Admin only</button>
+      <button type="button" data-value="public">Everyone</button>
+    </div>
+    <p class="settings-live-desc" id="case-studies-visibility-desc"></p>
+    <p id="settings-msg" class="inline-msg"></p>
+  </section>
+
+  <section class="admin-section">
+    <h2>Publish</h2>
+    <p class="section-desc">Bakes every current user and site setting into a fresh copy of <code>js/auth-guard.js</code>, then ships it.</p>
+
+    <span class="gh-status-chip" id="gh-status-chip"><span class="dot-lg"></span><span id="gh-status-text">Checking…</span></span>
+
+    <div id="gh-config" style="margin-bottom:22px;">
+      <div class="form-field" style="max-width:480px;">
+        <label for="gh-token">GitHub token <span style="font-weight:400;color:var(--text-muted);">(fine-grained, this repo only, Contents: Read &amp; write)</span></label>
+        <input id="gh-token" type="password" autocomplete="off" placeholder="github_pat_…" />
+      </div>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <button id="gh-save-btn" class="btn btn-ghost">Save token</button>
+        <button id="gh-test-btn" class="btn btn-ghost">Test connection</button>
+        <button id="gh-clear-btn" class="btn btn-ghost">Clear token</button>
+      </div>
+      <p id="gh-config-msg" class="inline-msg"></p>
+    </div>
+
+    <button id="publish-btn" class="btn btn-primary"></button>
+    <p id="publish-msg" class="inline-msg"></p>
   </section>
 
 </div>
@@ -102,24 +132,222 @@
 <script>
   window.bizomRequireAdmin();
 
+  // ---------------- GitHub sync ----------------
+  const GH_OWNER = "sahiltalreja-hash";
+  const GH_REPO = "New-Bizom-Project";
+  const GH_BRANCH = "master";
+  const GH_PATH = "js/auth-guard.js";
+  const GH_TOKEN_KEY = "bizom_help_center_gh_token";
+
+  function ghToken() { return localStorage.getItem(GH_TOKEN_KEY) || ""; }
+
+  async function ghRequest(path, opts) {
+    opts = opts || {};
+    const headers = Object.assign({
+      "Authorization": "Bearer " + ghToken(),
+      "Accept": "application/vnd.github+json",
+    }, opts.headers || {});
+    return fetch("https://api.github.com" + path, Object.assign({}, opts, { headers: headers }));
+  }
+
+  async function ghTestConnection() {
+    const res = await ghRequest("/repos/" + GH_OWNER + "/" + GH_REPO);
+    if (!res.ok) throw new Error("Couldn't connect (HTTP " + res.status + "). Check the token has Contents: Read & write on this repo.");
+    const data = await res.json();
+    const canPush = !!(data.permissions && data.permissions.push);
+    if (!canPush) throw new Error("Connected, but this token can't write to " + data.full_name + ". Grant Contents: Read & write.");
+    return data;
+  }
+
+  async function ghPublish(content) {
+    const getRes = await ghRequest("/repos/" + GH_OWNER + "/" + GH_REPO + "/contents/" + GH_PATH + "?ref=" + GH_BRANCH);
+    if (!getRes.ok) throw new Error("Couldn't read the current file from GitHub (HTTP " + getRes.status + ").");
+    const getData = await getRes.json();
+
+    const b64 = btoa(unescape(encodeURIComponent(content)));
+    const putRes = await ghRequest("/repos/" + GH_OWNER + "/" + GH_REPO + "/contents/" + GH_PATH, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        message: "Update auth-guard.js via Admin panel",
+        content: b64,
+        sha: getData.sha,
+        branch: GH_BRANCH,
+      }),
+    });
+    if (!putRes.ok) {
+      const err = await putRes.json().catch(function () { return {}; });
+      throw new Error(err.message || ("GitHub rejected the update (HTTP " + putRes.status + ")."));
+    }
+    return putRes.json();
+  }
+
+  function refreshGhStatus() {
+    const chip = document.getElementById("gh-status-chip");
+    const text = document.getElementById("gh-status-text");
+    const publishBtn = document.getElementById("publish-btn");
+    if (ghToken()) {
+      chip.className = "gh-status-chip gh-connected";
+      text.textContent = "Token saved — publishing goes straight to GitHub";
+      publishBtn.textContent = "Publish to GitHub";
+    } else {
+      chip.className = "gh-status-chip gh-disconnected";
+      text.textContent = "No token saved — publishing downloads a file instead";
+      publishBtn.textContent = "Download updated auth-guard.js";
+    }
+  }
+
+  document.getElementById("gh-save-btn").addEventListener("click", function () {
+    const input = document.getElementById("gh-token");
+    const msgEl = document.getElementById("gh-config-msg");
+    const val = input.value.trim();
+    if (!val) { showMsg(msgEl, "Paste a token first.", true); return; }
+    localStorage.setItem(GH_TOKEN_KEY, val);
+    input.value = "";
+    input.placeholder = "Token saved — paste a new one to replace it";
+    showMsg(msgEl, "Token saved in this browser.", false);
+    refreshGhStatus();
+  });
+
+  document.getElementById("gh-clear-btn").addEventListener("click", function () {
+    localStorage.removeItem(GH_TOKEN_KEY);
+    document.getElementById("gh-token").placeholder = "github_pat_…";
+    showMsg(document.getElementById("gh-config-msg"), "Token cleared.", false);
+    refreshGhStatus();
+  });
+
+  document.getElementById("gh-test-btn").addEventListener("click", async function () {
+    const msgEl = document.getElementById("gh-config-msg");
+    if (!ghToken()) { showMsg(msgEl, "Save a token first.", true); return; }
+    showMsg(msgEl, "Testing…", false);
+    try {
+      const data = await ghTestConnection();
+      showMsg(msgEl, "Connected to " + data.full_name + " with write access.", false);
+    } catch (err) {
+      showMsg(msgEl, err.message, true);
+    }
+  });
+
+  document.getElementById("publish-btn").addEventListener("click", async function () {
+    const msgEl = document.getElementById("publish-msg");
+    const btn = document.getElementById("publish-btn");
+    btn.disabled = true;
+    try {
+      const content = await window.bizomExportAuthGuardFile();
+      if (ghToken()) {
+        showMsg(msgEl, "Publishing to GitHub…", false);
+        const result = await ghPublish(content);
+        const commitUrl = result.commit && result.commit.html_url;
+        if (commitUrl) {
+          msgEl.innerHTML = 'Published — GitHub Pages will redeploy in about a minute. <a href="' + commitUrl + '" target="_blank" rel="noopener">View commit →</a>';
+          msgEl.className = "inline-msg show msg-success";
+        } else {
+          showMsg(msgEl, "Published.", false);
+        }
+      } else {
+        const blob = new Blob([content], { type: "text/javascript" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "auth-guard.js";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+        showMsg(msgEl, "Downloaded. Replace js/auth-guard.js with this file, then commit and push.", false);
+      }
+    } catch (err) {
+      showMsg(msgEl, "Couldn't publish: " + err.message, true);
+    } finally {
+      btn.disabled = false;
+    }
+  });
+
+  // ---------------- Stats ----------------
+  function renderStats() {
+    const users = window.bizomListUsers();
+    const counts = { admin: 0, mobisy: 0, customer: 0 };
+    users.forEach(function (u) { counts[u.role] = (counts[u.role] || 0) + 1; });
+    const cards = [
+      { label: "Total users", value: users.length, accent: "accent-indigo" },
+      { label: "Admins", value: counts.admin || 0, accent: "accent-violet" },
+      { label: "Mobisy", value: counts.mobisy || 0, accent: "accent-sky" },
+      { label: "Customers", value: counts.customer || 0, accent: "accent-mint" },
+    ];
+    document.getElementById("admin-stats").innerHTML = cards.map(function (c) {
+      return '<div class="admin-stat-card ' + c.accent + '"><b>' + c.value + '</b><span>' + c.label + '</span></div>';
+    }).join("");
+  }
+
+  // ---------------- Users table (with inline edit) ----------------
   function roleClass(role) { return "role-badge role-" + role; }
+  let openEditUsername = null;
 
   function renderUsers() {
     const tbody = document.getElementById("users-table-body");
     const users = window.bizomListUsers();
     tbody.innerHTML = users.map(function (u) {
-      const source = u.isSeed ? "Ships with site" : "Added in this browser";
+      const source = u.isSeed
+        ? (u.overridden ? "Ships with site (password/role changed here)" : "Ships with site")
+        : "Added in this browser";
       const removeBtn = u.isSeed
         ? '<button class="remove-user-btn" disabled title="Edit auth-guard.js to remove this one">Remove</button>'
         : '<button class="remove-user-btn" data-username="' + u.username.replace(/"/g, "&quot;") + '">Remove</button>';
-      return "<tr><td><strong>" + u.username + "</strong></td><td><span class=\"" + roleClass(u.role) + "\">" + u.roleLabel + "</span></td><td>" + source + "</td><td>" + removeBtn + "</td></tr>";
+      const editBtn = '<button class="edit-user-btn" data-username="' + u.username.replace(/"/g, "&quot;") + '">Edit</button>';
+      let rows = '<tr><td><strong>' + u.username + '</strong></td><td><span class="' + roleClass(u.role) + '">' + u.roleLabel + '</span></td><td>' + source + '</td><td>' + editBtn + removeBtn + '</td></tr>';
+      if (openEditUsername === u.username) {
+        rows += '<tr><td colspan="4" class="edit-row-cell">' +
+          '<form class="edit-row-form" data-username="' + u.username.replace(/"/g, "&quot;") + '">' +
+            '<div class="form-field"><label>New password</label><input type="text" class="edit-password" placeholder="Leave blank to keep current" autocomplete="off" /></div>' +
+            '<div class="form-field"><label>Role</label><select class="edit-role">' +
+              '<option value="customer"' + (u.role === "customer" ? " selected" : "") + '>Customer</option>' +
+              '<option value="mobisy"' + (u.role === "mobisy" ? " selected" : "") + '>Mobisy</option>' +
+              '<option value="admin"' + (u.role === "admin" ? " selected" : "") + '>Admin</option>' +
+            '</select></div>' +
+            '<button type="submit" class="btn btn-primary">Save</button>' +
+            '<button type="button" class="btn btn-ghost edit-cancel-btn">Cancel</button>' +
+          '</form>' +
+        '</td></tr>';
+      }
+      return rows;
     }).join("");
 
     tbody.querySelectorAll(".remove-user-btn:not(:disabled)").forEach(function (btn) {
       btn.addEventListener("click", function () {
         const result = window.bizomRemoveUser(btn.dataset.username);
-        if (result.ok) renderUsers();
+        if (result.ok) { renderUsers(); renderStats(); }
         else alert(result.error);
+      });
+    });
+
+    tbody.querySelectorAll(".edit-user-btn").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        openEditUsername = (openEditUsername === btn.dataset.username) ? null : btn.dataset.username;
+        renderUsers();
+      });
+    });
+
+    tbody.querySelectorAll(".edit-cancel-btn").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        openEditUsername = null;
+        renderUsers();
+      });
+    });
+
+    tbody.querySelectorAll(".edit-row-form").forEach(function (form) {
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        const username = form.dataset.username;
+        const password = form.querySelector(".edit-password").value;
+        const role = form.querySelector(".edit-role").value;
+        const result = window.bizomUpdateUser(username, password, role);
+        if (result.ok) {
+          openEditUsername = null;
+          renderUsers();
+          renderStats();
+        } else {
+          alert(result.error);
+        }
       });
     });
   }
@@ -138,37 +366,46 @@
 
     const result = window.bizomAddUser(username, password, role);
     if (result.ok) {
-      showMsg(msgEl, "Added “" + username.trim() + "”. Remember to publish changes below so it works on other computers.", false);
+      showMsg(msgEl, "Added “" + username.trim() + "”. Remember to publish below so it works on other computers.", false);
       document.getElementById("add-user-form").reset();
       renderUsers();
+      renderStats();
     } else {
       showMsg(msgEl, result.error, true);
     }
   });
 
-  document.getElementById("export-btn").addEventListener("click", async function () {
-    const msgEl = document.getElementById("export-msg");
-    try {
-      const content = await window.bizomExportAuthGuardFile();
-      const blob = new Blob([content], { type: "text/javascript" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "auth-guard.js";
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
-      showMsg(msgEl, "Downloaded. Replace js/auth-guard.js with this file, then commit and push.", false);
-    } catch (err) {
-      showMsg(msgEl, "Couldn't generate the file: " + err.message, true);
-    }
+  // ---------------- Site settings toggle ----------------
+  const VISIBILITY_DESCRIPTIONS = {
+    hidden: "Nobody sees the Case Studies link — not even admins. It stays reachable at case-studies.html for admins only, but doesn't show in the nav.",
+    admin: "Only admins see the Case Studies link and page. This is the current default.",
+    public: "Everyone signed in sees the Case Studies link and page.",
+  };
+
+  function renderVisibilityToggle() {
+    const settings = window.bizomGetSettings();
+    const toggle = document.getElementById("case-studies-visibility-toggle");
+    toggle.querySelectorAll("button").forEach(function (btn) {
+      btn.classList.toggle("active", btn.dataset.value === settings.caseStudiesVisibility);
+    });
+    document.getElementById("case-studies-visibility-desc").textContent = VISIBILITY_DESCRIPTIONS[settings.caseStudiesVisibility] || "";
+  }
+
+  document.getElementById("case-studies-visibility-toggle").addEventListener("click", function (e) {
+    const btn = e.target.closest("button[data-value]");
+    if (!btn) return;
+    window.bizomSetSettings({ caseStudiesVisibility: btn.dataset.value });
+    renderVisibilityToggle();
+    showMsg(document.getElementById("settings-msg"), "Applied locally. Remember to publish below so it applies for everyone.", false);
   });
 
   const me = window.bizomCurrentUser();
   document.getElementById("signed-in-as").textContent = "Signed in as " + me.username + " (" + me.role + ")";
 
+  renderStats();
   renderUsers();
+  renderVisibilityToggle();
+  refreshGhStatus();
 </script>
 </body>
 </html>
