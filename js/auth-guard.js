@@ -20,9 +20,10 @@
 // ==========================================================================
 
 const SEED_USERS = {
+  "Nitish": { password: "nitish", role: "mobisy" },
+  "aaden": { password: "aaden", role: "mobisy" },
   "admin": { password: "AdminChangeMe123", role: "admin" },
   "demo": { password: "ChangeMe123", role: "customer" },
-  // "clientname": { password: "theirpassword", role: "customer" },
 };
 
 const AUTH_KEY = "bizom_help_center_auth";
