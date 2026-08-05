@@ -51,13 +51,20 @@
 <script>
   document.getElementById("username").focus();
 
-  document.getElementById("login-form").addEventListener("submit", function (e) {
+  document.getElementById("login-form").addEventListener("submit", async function (e) {
     e.preventDefault();
     const username = document.getElementById("username").value.trim();
     const password = document.getElementById("password").value;
     const errorEl = document.getElementById("login-error");
+    const submitBtn = e.target.querySelector('button[type="submit"]');
 
-    if (window.bizomTryLogin(username, password)) {
+    errorEl.style.display = "none";
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Signing in…";
+
+    const ok = await window.bizomTryLogin(username, password);
+
+    if (ok) {
       const params = new URLSearchParams(window.location.search);
       // URLSearchParams.get() already decodes once — don't decode again here,
       // or a path containing "%20" (e.g. a space in a folder name) breaks.
@@ -65,6 +72,8 @@
       window.location.href = next || "index.html";
     } else {
       errorEl.style.display = "block";
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Sign In";
     }
   });
 </script>

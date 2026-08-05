@@ -1,81 +1,68 @@
 // ==========================================================================
-// Bizom Help Center — access gate
+// Bizom Help Center — access gate (Supabase-backed)
 //
-// IMPORTANT: this is a CLIENT-SIDE gate only. This site has no backend, so
-// the credentials below ship inside this file and are visible to anyone who
-// opens browser dev tools or view-source. It stops casual/unintended access
-// (a shared link, a search-engine crawl, a stray click) — it will NOT stop
-// someone who deliberately inspects the page. Don't rely on it to protect
-// genuinely sensitive data. If this site ever moves to a real server, swap
-// this for server-side auth (e.g. HTTP Basic Auth via .htaccess).
+// Real authentication: usernames map to a placeholder email
+// (<username>@bizom.local) and sign in via Supabase Auth. Roles live in a
+// `profiles` table, protected by Row Level Security. Admin-only actions
+// (create user, reset password, remove user) go through the "manage-users"
+// Edge Function, which holds the service-role key server-side — that key
+// never reaches the browser.
+//
+// The anon key below is PUBLIC by design (like a Firebase config) — it can
+// only do what Row Level Security allows. It is not a secret.
+//
+// SYNC CACHE: isAuthed()/currentRole()/currentUsername()/bizomGetSettings()
+// read from a local cache (localStorage) so page guards + nav rendering can
+// stay synchronous, exactly like before. The cache is populated on login
+// and kept honest by a background revalidation against the real Supabase
+// session/settings on every page load — if it's ever stale, this self-heals
+// within moments (logged out locally if the real session is gone, nav
+// re-rendered if a site setting changed elsewhere). The cache is a UX
+// convenience only; real enforcement is Supabase RLS + the Edge Function.
 //
 // ROLES: "admin" (can manage users from admin.html), "mobisy" (internal
 // team), "customer" (client access). Only "admin" sees the Admin link.
-//
-// ADDING USERS: the easiest way is to log in as an admin and use
-// admin.html — but since there's no shared server, a user added there only
-// exists in that one browser until you download the updated file it
-// generates (from admin.html) and commit/push it. To add someone
-// permanently up front instead, just add a line to SEED_USERS below.
 // ==========================================================================
 
-const SEED_USERS = {
-  "Nitish": { password: "nitish", role: "mobisy" },
-  "aaden": { password: "aaden", role: "mobisy" },
-  "admin": { password: "AdminChangeMe123", role: "admin" },
-  "demo": { password: "ChangeMe123", role: "customer" },
-};
-
-// SITE_SETTINGS controls feature visibility. caseStudiesVisibility:
-//   "hidden" - nobody sees the Case Studies nav link, not even admins
-//   "admin"  - only admins see it (default)
-//   "public" - everyone signed in sees it
-const SITE_SETTINGS = {
-  caseStudiesVisibility: "admin",
-};
+const SUPABASE_URL = "https://zgkphsemuunmwjdjvrle.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpna3Boc2VtdXVubXdqZGp2cmxlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU5NDM4MjgsImV4cCI6MjEwMTUxOTgyOH0.QSsSpz6XYcSC_oh7iZ1OJeSBfimGh0jZcY0lMxvBvhY";
+const EMAIL_DOMAIN = "bizom.local";
 
 const AUTH_KEY = "bizom_help_center_auth";
 const AUTH_USER_KEY = "bizom_help_center_auth_user";
 const AUTH_ROLE_KEY = "bizom_help_center_auth_role";
-const CUSTOM_USERS_KEY = "bizom_help_center_custom_users";
-const CUSTOM_SETTINGS_KEY = "bizom_help_center_custom_settings";
+const SETTINGS_CACHE_KEY = "bizom_help_center_settings_cache";
 
 const ROLE_LABELS = { admin: "Admin", mobisy: "Mobisy", customer: "Customer" };
 
-function getCustomUsers() {
-  try {
-    return JSON.parse(window.localStorage.getItem(CUSTOM_USERS_KEY) || "{}");
-  } catch (e) {
-    return {};
-  }
+// ---------------- Supabase client (loaded on demand, non-blocking) --------
+let supabaseClientPromise = null;
+function getSupabaseClient() {
+  if (supabaseClientPromise) return supabaseClientPromise;
+  supabaseClientPromise = new Promise(function (resolve, reject) {
+    if (window.supabase && window.supabase.createClient) {
+      resolve(window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY));
+      return;
+    }
+    const script = document.createElement("script");
+    script.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js";
+    script.onload = function () {
+      resolve(window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY));
+    };
+    script.onerror = function () {
+      reject(new Error("Couldn't load the Supabase client library."));
+    };
+    document.head.appendChild(script);
+  });
+  return supabaseClientPromise;
 }
 
-function setCustomUsers(obj) {
-  window.localStorage.setItem(CUSTOM_USERS_KEY, JSON.stringify(obj));
+function emailFor(username) {
+  const slug = username.trim().toLowerCase().replace(/[^a-z0-9_-]/g, "");
+  return slug + "@" + EMAIL_DOMAIN;
 }
 
-// Users added via admin.html override a seed user of the same name, so an
-// admin can "edit" a seed user locally without touching this file.
-function getAllUsers() {
-  return Object.assign({}, SEED_USERS, getCustomUsers());
-}
-
-function getCustomSettings() {
-  try {
-    return JSON.parse(window.localStorage.getItem(CUSTOM_SETTINGS_KEY) || "{}");
-  } catch (e) {
-    return {};
-  }
-}
-
-function setCustomSettings(obj) {
-  window.localStorage.setItem(CUSTOM_SETTINGS_KEY, JSON.stringify(obj));
-}
-
-function getEffectiveSettings() {
-  return Object.assign({}, SITE_SETTINGS, getCustomSettings());
-}
-
+// ---------------- Sync cache (backs isAuthed/currentRole/etc.) ------------
 function isAuthed() {
   try {
     return window.localStorage.getItem(AUTH_KEY) === "1";
@@ -92,10 +79,28 @@ function currentUsername() {
   return window.localStorage.getItem(AUTH_USER_KEY) || "";
 }
 
-function setAuthed(username, role) {
+function setCachedAuth(username, role) {
   window.localStorage.setItem(AUTH_KEY, "1");
   window.localStorage.setItem(AUTH_USER_KEY, username);
   window.localStorage.setItem(AUTH_ROLE_KEY, role);
+}
+
+function clearCachedAuth() {
+  window.localStorage.removeItem(AUTH_KEY);
+  window.localStorage.removeItem(AUTH_USER_KEY);
+  window.localStorage.removeItem(AUTH_ROLE_KEY);
+}
+
+function getCachedSettings() {
+  try {
+    return JSON.parse(window.localStorage.getItem(SETTINGS_CACHE_KEY) || "{}");
+  } catch (e) {
+    return {};
+  }
+}
+
+function setCachedSettings(obj) {
+  window.localStorage.setItem(SETTINGS_CACHE_KEY, JSON.stringify(obj));
 }
 
 function isLoginPage() {
@@ -110,10 +115,6 @@ function homeUrl() {
   return location.pathname.includes("/guides/") ? "../index.html" : "index.html";
 }
 
-function scriptUrl() {
-  return location.pathname.includes("/guides/") ? "../js/auth-guard.js" : "js/auth-guard.js";
-}
-
 // ---------------- Public API used by login.html / admin.html / main.js ----
 
 window.bizomIsAdmin = function () {
@@ -125,34 +126,44 @@ window.bizomCurrentUser = function () {
 };
 
 window.bizomGetSettings = function () {
-  return getEffectiveSettings();
+  const cached = getCachedSettings();
+  return { caseStudiesVisibility: cached.caseStudiesVisibility || "admin" };
 };
 
-// Sets one or more site settings locally (merged into the custom-settings
-// override, same pattern as bizomAddUser). Publish via admin.html to bake
-// it into this file for everyone.
-window.bizomSetSettings = function (partial) {
-  const current = getCustomSettings();
-  setCustomSettings(Object.assign({}, current, partial));
-};
-
-window.bizomLogout = function () {
+window.bizomLogout = async function () {
+  clearCachedAuth();
   try {
-    window.localStorage.removeItem(AUTH_KEY);
-    window.localStorage.removeItem(AUTH_USER_KEY);
-    window.localStorage.removeItem(AUTH_ROLE_KEY);
-  } catch (e) {}
+    const client = await getSupabaseClient();
+    await client.auth.signOut();
+  } catch (e) {
+    // best-effort — local cache is already cleared either way
+  }
   window.location.href = loginUrl();
 };
 
-window.bizomTryLogin = function (username, password) {
-  const users = getAllUsers();
-  const u = users[username];
-  if (u && u.password === password) {
-    setAuthed(username, u.role || "customer");
+window.bizomTryLogin = async function (username, password) {
+  try {
+    const client = await getSupabaseClient();
+    const { data, error } = await client.auth.signInWithPassword({
+      email: emailFor(username),
+      password: password,
+    });
+    if (error || !data.session) return false;
+
+    const { data: prof, error: profErr } = await client
+      .from("profiles")
+      .select("username, role")
+      .eq("id", data.user.id)
+      .maybeSingle();
+    if (profErr || !prof) {
+      await client.auth.signOut();
+      return false;
+    }
+    setCachedAuth(prof.username, prof.role);
     return true;
+  } catch (e) {
+    return false;
   }
-  return false;
 };
 
 // Redirects away from admin.html if the current user isn't an admin. Call
@@ -165,108 +176,101 @@ window.bizomRequireAdmin = function () {
 };
 
 // Redirects away from case-studies.html unless the visitor is allowed to
-// see it: admins can always reach it (so they can manage/preview it even
-// while it's hidden or admin-only), everyone else only when the site
+// see it: admins can always reach it, everyone else only when the site
 // setting is "public".
 window.bizomRequireCaseStudiesAccess = function () {
-  if (!isAuthed()) return; // runGuard() below already sends them to login
+  if (!isAuthed()) return;
   if (currentRole() === "admin") return;
-  const settings = getEffectiveSettings();
+  const settings = window.bizomGetSettings();
   if (settings.caseStudiesVisibility !== "public") {
     window.location.replace(homeUrl());
   }
 };
 
-window.bizomListUsers = function () {
-  const seed = SEED_USERS;
-  const custom = getCustomUsers();
-  const all = getAllUsers();
-  return Object.keys(all)
-    .sort()
-    .map(function (username) {
-      const isSeed = Object.prototype.hasOwnProperty.call(seed, username);
-      const isCustom = Object.prototype.hasOwnProperty.call(custom, username);
-      return {
-        username: username,
-        role: all[username].role || "customer",
-        roleLabel: ROLE_LABELS[all[username].role] || all[username].role,
-        isSeed: isSeed,
-        isCustom: isCustom,
-        overridden: isSeed && isCustom,
-      };
-    });
+// Site settings are admin-only to change; enforced server-side by RLS too.
+// Supabase's update() doesn't error when RLS silently filters out every row
+// (it just affects zero rows) — check the returned row, not just `error`,
+// or a non-admin's blocked write would look like a success here.
+window.bizomSetSettings = async function (partial) {
+  const client = await getSupabaseClient();
+  const updates = {};
+  if (partial.caseStudiesVisibility) updates.case_studies_visibility = partial.caseStudiesVisibility;
+  const { data, error } = await client.from("site_settings").update(updates).eq("id", 1).select();
+  if (error) throw new Error(error.message);
+  if (!data || !data.length) throw new Error("Only an admin can change site settings.");
+  setCachedSettings(Object.assign({}, getCachedSettings(), partial));
 };
 
-window.bizomAddUser = function (username, password, role) {
+window.bizomListUsers = async function () {
+  const client = await getSupabaseClient();
+  const { data, error } = await client.from("profiles").select("username, role").order("username");
+  if (error) throw new Error(error.message);
+  return data.map(function (u) {
+    return { username: u.username, role: u.role, roleLabel: ROLE_LABELS[u.role] || u.role };
+  });
+};
+
+async function callManageUsers(action, payload) {
+  const client = await getSupabaseClient();
+  const { data: sessionData } = await client.auth.getSession();
+  const token = sessionData && sessionData.session ? sessionData.session.access_token : "";
+  const resp = await fetch(SUPABASE_URL + "/functions/v1/manage-users", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "apikey": SUPABASE_ANON_KEY,
+      "Authorization": "Bearer " + token,
+    },
+    body: JSON.stringify(Object.assign({ action: action }, payload)),
+  });
+  const result = await resp.json().catch(function () { return {}; });
+  if (!resp.ok || !result.ok) throw new Error(result.error || "Request failed.");
+  return result;
+}
+
+window.bizomAddUser = async function (username, password, role) {
   username = (username || "").trim();
   password = (password || "").trim();
   if (!username || !password) return { ok: false, error: "Username and password are both required." };
   if (!ROLE_LABELS[role]) return { ok: false, error: "Pick a valid role." };
-  if (getAllUsers()[username]) return { ok: false, error: "That username already exists." };
-  const custom = getCustomUsers();
-  custom[username] = { password: password, role: role };
-  setCustomUsers(custom);
-  return { ok: true };
-};
-
-// Changes a user's password and/or role. Works for seed users too — it
-// saves a custom override (same mechanism admin.html already uses), which
-// takes precedence over the seed entry of the same name. Leave newPassword
-// empty to keep the current password.
-window.bizomUpdateUser = function (username, newPassword, newRole) {
-  const all = getAllUsers();
-  const existing = all[username];
-  if (!existing) return { ok: false, error: "User not found." };
-  if (newRole && !ROLE_LABELS[newRole]) return { ok: false, error: "Pick a valid role." };
-  const role = newRole || existing.role;
-  const password = (newPassword || "").trim() || existing.password;
-  const custom = getCustomUsers();
-  custom[username] = { password: password, role: role };
-  setCustomUsers(custom);
-  return { ok: true };
-};
-
-window.bizomRemoveUser = function (username) {
-  if (Object.prototype.hasOwnProperty.call(SEED_USERS, username)) {
-    return { ok: false, error: "This user ships with the site (in auth-guard.js) — remove it there, then commit, to delete it for everyone." };
+  try {
+    await callManageUsers("create", { username: username, password: password, role: role });
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: e.message };
   }
-  const custom = getCustomUsers();
-  if (!Object.prototype.hasOwnProperty.call(custom, username)) {
-    return { ok: false, error: "User not found." };
-  }
-  delete custom[username];
-  setCustomUsers(custom);
-  return { ok: true };
 };
 
-// Fetches this very file's own live source, swaps the SEED_USERS block for
-// one that includes every current user (seed + anyone added on this
-// browser), and returns the full replacement file as text. Downloading it
-// over js/auth-guard.js — then committing and pushing — is what makes new
-// users work on other laptops/browsers, since there's no shared server to
-// sync localStorage across devices.
-window.bizomExportAuthGuardFile = async function () {
-  const resp = await fetch(scriptUrl(), { cache: "no-store" });
-  const source = await resp.text();
+// Changes a user's password and/or role. Role changes go straight to the
+// profiles table (RLS allows admins to update any row); password resets go
+// through the Edge Function since only the Auth Admin API can do that.
+window.bizomUpdateUser = async function (username, newPassword, newRole) {
+  try {
+    if (newRole) {
+      const client = await getSupabaseClient();
+      // .select() so a blocked RLS write (0 rows, no error) is distinguishable
+      // from a real success — otherwise a non-admin's no-op looks like a win.
+      const { data, error } = await client.from("profiles").update({ role: newRole }).eq("username", username).select();
+      if (error) throw new Error(error.message);
+      if (!data || !data.length) throw new Error("Only an admin can change roles.");
+    }
+    const password = (newPassword || "").trim();
+    if (password) {
+      await callManageUsers("reset_password", { username: username, password: password });
+    }
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: e.message };
+  }
+};
 
-  const all = getAllUsers();
-  const userLines = Object.keys(all)
-    .sort()
-    .map(function (username) {
-      const u = all[username];
-      const uname = username.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
-      const pwd = String(u.password).replace(/\\/g, "\\\\").replace(/"/g, '\\"');
-      return '  "' + uname + '": { password: "' + pwd + '", role: "' + u.role + '" },';
-    });
-  const userBlock = "const SEED_USERS = {\n" + userLines.join("\n") + "\n};";
-
-  const settings = getEffectiveSettings();
-  const settingsBlock =
-    "const SITE_SETTINGS = {\n  caseStudiesVisibility: \"" + settings.caseStudiesVisibility + "\",\n};";
-
-  return source
-    .replace(/const SEED_USERS = \{[\s\S]*?\n\};/, userBlock)
-    .replace(/const SITE_SETTINGS = \{[\s\S]*?\n\};/, settingsBlock);
+window.bizomRemoveUser = async function (username) {
+  try {
+    await callManageUsers("delete", { username: username });
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: e.message };
+  }
 };
 
 // ---------------- Guard: redirect immediately if not authenticated --------
@@ -275,9 +279,45 @@ function runGuard() {
   if (!isAuthed()) {
     const next = encodeURIComponent(location.pathname + location.search + location.hash);
     window.location.replace(loginUrl() + "?next=" + next);
+    return;
   }
+  // Background: keep the local cache honest against the real session/settings.
+  // Runs after the synchronous redirect decision above so it never delays it.
+  revalidateSession();
+  refreshSettingsCache();
 }
 runGuard();
+
+async function revalidateSession() {
+  try {
+    const client = await getSupabaseClient();
+    const { data } = await client.auth.getSession();
+    if (!data.session) {
+      clearCachedAuth();
+      if (!isLoginPage()) {
+        const next = encodeURIComponent(location.pathname + location.search + location.hash);
+        window.location.replace(loginUrl() + "?next=" + next);
+      }
+    }
+  } catch (e) {
+    // offline or CDN blocked — leave the cached (optimistic) state as-is
+  }
+}
+
+async function refreshSettingsCache() {
+  try {
+    const client = await getSupabaseClient();
+    const { data, error } = await client.from("site_settings").select("case_studies_visibility").eq("id", 1).maybeSingle();
+    if (!error && data) {
+      const before = JSON.stringify(getCachedSettings());
+      const fresh = { caseStudiesVisibility: data.case_studies_visibility };
+      setCachedSettings(fresh);
+      if (JSON.stringify(fresh) !== before && window.renderMainNav) window.renderMainNav();
+    }
+  } catch (e) {
+    // leave the cached value in place
+  }
+}
 
 // Re-check on bfcache restore (e.g. clicking "back" after logging out) —
 // a restored page doesn't re-run scripts on its own, so without this a
