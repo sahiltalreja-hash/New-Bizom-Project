@@ -175,12 +175,17 @@ function renderMainNav() {
   }).join("");
 
   const isAdminPage = /\/?admin\.html$/.test(location.pathname);
-  const adminLink = (window.bizomIsAdmin && window.bizomIsAdmin())
+  const isCaseStudiesPage = /\/?case-studies\.html$/.test(location.pathname);
+  const showAdminNavItems = !!(window.bizomIsAdmin && window.bizomIsAdmin());
+  const caseStudiesLink = showAdminNavItems
+    ? `<a href="${resolveUrl("case-studies.html")}"${isCaseStudiesPage ? ' class="active"' : ""}>Case Studies</a>`
+    : "";
+  const adminLink = showAdminNavItems
     ? `<a href="${resolveUrl("admin.html")}"${isAdminPage ? ' class="active"' : ""}>Admin</a>`
     : "";
 
   nav.innerHTML = `
-    <a href="${resolveUrl("index.html")}"${isGuidePage() || isAdminPage ? "" : ' class="active"'}>Home</a>
+    <a href="${resolveUrl("index.html")}"${isGuidePage() || isAdminPage || isCaseStudiesPage ? "" : ' class="active"'}>Home</a>
     <div class="nav-item">
       <button type="button" class="nav-trigger" id="guides-trigger">
         Guides
@@ -194,6 +199,7 @@ function renderMainNav() {
         </div>
       </div>
     </div>
+    ${caseStudiesLink}
     ${adminLink}
   `;
 }
