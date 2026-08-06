@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script src="../js/auth-guard.js"></script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>MSL — Must Sell Lines — Bizom Help Center</title>
+<meta name="description" content="How to create, view, edit and assign Must Sell Lines (MSL) in Bizom via the web UI and MDM, plus how they show up in the app." />
+<link rel="icon" href="../assets/img/logo/bizom-logo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css" />
+</head>
+<body data-guide="msl">
+
+<div class="reading-progress"></div>
+
+<header class="site-header">
+  <div class="container">
+    <a href="../index.html" class="brand">
+      <img src="../assets/img/logo/bizom-logo.png" alt="Bizom" />
+    </a>
+    <nav class="main-nav" id="main-nav"></nav>
+    <div class="header-actions">
+      <div class="header-search-wrap">
+        <div class="header-search">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          <input id="header-search-input" type="text" placeholder="Search guides…" autocomplete="off" />
+        </div>
+        <div class="search-panel" id="header-search-panel"></div>
+      </div>
+      <button id="logout-btn" class="icon-btn" title="Log out" aria-label="Log out"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg></button>
+      <a href="mailto:support@mobisytechnologies.zohodesk.in" class="btn btn-primary btn-sm">Contact Support</a>
+      <button class="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+  <div class="guide-shell">
+
+    <aside class="guide-sidebar">
+      <div id="sidebar-nav-container"></div>
+      <div class="sidebar-card">
+        <h5>Still stuck?</h5>
+        <p>Our implementation team can walk you through this live.</p>
+        <a href="mailto:support@mobisytechnologies.zohodesk.in" class="btn btn-primary btn-sm" style="width:100%;">Contact Support</a>
+      </div>
+    </aside>
+
+    <main class="guide-main">
+      <div class="breadcrumb">
+        <a href="../index.html">Home</a>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 6 6 6-6 6"/></svg>
+        <span class="current">MSL</span>
+      </div>
+
+      <div class="guide-header">
+        <span class="module-tag accent-mint" style="display:inline-block;">TRADE PROMOTIONS</span>
+        <h1>MSL — Must Sell Lines</h1>
+        <p class="lead">An MSL (Must Sell SKU/Line) sets a target quantity for a group of SKUs, at a chosen level of the distribution network — used to push focus products or clear priority stock, with the target and achievement highlighted right in the app.</p>
+      </div>
+
+      <div class="guide-meta-row">
+        <div class="meta-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg> 8 min read</div>
+        <div class="meta-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg> Web, App &amp; MDM</div>
+        <div class="meta-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 20V10M18 20V4M6 20v-4"/></svg> Admin access needed</div>
+      </div>
+
+      <div class="toc-box">
+        <h5>On this page</h5>
+        <ol>
+          <li><a href="#what-is-msl">What is an MSL?</a></li>
+          <li><a href="#creating-msl">Creating an MSL</a></li>
+          <li><a href="#viewing-msl">Viewing MSLs</a></li>
+          <li><a href="#editing-msl">Editing an MSL</a></li>
+          <li><a href="#assigning-msl">Assigning an MSL</a></li>
+          <li><a href="#mdm-msl">Bulk MSL management via MDM</a></li>
+          <li><a href="#msl-in-app">MSL in the app</a></li>
+        </ol>
+      </div>
+
+      <article class="guide-content">
+
+        <h2 id="what-is-msl">1. What is an MSL?</h2>
+        <p>MSL stands for Must Sell SKU/Line — a target quantity set against a group of SKUs (by variant, category, subcategory, brand, sub-brand or individual SKU) that the field team is expected to sell within a period. Once assigned to a level of the network, the target and how close a rep is to hitting it show up directly in the app's order and sale screens.</p>
+        <p>MSLs can be configured two ways:</p>
+        <ul>
+          <li><strong>Web UI</strong> — quicker for one-off MSLs, but the target can only be added while editing, not while creating.</li>
+          <li><strong>MDM uploads</strong> — fewer restrictions, and the only way to create or assign MSLs in bulk.</li>
+        </ul>
+
+        <h2 id="creating-msl">2. Creating an MSL</h2>
+        <p>Here's how to create an MSL through the Bizom web UI:</p>
+        <ol class="step-list">
+          <li><h4>Go to <code>yourcompanyurl.bizom.in/msls/add</code></h4></li>
+          <li><h4>Fill in the MSL details</h4>
+            <div class="data-table-wrap">
+              <table class="data-table">
+                <thead><tr><th>Field</th><th>What it means</th></tr></thead>
+                <tbody>
+                  <tr><td><strong>Name</strong></td><td>Name of the MSL being created.</td></tr>
+                  <tr><td><strong>Name Alias</strong></td><td>Alias that appears on the transactional (order/sale) screen instead.</td></tr>
+                  <tr><td><strong>Erp</strong></td><td>ERP code for the MSL, if you integrate with an external system.</td></tr>
+                  <tr><td><strong>Sequence</strong></td><td>Display order on the transactional screen.</td></tr>
+                  <tr><td><strong>Target Color</strong></td><td>Background colour shown for SKUs added to the MSL, before the target is met.</td></tr>
+                  <tr><td><strong>Achievement Color</strong></td><td>Background colour shown once the target has been met.</td></tr>
+                  <tr><td><strong>Type</strong></td><td>Sale, Order, or Delivery.</td></tr>
+                  <tr><td><strong>Start / End Date</strong></td><td>Start date can be today or later; end date must be after the start date.</td></tr>
+                  <tr><td><strong>Rolling Period</strong></td><td>Current month, -1, -2 or -3 months. A value of -3 means the achievement is calculated over the current month plus the last 2 months.</td></tr>
+                  <tr><td><strong>Filter</strong></td><td>The SKU entity the MSL is built on — Variant, Category, Subcategory, Brand, Sub-Brand or individual SKU.</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <figure class="shot">
+              <img src="../assets/img/screenshots/msl-create-filled.png" alt="Creating an MSL with details filled in" loading="lazy" />
+              <figcaption>Create MSL — filled in with an example</figcaption>
+            </figure>
+          </li>
+          <li><h4>Click Create MSL</h4><p>The MSL has been created — the target itself is added afterwards, from Edit (see below).</p></li>
+        </ol>
+
+        <div class="callout callout-note">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>
+          <p><strong>Note</strong>The web UI restricts adding the target while creating an MSL — it can only be added once you edit the MSL afterwards.</p>
+        </div>
+
+        <h2 id="viewing-msl">3. Viewing MSLs</h2>
+        <ol class="step-list">
+          <li><h4>Go to <code>yourcompanyurl.bizom.in/msls</code></h4><p>Every MSL created so far is listed here.</p>
+            <figure class="shot">
+              <img src="../assets/img/screenshots/msl-list.png" alt="List of MSLs" loading="lazy" />
+              <figcaption>List MSL</figcaption>
+            </figure>
+          </li>
+          <li><h4>Click View to drill into one</h4>
+            <figure class="shot">
+              <img src="../assets/img/screenshots/msl-view.png" alt="MSL detail view" loading="lazy" />
+              <figcaption>MSL details — including which SKUs it's built on</figcaption>
+            </figure>
+          </li>
+        </ol>
+
+        <h2 id="editing-msl">4. Editing an MSL</h2>
+        <ol class="step-list">
+          <li><h4>From the MSL list, click Edit</h4>
+            <figure class="shot">
+              <img src="../assets/img/screenshots/msl-edit.png" alt="Editing an MSL, with Update MSL and Update MSL Properties circled" loading="lazy" />
+              <figcaption>Edit MSL — Update MSL saves the header fields; Update MSL Properties sets the target</figcaption>
+            </figure>
+          </li>
+          <li><h4>Update the fields that need changing</h4><p>Sequence, Target Color, Achievement Color, End Date, and whether the MSL is active can all be updated here. Click <strong>Update MSL</strong> to save.</p></li>
+          <li><h4>Add or change the target via Update MSL Properties</h4><p>This opens the MSL Properties table — enter the target for each SKU/type, use the checkbox to keep it active (unchecking removes that entry from the MSL), then click <strong>Submit</strong>.</p>
+            <figure class="shot">
+              <img src="../assets/img/screenshots/msl-edit-properties.png" alt="MSL Properties table with target column highlighted" loading="lazy" />
+              <figcaption>MSL Properties — set the target per SKU</figcaption>
+            </figure>
+          </li>
+        </ol>
+
+        <div class="callout callout-warn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 9v4M12 17h.01M10.3 3.9 2.7 18a2 2 0 0 0 1.7 3h15.2a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>
+          <p><strong>Warning</strong>Once an MSL's end date has passed, its properties can no longer be edited — only the target and active status can still be changed.</p>
+        </div>
+
+        <h2 id="assigning-msl">5. Assigning an MSL</h2>
+        <p>An MSL isn't visible anywhere until it's assigned — this maps it from a "From Level" to a "To Level" of the transaction (order/sale/fulfilment).</p>
+        <ol class="step-list">
+          <li><h4>Go to <code>yourcompanyurl.bizom.in/msls/assign</code></h4></li>
+          <li><h4>Fill in the assignment details</h4>
+            <div class="data-table-wrap">
+              <table class="data-table">
+                <thead><tr><th>Field</th><th>What it means</th></tr></thead>
+                <tbody>
+                  <tr><td><strong>Select MSL</strong></td><td>The MSL you want to assign.</td></tr>
+                  <tr><td><strong>From level</strong></td><td>Zone, Subzone, or Warehouse.</td></tr>
+                  <tr><td><strong>To level</strong></td><td>Warehouse Type (for primary), Warehouse, Outlet, Outlet Type, or Outlet Category.</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <figure class="shot">
+              <img src="../assets/img/screenshots/msl-assign-filled.png" alt="Assigning an MSL from a warehouse to an outlet type" loading="lazy" />
+              <figcaption>Assign MSL — filled in with an example</figcaption>
+            </figure>
+          </li>
+          <li><h4>Click Assign MSL</h4><p>The mapping is complete — the MSL is now live for that level.</p></li>
+        </ol>
+
+        <h2 id="mdm-msl">6. Bulk MSL management via MDM</h2>
+        <p>MDM uploads have fewer restrictions than the web UI — the target can be set directly at creation, and both creating and assigning support bulk uploads.</p>
+
+        <h3>Creating MSLs via MDM</h3>
+        <ol class="step-list">
+          <li><h4>Go to <code>yourcompanyurl.bizom.in/mdms</code></h4><p>Search "create msl" and click the upload icon under Actions.</p></li>
+          <li><h4>Download and open the template</h4>
+            <figure class="shot">
+              <img src="../assets/img/screenshots/msl-mdm-create-template.png" alt="Create MSL MDM template columns" loading="lazy" />
+              <figcaption>Create MSL MDM template</figcaption>
+            </figure>
+          </li>
+          <li><h4>Fill in the template</h4>
+            <details class="field-ref">
+              <summary>Create MSL MDM columns</summary>
+              <div class="field-ref-body">
+                <div class="data-table-wrap">
+                  <table class="data-table">
+                    <thead><tr><th>Column</th><th>Notes</th></tr></thead>
+                    <tbody>
+                      <tr><td><code>name</code></td><td>Name of the MSL to be created.</td></tr>
+                      <tr><td><code>erp_id</code></td><td>ERP ID, if importing from another system.</td></tr>
+                      <tr><td><code>quantity</code></td><td>Target quantity.</td></tr>
+                      <tr><td><code>type</code></td><td>sale, order, or delivery.</td></tr>
+                      <tr><td><code>start_date</code> (DD-MM-YYYY)</td><td>MSL start date.</td></tr>
+                      <tr><td><code>end_date</code> (DD-MM-YYYY)</td><td>MSL expiry date.</td></tr>
+                      <tr><td><code>rolling_period</code></td><td>Whether the same MSL repeats the following month — supported up to 3 months.</td></tr>
+                      <tr><td><code>name_alias</code></td><td>Alias shown on the transactional screen.</td></tr>
+                      <tr><td><code>sequence</code></td><td>Display order on the transactional screen.</td></tr>
+                      <tr><td><code>property</code></td><td>The SKU entity level — SKU, design type, category, subcategory, etc.</td></tr>
+                      <tr><td><code>property_id</code> (comma-separated)</td><td>Bizom ID(s) for whatever was entered in <code>property</code> — SKU ID, category ID, design type ID, etc.</td></tr>
+                      <tr><td><code>target_color</code> / <code>target_text_color</code></td><td>Background and text colour shown for SKUs added to the MSL.</td></tr>
+                      <tr><td><code>achievement_color</code> / <code>achievement_text_colour</code></td><td>Background and text colour shown once the target is met.</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </details>
+          </li>
+          <li><h4>Save the file and upload it</h4><p>Click the upload icon, then <strong>Validate Data</strong> — once validation passes, click <strong>Save Data</strong> to create the MSLs.</p></li>
+        </ol>
+
+        <h3>Assigning MSLs via MDM</h3>
+        <ol class="step-list">
+          <li><h4>Go to <code>yourcompanyurl.bizom.in/mdms</code></h4><p>Search "assign msl" and click the upload icon under Actions.</p></li>
+          <li><h4>Download and open the template</h4>
+            <figure class="shot">
+              <img src="../assets/img/screenshots/msl-mdm-assign-template.png" alt="Assign MSL MDM template columns" loading="lazy" />
+              <figcaption>Assign MSL MDM template</figcaption>
+            </figure>
+          </li>
+          <li><h4>Fill in the template</h4>
+            <details class="field-ref">
+              <summary>Assign MSL MDM columns</summary>
+              <div class="field-ref-body">
+                <div class="data-table-wrap">
+                  <table class="data-table">
+                    <thead><tr><th>Column</th><th>Notes</th></tr></thead>
+                    <tbody>
+                      <tr><td><code>msl_id</code></td><td>Bizom ID of the existing MSL to assign.</td></tr>
+                      <tr><td><code>fromlevel</code></td><td>Zone, Subzone, or Warehouse.</td></tr>
+                      <tr><td><code>fromlevel_id</code></td><td>The zone/subzone/warehouse ID matching <code>fromlevel</code>.</td></tr>
+                      <tr><td><code>tolevel</code></td><td>Warehouse Type, Warehouse, Outlet, Outlet Type, or Outlet Category.</td></tr>
+                      <tr><td><code>tolevel_id</code></td><td>The matching ID for whatever was entered in <code>tolevel</code>.</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </details>
+          </li>
+          <li><h4>Save the file and upload it</h4><p>Click the upload icon on the "assign msl" MDM page, then <strong>Validate Data</strong> followed by <strong>Save Data</strong> to complete the mapping.</p></li>
+        </ol>
+
+        <h2 id="msl-in-app">7. MSL in the app</h2>
+        <p>MSLs are visible in the Order, Sale and Order Fulfilment screens of the app. Under the Category and Subcategory filters, select <strong>MSL</strong> and then the specific MSL configured — SKUs the MSL is built on are then highlighted right in the list.</p>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+          <figure class="shot">
+            <img src="../assets/img/screenshots/msl-app-filter.jpg" alt="MSL filter dropdown in the app" loading="lazy" />
+            <figcaption>Filtering by MSL in the app</figcaption>
+          </figure>
+          <figure class="shot">
+            <img src="../assets/img/screenshots/msl-app-highlighted.jpg" alt="MSL SKUs highlighted by target and achievement colour" loading="lazy" />
+            <figcaption>SKUs highlighted by target / achievement colour</figcaption>
+          </figure>
+        </div>
+        <p>MSL SKUs are shaded using the colours set during creation — one for "target not yet met" and one for "achievement met", updated in real time as the rep enters quantities. In the Order summary screen, MSL SKUs not yet ordered show in the target colour; SKUs whose target has already been met drop off the summary. Tapping the SKU name surfaces the full set of MSL SKUs at the top of the order/sale screen.</p>
+        <p>MSL SKUs can also be filtered using the Filter option at the top of the screen, and sorted using the sort feature.</p>
+
+        <div class="helpful-box">
+          <p>Was this guide helpful?</p>
+          <div class="helpful-actions">
+            <button aria-label="Yes, helpful"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M7 10v11M2 12v7a2 2 0 0 0 2 2h11.5a2 2 0 0 0 2-1.6l1.4-7A2 2 0 0 0 17 10H13V5a2 2 0 0 0-4 0v1.5L7 10Z"/></svg></button>
+            <button aria-label="No, not helpful"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M17 14V3M22 12V5a2 2 0 0 0-2-2H8.5a2 2 0 0 0-2 1.6l-1.4 7A2 2 0 0 0 7 14h4v5a2 2 0 0 0 4 0v-1.5l4-3.5Z"/></svg></button>
+          </div>
+        </div>
+
+      </article>
+
+      <div id="related-guides"></div>
+
+      <div class="guide-footer-nav">
+        <a href="schemes.html"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></span><span><span class="label">Previous</span>Schemes</span></a>
+        <a href="reports-dashboards.html" class="to-next"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span><span><span class="label">Next Guide</span>Request a Report or Dashboard</span></a>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-bottom">
+      <span>© 2026 Bizom · Mobisy Technologies. All rights reserved.</span>
+      <span>Internal help center — for Bizom client teams</span>
+    </div>
+  </div>
+</footer>
+
+<script src="../js/main.js"></script>
+</body>
+</html>

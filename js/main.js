@@ -43,6 +43,7 @@ const GUIDES = [
   { id: "orders-payments", title: "Orders & Payments", url: "guides/orders-payments.html", category: "Distribution & Inventory", desc: "Manage primary, secondary & direct orders." },
 
   { id: "schemes", title: "Schemes", url: "guides/schemes.html", category: "Schemes & Promotions", desc: "Quantity, value & multi-slab schemes." },
+  { id: "msl", title: "MSL — Must Sell Lines", url: "guides/msl.html", category: "Schemes & Promotions", desc: "Set and track must-sell SKU targets." },
 
   { id: "reports-dashboards", title: "Request a Report or Dashboard", url: "guides/reports-dashboards.html", category: "Reports & Analytics", desc: "How to submit an FSD for a new report or dashboard." },
 ];
@@ -55,7 +56,8 @@ const RELATED_GUIDES = {
   "outlet-categories": ["outlet-management", "sku-management", "schemes"],
   "sku-management": ["sizes-variants-categories", "inventory", "schemes"],
   "sizes-variants-categories": ["sku-management", "inventory"],
-  "schemes": ["inventory", "sku-management", "orders-payments"],
+  "schemes": ["msl", "inventory", "sku-management"],
+  "msl": ["schemes", "user-targets", "sku-management"],
   "inventory": ["grn", "sale-returns", "sku-management"],
   "grn": ["inventory", "sale-returns", "distributor-warehouse"],
   "sale-returns": ["grn", "orders-payments", "inventory"],
@@ -113,6 +115,10 @@ const SEARCH_INDEX_EXTRA = [
   { title: "User Targets", section: "Target Achievement", url: "guides/user-targets.html#target-achievement", tags: "target achievement view date range", snippet: "Targets achieved by a user, after sale or fulfilment of orders, can be viewed from Target Achievement." },
   { title: "User Targets", section: "Bulk upload via MDM", url: "guides/user-targets.html#mdm-targets", tags: "mdm bulk target upload user sku", snippet: "Set targets for many users and SKUs at once via the User Targets MDM." },
   { title: "Request a Report or Dashboard", section: "Submitting an FSD", url: "guides/reports-dashboards.html#submit-fsd", tags: "fsd report dashboard request new test cases", snippet: "Raise a request by submitting the required details in the attached FSD format along with test cases." },
+  { title: "MSL — Must Sell Lines", section: "Creating an MSL", url: "guides/msl.html#creating-msl", tags: "msl must sell line create target sku", snippet: "Set a target quantity for a group of SKUs — by variant, category, subcategory, brand or individual SKU." },
+  { title: "MSL — Must Sell Lines", section: "Assigning an MSL", url: "guides/msl.html#assigning-msl", tags: "msl assign from level to level warehouse outlet", snippet: "An MSL isn't visible anywhere until it's assigned from a From Level to a To Level of the transaction." },
+  { title: "MSL — Must Sell Lines", section: "Bulk MSL management via MDM", url: "guides/msl.html#mdm-msl", tags: "msl mdm bulk create assign template", snippet: "MDM uploads have fewer restrictions than the web UI — the target can be set directly at creation." },
+  { title: "MSL — Must Sell Lines", section: "MSL in the app", url: "guides/msl.html#msl-in-app", tags: "msl app order sale highlight target achievement colour", snippet: "MSL SKUs are shaded by target and achievement colour, updated in real time as the rep enters quantities." },
 ];
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -134,6 +140,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initSearchResultsPage();
   initLogout();
   initHotspots();
+  initCaseStudiesCarousel();
 });
 
 function isGuidePage() {
@@ -578,6 +585,59 @@ function initBackToTop() {
   document.body.appendChild(btn);
   window.addEventListener("scroll", () => btn.classList.toggle("show", window.scrollY > 500));
   btn.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+}
+
+// ---------------- Homepage case studies carousel ----------------
+// Shown to the same audience as the Case Studies nav link (mirrors the
+// same visibility logic from renderMainNav), so it never teases a page a
+// visitor can't actually open.
+let carouselAutoplayTimer = null;
+
+function initCaseStudiesCarousel() {
+  const section = document.getElementById("case-studies-carousel-section");
+  if (!section) return;
+
+  const settings = window.bizomGetSettings ? window.bizomGetSettings() : { caseStudiesVisibility: "admin" };
+  const isAdminUser = !!(window.bizomIsAdmin && window.bizomIsAdmin());
+  const visible =
+    settings.caseStudiesVisibility === "public" ||
+    (isAdminUser && settings.caseStudiesVisibility !== "hidden");
+
+  section.style.display = visible ? "" : "none";
+  clearInterval(carouselAutoplayTimer);
+  if (!visible) return;
+
+  const track = document.getElementById("carousel-track");
+  const dotsWrap = document.getElementById("carousel-dots");
+  const slides = Array.from(track.children);
+  const prevBtn = section.querySelector(".carousel-arrow.prev");
+  const nextBtn = section.querySelector(".carousel-arrow.next");
+  let index = 0;
+
+  dotsWrap.innerHTML = slides.map((_, i) => `<button type="button" aria-label="Go to slide ${i + 1}"></button>`).join("");
+  const dots = Array.from(dotsWrap.children);
+
+  function render() {
+    track.style.transform = "translateX(-" + (index * 100) + "%)";
+    dots.forEach((d, i) => d.classList.toggle("active", i === index));
+  }
+  function goTo(i) {
+    index = (i + slides.length) % slides.length;
+    render();
+  }
+  function restartAutoplay() {
+    clearInterval(carouselAutoplayTimer);
+    carouselAutoplayTimer = setInterval(() => goTo(index + 1), 5500);
+  }
+
+  prevBtn.addEventListener("click", () => { goTo(index - 1); restartAutoplay(); });
+  nextBtn.addEventListener("click", () => { goTo(index + 1); restartAutoplay(); });
+  dots.forEach((d, i) => d.addEventListener("click", () => { goTo(i); restartAutoplay(); }));
+  section.addEventListener("mouseenter", () => clearInterval(carouselAutoplayTimer));
+  section.addEventListener("mouseleave", restartAutoplay);
+
+  render();
+  restartAutoplay();
 }
 
 // ---------------- Screenshot hotspots ----------------

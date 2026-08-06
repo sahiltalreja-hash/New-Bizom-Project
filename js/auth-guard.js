@@ -312,7 +312,10 @@ async function refreshSettingsCache() {
       const before = JSON.stringify(getCachedSettings());
       const fresh = { caseStudiesVisibility: data.case_studies_visibility };
       setCachedSettings(fresh);
-      if (JSON.stringify(fresh) !== before && window.renderMainNav) window.renderMainNav();
+      if (JSON.stringify(fresh) !== before) {
+        if (window.renderMainNav) window.renderMainNav();
+        if (window.initCaseStudiesCarousel) window.initCaseStudiesCarousel();
+      }
     }
   } catch (e) {
     // leave the cached value in place
