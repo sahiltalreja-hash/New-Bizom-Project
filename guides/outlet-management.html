@@ -71,6 +71,7 @@
         <h5>On this page</h5>
         <ol>
           <li><a href="#customise-form">Customise the Add Outlet form</a></li>
+          <li><a href="#add-via-app">Add an outlet via the app</a></li>
           <li><a href="#rename-fields">Rename existing fields</a></li>
           <li><a href="#mdm-outlet">Add outlets in bulk via MDM</a></li>
           <li><a href="#update-outlet">Updating outlets via MDM</a></li>
@@ -122,7 +123,60 @@
           </table>
         </div>
 
-        <h2 id="rename-fields">2. Rename existing fields</h2>
+        <h2 id="add-via-app">2. Add an outlet via the app</h2>
+        <p>Field reps can add a new outlet directly from the app while out on a beat — useful for on-the-spot additions without waiting for a web/MDM update.</p>
+        <ol class="step-list">
+          <li><h4>Open the beat and tap the add-outlet icon</h4><p>From the outlet list for today's beat, tap the icon in the top-right corner.</p>
+            <figure class="shot">
+              <div class="shot-hotspot-wrap">
+                <img src="../assets/img/screenshots/outlet-app-1-beat-list.jpg" alt="Beat outlet list with the add-outlet icon" loading="lazy" />
+                <button class="hotspot" style="top:8%;left:88%;" aria-label="About the add-outlet icon">1</button>
+                <div class="hotspot-tip" style="top:8%;left:88%;">Tap here to add a new outlet to this beat.</div>
+                <button class="hotspot" style="top:47%;left:50%;" aria-label="About existing outlets">2</button>
+                <div class="hotspot-tip" style="top:47%;left:50%;">Outlets already on the beat — tap one to start a visit instead of adding new.</div>
+              </div>
+              <figcaption>Beat outlet list — tap the numbered dots for details</figcaption>
+            </figure>
+          </li>
+          <li><h4>Enter the outlet name and owner's mobile number</h4><p>Bizom uses these two fields to check for duplicates before creating anything.</p>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+              <figure class="shot">
+                <img src="../assets/img/screenshots/outlet-app-2-name-mobile.jpg" alt="Empty Outlet Name and Owner Mobile No fields" loading="lazy" />
+                <figcaption>Both fields required</figcaption>
+              </figure>
+              <figure class="shot">
+                <img src="../assets/img/screenshots/outlet-app-3-name-mobile-filled.jpg" alt="Filled Outlet Name and Owner Mobile No fields" loading="lazy" />
+                <figcaption>Filled in</figcaption>
+              </figure>
+            </div>
+          </li>
+          <li><h4>Confirm there's no duplicate</h4><p>Bizom searches nearby outlets by name and number before letting you continue.</p>
+            <figure class="shot">
+              <div class="shot-hotspot-wrap">
+                <img src="../assets/img/screenshots/outlet-app-4-no-duplicates.jpg" alt="No Duplicate Outlets Found dialog" loading="lazy" />
+                <button class="hotspot" style="top:78%;left:34%;" aria-label="About Cancel">1</button>
+                <div class="hotspot-tip" style="top:78%;left:34%;">Cancel if this turns out to be an outlet that's already been added.</div>
+                <button class="hotspot" style="top:78%;left:70%;" aria-label="About Proceed to Add">2</button>
+                <div class="hotspot-tip" style="top:78%;left:70%;">No clash found — tap to continue and fill in the rest of the outlet's details.</div>
+              </div>
+              <figcaption>Duplicate check — tap the numbered dots for details</figcaption>
+            </figure>
+          </li>
+          <li><h4>Fill in the rest of the outlet's details</h4><p>Name and mobile number carry over automatically. Address and Contact Person Name are required; the rest of the standard fields follow below.</p>
+            <figure class="shot">
+              <div class="shot-hotspot-wrap">
+                <img src="../assets/img/screenshots/outlet-app-5-full-form.jpg" alt="Full outlet details form on the app" loading="lazy" />
+                <button class="hotspot" style="top:12%;left:50%;" aria-label="About the carried-over name">1</button>
+                <div class="hotspot-tip" style="top:12%;left:50%;">Carried over from the previous step — no need to re-type it.</div>
+                <button class="hotspot" style="top:45%;left:50%;" aria-label="About required fields">2</button>
+                <div class="hotspot-tip" style="top:45%;left:50%;">Address and Contact Person Name are required — the same rules set in the Basic Outlet Form (section 1) apply here too.</div>
+              </div>
+              <figcaption>Outlet details — tap the numbered dots for details</figcaption>
+            </figure>
+          </li>
+        </ol>
+
+        <h2 id="rename-fields">3. Rename existing fields</h2>
         <p>You can relabel any field on the Add Outlet / Edit Outlet screen without touching the underlying data.</p>
         <ol class="step-list">
           <li><h4>Open the Basic Outlet Form</h4></li>
@@ -154,7 +208,7 @@
           </figure>
         </div>
 
-        <h2 id="mdm-outlet">3. Add outlets in bulk via MDM</h2>
+        <h2 id="mdm-outlet">4. Add outlets in bulk via MDM</h2>
         <p>For onboarding many outlets at once, use the Outlets MDM upload instead of adding them one by one on the web.</p>
         <ol class="step-list">
           <li><h4>Go to your MDM listing</h4><p>Navigate to <code>yourcompanyurl.bizom.in/mdms</code></p></li>
@@ -193,7 +247,7 @@
           </div>
         </details>
 
-        <h2 id="update-outlet">4. Updating outlets via MDM</h2>
+        <h2 id="update-outlet">5. Updating outlets via MDM</h2>
         <p>The same MDM area supports bulk updates to outlets you've already created — useful for correcting addresses, re-mapping areas, changing outlet status, or fixing contact details at scale.</p>
         <ol class="step-list">
           <li><h4>Go to <code>yourcompanyurl.bizom.in/mdms</code> and open "Update Outlets"</h4></li>
