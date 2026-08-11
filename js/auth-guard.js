@@ -141,11 +141,15 @@ window.bizomLogout = async function () {
   window.location.href = loginUrl();
 };
 
-window.bizomTryLogin = async function (username, password) {
+window.bizomTryLogin = async function (usernameOrEmail, password) {
   try {
     const client = await getSupabaseClient();
+    const identifier = (usernameOrEmail || "").trim();
+    // Bulk-imported users log in with their real email; the original
+    // username-based accounts still work via their placeholder email.
+    const email = identifier.includes("@") ? identifier : emailFor(identifier);
     const { data, error } = await client.auth.signInWithPassword({
-      email: emailFor(username),
+      email: email,
       password: password,
     });
     if (error || !data.session) return false;
@@ -160,6 +164,8 @@ window.bizomTryLogin = async function (username, password) {
       return false;
     }
     setCachedAuth(prof.username, prof.role);
+    // Best-effort usage tracking — never let a logging failure block login.
+    client.from("login_events").insert({ user_id: data.user.id }).then(function () {}, function () {});
     return true;
   } catch (e) {
     return false;
@@ -203,11 +209,33 @@ window.bizomSetSettings = async function (partial) {
 
 window.bizomListUsers = async function () {
   const client = await getSupabaseClient();
-  const { data, error } = await client.from("profiles").select("username, role").order("username");
+  const { data, error } = await client.from("profiles").select("username, role, email, customer_name").order("username");
   if (error) throw new Error(error.message);
   return data.map(function (u) {
-    return { username: u.username, role: u.role, roleLabel: ROLE_LABELS[u.role] || u.role };
+    return {
+      username: u.username,
+      role: u.role,
+      roleLabel: ROLE_LABELS[u.role] || u.role,
+      email: u.email || "",
+      customerName: u.customer_name || "",
+    };
   });
+};
+
+// Fetches recent login activity (last 31 days) plus the full user roster, so
+// the admin page can build "who's logged in today/this week/this month",
+// sort by open count, or list users who've never opened it. Admin-only,
+// enforced by login_events' RLS SELECT policy.
+window.bizomGetUsageSummary = async function () {
+  const client = await getSupabaseClient();
+  const cutoff = new Date(Date.now() - 31 * 24 * 60 * 60 * 1000).toISOString();
+  const [eventsRes, profilesRes] = await Promise.all([
+    client.from("login_events").select("occurred_at, user_id, profiles(username, customer_name)").gte("occurred_at", cutoff).order("occurred_at", { ascending: false }),
+    client.from("profiles").select("id, username, customer_name, role"),
+  ]);
+  if (eventsRes.error) throw new Error(eventsRes.error.message);
+  if (profilesRes.error) throw new Error(profilesRes.error.message);
+  return { events: eventsRes.data, profiles: profilesRes.data };
 };
 
 async function callManageUsers(action, payload) {
@@ -228,13 +256,19 @@ async function callManageUsers(action, payload) {
   return result;
 }
 
-window.bizomAddUser = async function (username, password, role) {
+window.bizomAddUser = async function (username, password, role, email, customerName) {
   username = (username || "").trim();
   password = (password || "").trim();
   if (!username || !password) return { ok: false, error: "Username and password are both required." };
   if (!ROLE_LABELS[role]) return { ok: false, error: "Pick a valid role." };
   try {
-    await callManageUsers("create", { username: username, password: password, role: role });
+    await callManageUsers("create", {
+      username: username,
+      password: password,
+      role: role,
+      email: (email || "").trim(),
+      customerName: (customerName || "").trim(),
+    });
     return { ok: true };
   } catch (e) {
     return { ok: false, error: e.message };

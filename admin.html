@@ -10,6 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css" />
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 </head>
 <body>
 
@@ -49,7 +50,7 @@
     <p class="section-desc">Everyone who can sign in to this site.</p>
     <div class="data-table-wrap">
       <table class="data-table">
-        <thead><tr><th>Username</th><th>Role</th><th></th></tr></thead>
+        <thead><tr><th>Name</th><th>Email</th><th>Customer</th><th>Role</th><th></th></tr></thead>
         <tbody id="users-table-body"></tbody>
       </table>
     </div>
@@ -57,11 +58,11 @@
 
   <section class="admin-section">
     <h2>Add a user</h2>
-    <p class="section-desc">Give someone their own username, password and role. They can sign in right away.</p>
+    <p class="section-desc">Give someone their own login. Leave Email blank to fall back to a placeholder login (username-based); fill it in to let them sign in with their real email instead.</p>
     <form id="add-user-form">
       <div class="form-row">
         <div class="form-field">
-          <label for="new-username">Username</label>
+          <label for="new-username">Name</label>
           <input id="new-username" type="text" autocomplete="off" required />
         </div>
         <div class="form-field">
@@ -77,9 +78,29 @@
           </select>
         </div>
       </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label for="new-email">Email <span style="font-weight:400;color:var(--text-muted);">(optional)</span></label>
+          <input id="new-email" type="email" autocomplete="off" placeholder="name@company.com" />
+        </div>
+        <div class="form-field">
+          <label for="new-customer">Customer <span style="font-weight:400;color:var(--text-muted);">(optional)</span></label>
+          <input id="new-customer" type="text" autocomplete="off" placeholder="Client / company name" />
+        </div>
+      </div>
       <button type="submit" class="btn btn-primary" style="margin-top:18px;">Add User</button>
       <p id="add-user-msg" class="inline-msg"></p>
     </form>
+  </section>
+
+  <section class="admin-section">
+    <h2>Bulk import via Excel</h2>
+    <p class="section-desc">Columns: <strong>Name</strong>, <strong>Password</strong>, <strong>Email</strong>, <strong>Customer</strong>, <strong>Role</strong> (1 = Admin, 2 = Mobisy, 3 = Customer — the words work too). One row per person.</p>
+    <div class="bulk-upload-row">
+      <input type="file" id="bulk-upload-input" accept=".xlsx,.xls,.csv" />
+      <span id="bulk-upload-status" style="font-size:13.5px;color:var(--text-muted);"></span>
+    </div>
+    <div class="bulk-results" id="bulk-upload-results"></div>
   </section>
 
   <section class="admin-section">
@@ -92,6 +113,22 @@
     </div>
     <p class="settings-live-desc" id="case-studies-visibility-desc"></p>
     <p id="settings-msg" class="inline-msg"></p>
+  </section>
+
+  <section class="admin-section">
+    <div class="usage-header">
+      <h2 style="margin-bottom:0;">Who's logged in <span style="font-weight:400;color:var(--text-muted);font-size:13.5px;">· today / this week / this month</span></h2>
+      <div style="display:flex;gap:10px;">
+        <button id="usage-download-btn" class="btn btn-ghost">Download</button>
+        <button id="usage-refresh-btn" class="btn btn-ghost">Refresh</button>
+      </div>
+    </div>
+    <div class="segmented" id="usage-tabs">
+      <button type="button" data-tab="recent" class="active">Recent</button>
+      <button type="button" data-tab="opens">By opens</button>
+      <button type="button" data-tab="never">Never opened</button>
+    </div>
+    <div id="usage-body" style="margin-top:18px;"></div>
   </section>
 
 </div>
@@ -141,7 +178,7 @@
     try {
       users = await window.bizomListUsers();
     } catch (err) {
-      tbody.innerHTML = '<tr><td colspan="3">Couldn\'t load users: ' + err.message + '</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="5">Couldn\'t load users: ' + err.message + '</td></tr>';
       return;
     }
 
@@ -151,9 +188,9 @@
         ? '<button class="remove-user-btn" disabled title="You can\'t remove your own account">Remove</button>'
         : '<button class="remove-user-btn" data-username="' + u.username.replace(/"/g, "&quot;") + '">Remove</button>';
       const editBtn = '<button class="edit-user-btn" data-username="' + u.username.replace(/"/g, "&quot;") + '">Edit</button>';
-      let rows = '<tr><td><strong>' + u.username + '</strong>' + (isSelf ? ' <span class="overridden-tag">(you)</span>' : '') + '</td><td><span class="' + roleClass(u.role) + '">' + u.roleLabel + '</span></td><td>' + editBtn + removeBtn + '</td></tr>';
+      let rows = '<tr><td><strong>' + escapeHtml(u.username) + '</strong>' + (isSelf ? ' <span class="overridden-tag">(you)</span>' : '') + '</td><td>' + escapeHtml(u.email || "—") + '</td><td>' + escapeHtml(u.customerName || "—") + '</td><td><span class="' + roleClass(u.role) + '">' + u.roleLabel + '</span></td><td>' + editBtn + removeBtn + '</td></tr>';
       if (openEditUsername === u.username) {
-        rows += '<tr><td colspan="3" class="edit-row-cell">' +
+        rows += '<tr><td colspan="5" class="edit-row-cell">' +
           '<form class="edit-row-form" data-username="' + u.username.replace(/"/g, "&quot;") + '">' +
             '<div class="form-field"><label>New password</label><input type="text" class="edit-password" placeholder="Leave blank to keep current" autocomplete="off" /></div>' +
             '<div class="form-field"><label>Role</label><select class="edit-role">' +
@@ -214,28 +251,6 @@
     });
   }
 
-  document.getElementById("add-user-form").addEventListener("submit", async function (e) {
-    e.preventDefault();
-    const username = document.getElementById("new-username").value;
-    const password = document.getElementById("new-password").value;
-    const role = document.getElementById("new-role").value;
-    const msgEl = document.getElementById("add-user-msg");
-    const submitBtn = e.target.querySelector('button[type="submit"]');
-
-    submitBtn.disabled = true;
-    const result = await window.bizomAddUser(username, password, role);
-    submitBtn.disabled = false;
-
-    if (result.ok) {
-      showMsg(msgEl, "Added “" + username.trim() + "”. They can sign in right away.", false);
-      document.getElementById("add-user-form").reset();
-      renderUsers();
-      renderStats();
-    } else {
-      showMsg(msgEl, result.error, true);
-    }
-  });
-
   // ---------------- Site settings toggle ----------------
   const VISIBILITY_DESCRIPTIONS = {
     hidden: "Nobody sees the Case Studies link — not even admins. It stays reachable at case-studies.html for admins only, but doesn't show in the nav.",
@@ -252,6 +267,193 @@
     document.getElementById("case-studies-visibility-desc").textContent = VISIBILITY_DESCRIPTIONS[settings.caseStudiesVisibility] || "";
   }
 
+  // ---------------- Bulk import ----------------
+  const BULK_ROLE_MAP = { "1": "admin", "2": "mobisy", "3": "customer", "admin": "admin", "mobisy": "mobisy", "customer": "customer" };
+
+  async function handleBulkUpload(file) {
+    const statusEl = document.getElementById("bulk-upload-status");
+    const resultsEl = document.getElementById("bulk-upload-results");
+    resultsEl.innerHTML = "";
+    statusEl.textContent = "Reading file…";
+
+    let rows;
+    try {
+      const data = await file.arrayBuffer();
+      const wb = XLSX.read(data, { type: "array" });
+      const sheet = wb.Sheets[wb.SheetNames[0]];
+      rows = XLSX.utils.sheet_to_json(sheet, { defval: "" });
+    } catch (err) {
+      statusEl.textContent = "";
+      resultsEl.innerHTML = '<p class="section-desc">Couldn\'t read that file: ' + err.message + "</p>";
+      return;
+    }
+
+    if (!rows.length) {
+      statusEl.textContent = "";
+      resultsEl.innerHTML = '<p class="section-desc">No rows found in that file.</p>';
+      return;
+    }
+
+    const outcomes = [];
+    for (let i = 0; i < rows.length; i++) {
+      const row = rows[i];
+      statusEl.textContent = "Adding " + (i + 1) + " of " + rows.length + "…";
+      const name = String(row.Name || row.name || "").trim();
+      const password = String(row.Password || row.password || "").trim();
+      const email = String(row.Email || row.email || "").trim();
+      const customer = String(row.Customer || row.customer || "").trim();
+      const roleRaw = String(row.Role || row.role || "").trim().toLowerCase();
+      const role = BULK_ROLE_MAP[roleRaw];
+
+      if (!name || !password || !role) {
+        outcomes.push({ name: name || "(row " + (i + 1) + ")", ok: false, error: "Missing or invalid Name / Password / Role" });
+        continue;
+      }
+      const result = await window.bizomAddUser(name, password, role, email, customer);
+      outcomes.push({ name: name, ok: result.ok, error: result.error });
+    }
+
+    statusEl.textContent = "";
+    const okCount = outcomes.filter(function (o) { return o.ok; }).length;
+    resultsEl.innerHTML =
+      '<p style="font-weight:700;margin-bottom:8px;">' + okCount + " of " + outcomes.length + " added</p>" +
+      outcomes.map(function (o) {
+        return '<div class="bulk-row"><span>' + escapeHtml(o.name) + "</span><span class=\"" + (o.ok ? "bulk-ok" : "bulk-fail") + '">' + (o.ok ? "Added" : escapeHtml(o.error || "Failed")) + "</span></div>";
+      }).join("");
+
+    renderUsers();
+    renderStats();
+  }
+
+  // ---------------- Usage / "who's logged in" ----------------
+  let usageData = null;
+  let usageTab = "recent";
+
+  function formatTs(iso) {
+    const d = new Date(iso);
+    return d.toLocaleDateString(undefined, { month: "short", day: "numeric" }) + ", " + d.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
+  }
+
+  function bucketUsage(events, profiles) {
+    const now = Date.now();
+    const DAY = 24 * 60 * 60 * 1000;
+    const byUser = {};
+    events.forEach(function (ev) {
+      const uid = ev.user_id;
+      if (!byUser[uid]) {
+        byUser[uid] = {
+          username: ev.profiles ? ev.profiles.username : "(unknown)",
+          customerName: ev.profiles ? ev.profiles.customer_name : "",
+          count: 0,
+          lastSeen: ev.occurred_at,
+        };
+      }
+      byUser[uid].count++;
+      if (new Date(ev.occurred_at) > new Date(byUser[uid].lastSeen)) byUser[uid].lastSeen = ev.occurred_at;
+    });
+
+    const withActivity = Object.keys(byUser).map(function (uid) { return Object.assign({ id: uid }, byUser[uid]); });
+    function since(cutoff) {
+      return withActivity.filter(function (u) { return new Date(u.lastSeen).getTime() >= cutoff; })
+        .sort(function (a, b) { return new Date(b.lastSeen) - new Date(a.lastSeen); });
+    }
+
+    const byOpens = withActivity.slice().sort(function (a, b) { return b.count - a.count; });
+    const activeIds = Object.keys(byUser);
+    const neverOpened = profiles.filter(function (p) { return activeIds.indexOf(p.id) === -1; });
+
+    return {
+      today: since(now - DAY),
+      week: since(now - 7 * DAY),
+      month: since(now - 30 * DAY),
+      byOpens: byOpens,
+      neverOpened: neverOpened,
+    };
+  }
+
+  function renderUsageList(users, showOpens) {
+    if (!users.length) return '<p class="section-desc">Nobody yet.</p>';
+    return '<ul class="usage-list">' + users.map(function (u) {
+      const sub = showOpens ? (u.count + " open" + (u.count === 1 ? "" : "s")) : formatTs(u.lastSeen);
+      const customer = u.customerName ? ' <span class="overridden-tag">' + escapeHtml(u.customerName) + "</span>" : "";
+      return "<li><strong>" + escapeHtml(u.username) + "</strong>" + customer + '<span class="usage-sub">' + sub + "</span></li>";
+    }).join("") + "</ul>";
+  }
+
+  function renderUsageBody() {
+    const body = document.getElementById("usage-body");
+    if (!usageData) { body.innerHTML = '<p class="section-desc">Loading…</p>'; return; }
+    if (usageTab === "recent") {
+      body.innerHTML = '<div class="usage-columns">' +
+        "<div><h4>Today (" + usageData.today.length + ")</h4>" + renderUsageList(usageData.today) + "</div>" +
+        "<div><h4>This week (" + usageData.week.length + ")</h4>" + renderUsageList(usageData.week) + "</div>" +
+        "<div><h4>This month (" + usageData.month.length + ")</h4>" + renderUsageList(usageData.month) + "</div>" +
+        "</div>";
+    } else if (usageTab === "opens") {
+      body.innerHTML = renderUsageList(usageData.byOpens, true);
+    } else {
+      body.innerHTML = usageData.neverOpened.length
+        ? "<ul class=\"usage-list\">" + usageData.neverOpened.map(function (p) { return "<li><strong>" + escapeHtml(p.username) + "</strong></li>"; }).join("") + "</ul>"
+        : '<p class="section-desc">Everyone has opened it at least once.</p>';
+    }
+  }
+
+  async function loadUsage() {
+    document.getElementById("usage-body").innerHTML = '<p class="section-desc">Loading…</p>';
+    try {
+      const raw = await window.bizomGetUsageSummary();
+      usageData = bucketUsage(raw.events, raw.profiles);
+      renderUsageBody();
+    } catch (err) {
+      document.getElementById("usage-body").innerHTML = '<p class="section-desc">Couldn\'t load: ' + err.message + "</p>";
+    }
+  }
+
+  function downloadUsageCsv() {
+    if (!usageData) return;
+    const rows = [["Name", "Customer", "Opens", "Last seen"]].concat(usageData.byOpens.map(function (u) {
+      return [u.username, u.customerName || "", u.count, u.lastSeen];
+    }));
+    const csv = rows.map(function (r) {
+      return r.map(function (v) { return '"' + String(v).replace(/"/g, '""') + '"'; }).join(",");
+    }).join("\n");
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "usage.csv";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  // ============ one-time event bindings ============
+  // BIZOM_BINDINGS_START
+  document.getElementById("add-user-form").addEventListener("submit", async function (e) {
+    e.preventDefault();
+    const username = document.getElementById("new-username").value;
+    const password = document.getElementById("new-password").value;
+    const role = document.getElementById("new-role").value;
+    const email = document.getElementById("new-email").value;
+    const customer = document.getElementById("new-customer").value;
+    const msgEl = document.getElementById("add-user-msg");
+    const submitBtn = e.target.querySelector('button[type="submit"]');
+
+    submitBtn.disabled = true;
+    const result = await window.bizomAddUser(username, password, role, email, customer);
+    submitBtn.disabled = false;
+
+    if (result.ok) {
+      showMsg(msgEl, "Added “" + username.trim() + "”. They can sign in right away.", false);
+      document.getElementById("add-user-form").reset();
+      renderUsers();
+      renderStats();
+    } else {
+      showMsg(msgEl, result.error, true);
+    }
+  });
+
   document.getElementById("case-studies-visibility-toggle").addEventListener("click", async function (e) {
     const btn = e.target.closest("button[data-value]");
     if (!btn) return;
@@ -265,12 +467,31 @@
     }
   });
 
+  document.getElementById("bulk-upload-input").addEventListener("change", function (e) {
+    const file = e.target.files[0];
+    if (file) handleBulkUpload(file);
+    e.target.value = "";
+  });
+
+  document.getElementById("usage-tabs").addEventListener("click", function (e) {
+    const btn = e.target.closest("button[data-tab]");
+    if (!btn) return;
+    usageTab = btn.dataset.tab;
+    document.querySelectorAll("#usage-tabs button").forEach(function (b) { b.classList.toggle("active", b === btn); });
+    renderUsageBody();
+  });
+
+  document.getElementById("usage-download-btn").addEventListener("click", downloadUsageCsv);
+  document.getElementById("usage-refresh-btn").addEventListener("click", loadUsage);
+  // BIZOM_BINDINGS_END
+
   const me = window.bizomCurrentUser();
   document.getElementById("signed-in-as").textContent = "Signed in as " + me.username + " (" + me.role + ")";
 
   renderStats();
   renderUsers();
   renderVisibilityToggle();
+  loadUsage();
 </script>
 </body>
 </html>

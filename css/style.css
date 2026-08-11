@@ -522,6 +522,31 @@ table.data-table code { background: var(--surface-alt); padding: 2px 6px; border
 .inline-msg.msg-error { color: #c23434; }
 .inline-msg.msg-success { color: #0f9c7d; }
 
+/* ---------------- Bulk upload ---------------- */
+.bulk-upload-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.bulk-upload-row input[type="file"] {
+  font-size: 13.5px; padding: 9px 12px; border-radius: 10px; border: 1px dashed var(--border);
+  background: var(--surface-alt); max-width: 320px;
+}
+.bulk-results { margin-top: 14px; font-size: 13.5px; }
+.bulk-results .bulk-row { padding: 6px 0; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; gap: 12px; }
+.bulk-results .bulk-row:last-child { border-bottom: none; }
+.bulk-results .bulk-ok { color: #0f9c7d; font-weight: 600; }
+.bulk-results .bulk-fail { color: #c23434; font-weight: 600; }
+
+/* ---------------- Usage / "who's logged in" ---------------- */
+.usage-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 18px; flex-wrap: wrap; }
+.usage-header h2 { margin-bottom: 0; }
+.usage-columns { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 18px; }
+.usage-columns h4 { font-size: 12.5px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 10px; }
+@media (max-width: 780px) { .usage-columns { grid-template-columns: 1fr; } }
+.usage-list { list-style: none; margin: 0; padding: 0; }
+.usage-list li {
+  padding: 10px 0; border-bottom: 1px solid var(--border); display: flex; flex-direction: column; gap: 2px;
+}
+.usage-list li:last-child { border-bottom: none; }
+.usage-list .usage-sub { font-size: 12.5px; color: var(--text-muted); }
+
 .remove-user-btn, .edit-user-btn {
   font-size: 12.5px; font-weight: 700; background: none; border: none; padding: 4px 8px;
   border-radius: 6px; transition: background 0.2s; cursor: pointer;
