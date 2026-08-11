@@ -7,6 +7,12 @@
 // source of truth — no per-page HTML edits needed.
 // ==========================================================================
 
+// Bump this on every redeploy (new value each time is all that matters —
+// timestamp, commit hash, whatever). Powers the "new version available"
+// banner in initVersionCheck() below: open tabs poll for this string and
+// prompt a refresh the moment it changes on the server.
+const BIZOM_BUILD_ID = "2026-08-11.1";
+
 const CATEGORY_ORDER = [
   "Outlets & Geography",
   "Product & Master Data",
@@ -563,15 +569,71 @@ function initScrollspy() {
   });
 }
 
+// ---------------- New version available banner ----------------
+// Works on both the multi-page GitHub Pages site and the single-file
+// standalone build: first tries fetching the separate js/main.js (the normal
+// site), and if that doesn't turn up a build id — because it's a single-file
+// build where main.js is inlined rather than a fetchable file — falls back
+// to re-fetching the current page itself.
+function extractBuildId(text) {
+  const m = text && text.match(/BIZOM_BUILD_ID\s*=\s*"([^"]+)"/);
+  return m ? m[1] : null;
+}
+
+function versionCheckUrl() {
+  return isGuidePage() ? "../js/main.js" : "js/main.js";
+}
+
+let updateBannerEl = null;
+
+function showUpdateBanner() {
+  if (updateBannerEl) return;
+  const bar = document.createElement("div");
+  bar.className = "update-banner";
+  bar.innerHTML =
+    '<span>A new version of this page is available.</span>' +
+    '<button type="button" class="update-banner-refresh">Refresh now</button>' +
+    '<button type="button" class="update-banner-dismiss" aria-label="Dismiss">&times;</button>';
+  document.body.appendChild(bar);
+  updateBannerEl = bar;
+  requestAnimationFrame(() => bar.classList.add("show"));
+  bar.querySelector(".update-banner-refresh").addEventListener("click", () => window.location.reload());
+  bar.querySelector(".update-banner-dismiss").addEventListener("click", () => {
+    bar.classList.remove("show");
+    setTimeout(() => { bar.remove(); updateBannerEl = null; }, 300);
+  });
+}
+
+async function checkForNewVersion() {
+  try {
+    let res = await fetch(versionCheckUrl(), { cache: "no-store" });
+    let remoteId = res.ok ? extractBuildId(await res.text()) : null;
+    if (!remoteId) {
+      res = await fetch(location.href, { cache: "no-store" });
+      remoteId = res.ok ? extractBuildId(await res.text()) : null;
+    }
+    if (remoteId && remoteId !== BIZOM_BUILD_ID) showUpdateBanner();
+  } catch (e) {
+    // offline, or fetch blocked — silently retry on the next interval
+  }
+}
+
+function initVersionCheck() {
+  setInterval(checkForNewVersion, 5 * 60 * 1000);
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") checkForNewVersion();
+  });
+}
+
 // ---------------- Was this helpful ----------------
 function initHelpfulBox() {
-  const box = document.querySelector(".helpful-box");
-  if (!box) return;
-  const buttons = box.querySelectorAll("button");
-  buttons.forEach(btn => {
-    btn.addEventListener("click", () => {
-      buttons.forEach(b => b.classList.remove("picked"));
-      btn.classList.add("picked");
+  document.querySelectorAll(".helpful-box").forEach(box => {
+    const buttons = box.querySelectorAll("button");
+    buttons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        buttons.forEach(b => b.classList.remove("picked"));
+        btn.classList.add("picked");
+      });
     });
   });
 }
@@ -684,3 +746,8 @@ function initLogout() {
     if (window.bizomLogout) window.bizomLogout();
   });
 }
+
+// Runs on every page (including the standalone build) regardless of the
+// SPA router — a separate DOMContentLoaded listener, so it doesn't touch
+// the bootstrap block above that build-with-auth.js pattern-matches on.
+document.addEventListener("DOMContentLoaded", initVersionCheck);

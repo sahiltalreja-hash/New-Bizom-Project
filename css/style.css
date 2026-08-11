@@ -241,7 +241,12 @@ code {
 .hero-search button { flex-shrink: 0; }
 
 .hero-stats { display: flex; gap: 40px; margin-top: 56px; flex-wrap: wrap; }
-.hero-stats .stat b { display: block; font-size: 26px; font-weight: 800; }
+.hero-stats .stat { padding-left: 22px; border-left: 2px solid rgba(255, 255, 255, 0.14); }
+.hero-stats .stat:first-child { padding-left: 0; border-left: none; }
+.hero-stats .stat b {
+  display: block; font-size: 26px; font-weight: 800;
+  background: linear-gradient(90deg, #fff, var(--mint)); -webkit-background-clip: text; background-clip: text; color: transparent;
+}
 .hero-stats .stat span { font-size: 13px; color: rgba(255, 255, 255, 0.55); }
 
 /* ---------------- Sections ---------------- */
@@ -332,11 +337,14 @@ code {
 
 /* ---------------- How it works strip ---------------- */
 .flow-strip { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
-.flow-step { flex: 1; min-width: 150px; text-align: center; padding: 20px; }
+.flow-step { flex: 1; min-width: 150px; text-align: center; padding: 20px; transition: transform 0.3s var(--ease); }
+.flow-step:hover { transform: translateY(-5px); }
 .flow-step .num {
-  width: 40px; height: 40px; border-radius: 50%; background: var(--surface-alt); border: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; font-weight: 700; color: var(--indigo);
+  width: 44px; height: 44px; border-radius: 50%; background: var(--gradient-brand); border: none;
+  display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; font-weight: 700; font-size: 16px; color: #fff;
+  box-shadow: 0 8px 20px rgba(62, 13, 234, 0.32); transition: box-shadow 0.3s var(--ease);
 }
+.flow-step:hover .num { box-shadow: 0 12px 26px rgba(62, 13, 234, 0.45); }
 .flow-step h4 { font-size: 15px; margin-bottom: 4px; }
 .flow-step p { font-size: 13.5px; margin: 0; }
 .flow-arrow { color: var(--border); flex-shrink: 0; }
@@ -804,4 +812,29 @@ table.data-table code { background: var(--surface-alt); padding: 2px 6px; border
   .guide-footer-nav a { max-width: 100%; }
   .flow-strip { flex-direction: column; }
   .flow-arrow { transform: rotate(90deg); }
+}
+
+/* ---------------- New version available banner ---------------- */
+.update-banner {
+  position: fixed; left: 50%; bottom: 22px; transform: translate(-50%, 120%);
+  z-index: 1200; display: flex; align-items: center; gap: 14px;
+  background: var(--navy); color: #fff; padding: 14px 16px 14px 20px;
+  border-radius: var(--radius-pill); box-shadow: var(--shadow-lg);
+  max-width: calc(100vw - 40px); transition: transform 0.35s var(--ease);
+}
+.update-banner.show { transform: translate(-50%, 0); }
+.update-banner span { font-size: 13.5px; font-weight: 600; white-space: nowrap; }
+.update-banner-refresh {
+  flex-shrink: 0; background: var(--gradient-brand); color: #fff; border: none;
+  padding: 9px 16px; border-radius: var(--radius-pill); font-size: 13px; font-weight: 700; cursor: pointer;
+}
+.update-banner-dismiss {
+  flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%; border: none;
+  background: rgba(255, 255, 255, 0.12); color: #fff; font-size: 17px; line-height: 1; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+.update-banner-dismiss:hover { background: rgba(255, 255, 255, 0.22); }
+@media (max-width: 640px) {
+  .update-banner { flex-wrap: wrap; justify-content: center; text-align: center; bottom: 14px; padding: 14px 18px; }
+  .update-banner span { white-space: normal; }
 }
