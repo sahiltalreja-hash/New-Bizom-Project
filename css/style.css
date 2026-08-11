@@ -525,6 +525,10 @@ table.data-table code { background: var(--surface-alt); padding: 2px 6px; border
 .role-badge.role-mobisy { background: rgba(47, 108, 231, 0.12); color: #2f6ce7; }
 .role-badge.role-customer { background: rgba(15, 156, 125, 0.12); color: #0f9c7d; }
 
+.vote-badge { display: inline-block; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: var(--radius-pill); }
+.vote-badge.vote-up { background: rgba(15, 156, 125, 0.12); color: #0f9c7d; }
+.vote-badge.vote-down { background: rgba(226, 62, 62, 0.1); color: #c23b3b; }
+
 .inline-msg { font-size: 13.5px; font-weight: 600; margin-top: 10px; display: none; }
 .inline-msg.show { display: block; }
 .inline-msg.msg-error { color: #c23434; }
@@ -709,6 +713,20 @@ table.data-table code { background: var(--surface-alt); padding: 2px 6px; border
 }
 .helpful-actions button:hover { border-color: var(--indigo); color: var(--indigo); transform: translateY(-2px); }
 .helpful-actions button.picked { background: var(--gradient-brand); color: #fff; border-color: transparent; }
+
+.helpful-feedback-form {
+  margin-top: 10px; padding: 16px 20px; border-radius: var(--radius-md); background: var(--surface-alt);
+  border: 1px solid var(--border); opacity: 0; transform: translateY(-6px); transition: all 0.25s var(--ease);
+}
+.helpful-feedback-form.open { opacity: 1; transform: translateY(0); }
+.helpful-feedback-form label { display: block; font-size: 13px; font-weight: 600; color: var(--text-primary); margin-bottom: 8px; }
+.helpful-feedback-form textarea {
+  width: 100%; resize: vertical; min-height: 56px; padding: 10px 12px; border-radius: 8px;
+  border: 1px solid var(--border); font: inherit; font-size: 13.5px; outline: none; background: #fff;
+}
+.helpful-feedback-form textarea:focus { border-color: var(--indigo); box-shadow: 0 0 0 3px rgba(62, 13, 234, 0.1); }
+.helpful-feedback-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 10px; }
+.helpful-feedback-sent { margin: 0; font-size: 13.5px; font-weight: 600; color: var(--indigo); }
 
 /* Lightbox */
 .lightbox { position: fixed; inset: 0; background: rgba(16, 5, 35, 0.88); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 40px; backdrop-filter: blur(4px); }

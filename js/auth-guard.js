@@ -238,6 +238,42 @@ window.bizomGetUsageSummary = async function () {
   return { events: eventsRes.data, profiles: profilesRes.data };
 };
 
+// Records (or updates) a signed-in user's thumbs up/down on a guide, plus an
+// optional comment on a downvote. One row per user per guide — re-voting
+// overwrites the previous vote/comment rather than piling up duplicates.
+window.bizomSubmitGuideFeedback = async function (guideId, guideTitle, vote, comment) {
+  try {
+    const client = await getSupabaseClient();
+    const { data: sessionData } = await client.auth.getSession();
+    const userId = sessionData && sessionData.session ? sessionData.session.user.id : null;
+    if (!userId) return { ok: false, error: "Not signed in." };
+    const { error } = await client.from("guide_feedback").upsert({
+      user_id: userId,
+      guide_id: guideId,
+      guide_title: guideTitle,
+      vote: vote,
+      comment: (comment || "").trim() || null,
+      updated_at: new Date().toISOString(),
+    }, { onConflict: "user_id,guide_id" });
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: e.message };
+  }
+};
+
+// Admin-only — enforced by guide_feedback's RLS SELECT policy. Every vote +
+// comment, newest first, joined with who submitted it.
+window.bizomGetGuideFeedback = async function () {
+  const client = await getSupabaseClient();
+  const { data, error } = await client
+    .from("guide_feedback")
+    .select("id, guide_id, guide_title, vote, comment, created_at, updated_at, profiles(username, customer_name)")
+    .order("updated_at", { ascending: false });
+  if (error) throw new Error(error.message);
+  return data;
+};
+
 async function callManageUsers(action, payload) {
   const client = await getSupabaseClient();
   const { data: sessionData } = await client.auth.getSession();

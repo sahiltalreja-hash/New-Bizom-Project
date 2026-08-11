@@ -136,6 +136,26 @@
     <div id="usage-body" style="margin-top:18px;"></div>
   </section>
 
+  <section class="admin-section">
+    <div class="usage-header">
+      <h2 style="margin-bottom:0;">Guide Feedback <span style="font-weight:400;color:var(--text-muted);font-size:13.5px;">· thumbs up/down + comments from every guide</span></h2>
+      <div style="display:flex;gap:10px;">
+        <div class="segmented" id="feedback-filter">
+          <button type="button" data-filter="all" class="active">All</button>
+          <button type="button" data-filter="up">Liked</button>
+          <button type="button" data-filter="down">Disliked</button>
+        </div>
+        <button id="feedback-refresh-btn" class="btn btn-ghost">Refresh</button>
+      </div>
+    </div>
+    <div class="data-table-wrap" style="margin-top:18px;">
+      <table class="data-table">
+        <thead><tr><th>Guide</th><th>User</th><th>Vote</th><th>Comment</th><th>Date</th></tr></thead>
+        <tbody id="feedback-table-body"></tbody>
+      </table>
+    </div>
+  </section>
+
 </div>
 
 <footer class="site-footer">
@@ -433,6 +453,45 @@
     URL.revokeObjectURL(url);
   }
 
+  // ---------------- Guide feedback ----------------
+  let feedbackData = [];
+  let feedbackFilter = "all";
+
+  function voteBadge(vote) {
+    return vote === "up"
+      ? '<span class="vote-badge vote-up">Liked</span>'
+      : '<span class="vote-badge vote-down">Disliked</span>';
+  }
+
+  function renderFeedbackTable() {
+    const tbody = document.getElementById("feedback-table-body");
+    const rows = feedbackFilter === "all" ? feedbackData : feedbackData.filter(function (f) { return f.vote === feedbackFilter; });
+    if (!rows.length) {
+      tbody.innerHTML = '<tr><td colspan="5">No feedback yet.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = rows.map(function (f) {
+      const who = f.profiles ? f.profiles.username : "(unknown)";
+      const customer = f.profiles && f.profiles.customer_name ? ' <span class="overridden-tag">' + escapeHtml(f.profiles.customer_name) + "</span>" : "";
+      const comment = f.comment ? escapeHtml(f.comment) : '<span style="color:var(--text-muted);">—</span>';
+      return "<tr><td><strong>" + escapeHtml(f.guide_title) + "</strong></td>" +
+        "<td>" + escapeHtml(who) + customer + "</td>" +
+        "<td>" + voteBadge(f.vote) + "</td>" +
+        "<td>" + comment + "</td>" +
+        "<td>" + formatTs(f.updated_at) + "</td></tr>";
+    }).join("");
+  }
+
+  async function loadGuideFeedback() {
+    document.getElementById("feedback-table-body").innerHTML = '<tr><td colspan="5">Loading…</td></tr>';
+    try {
+      feedbackData = await window.bizomGetGuideFeedback();
+      renderFeedbackTable();
+    } catch (err) {
+      document.getElementById("feedback-table-body").innerHTML = '<tr><td colspan="5">Couldn\'t load: ' + escapeHtml(err.message) + "</td></tr>";
+    }
+  }
+
   // ============ one-time event bindings ============
   // BIZOM_BINDINGS_START
   document.getElementById("add-user-form").addEventListener("submit", async function (e) {
@@ -492,6 +551,15 @@
 
   document.getElementById("usage-download-btn").addEventListener("click", downloadUsageCsv);
   document.getElementById("usage-refresh-btn").addEventListener("click", loadUsage);
+
+  document.getElementById("feedback-filter").addEventListener("click", function (e) {
+    const btn = e.target.closest("button[data-filter]");
+    if (!btn) return;
+    feedbackFilter = btn.dataset.filter;
+    document.querySelectorAll("#feedback-filter button").forEach(function (b) { b.classList.toggle("active", b === btn); });
+    renderFeedbackTable();
+  });
+  document.getElementById("feedback-refresh-btn").addEventListener("click", loadGuideFeedback);
   // BIZOM_BINDINGS_END
 
   const me = window.bizomCurrentUser();
@@ -501,6 +569,7 @@
   renderUsers();
   renderVisibilityToggle();
   loadUsage();
+  loadGuideFeedback();
 </script>
 </body>
 </html>

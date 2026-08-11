@@ -11,7 +11,7 @@
 // timestamp, commit hash, whatever). Powers the "new version available"
 // banner in initVersionCheck() below: open tabs poll for this string and
 // prompt a refresh the moment it changes on the server.
-const BIZOM_BUILD_ID = "2026-08-11.1";
+const BIZOM_BUILD_ID = "2026-08-11.2";
 
 const CATEGORY_ORDER = [
   "Outlets & Geography",
@@ -626,14 +626,78 @@ function initVersionCheck() {
 }
 
 // ---------------- Was this helpful ----------------
+// Thumbs up records instantly. Thumbs down also records instantly (so we
+// never lose the vote itself), then opens a small inline box asking what
+// went wrong — an optional comment gets attached to that same vote.
+// Requires window.bizomSubmitGuideFeedback (auth-guard.js).
+function guideIdForFeedbackBox(box) {
+  const wrap = box.closest("[data-page]");
+  if (wrap) return wrap.getAttribute("data-page");
+  return document.body.getAttribute("data-guide") || document.body.getAttribute("data-page") || "";
+}
+
+function closeFeedbackForm(box) {
+  const next = box.nextElementSibling;
+  if (next && next.classList.contains("helpful-feedback-form")) next.remove();
+}
+
+function openFeedbackForm(box, guideId, guideTitle) {
+  closeFeedbackForm(box);
+  const form = document.createElement("div");
+  form.className = "helpful-feedback-form";
+  form.innerHTML =
+    '<label>What went wrong, and how can we improve this guide?</label>' +
+    '<textarea rows="2" maxlength="600" placeholder="Optional, but it helps us fix it faster…"></textarea>' +
+    '<div class="helpful-feedback-actions">' +
+      '<button type="button" class="btn btn-ghost btn-sm helpful-feedback-skip">Skip</button>' +
+      '<button type="button" class="btn btn-primary btn-sm helpful-feedback-send">Send feedback</button>' +
+    '</div>' +
+    '<p class="helpful-feedback-sent" hidden>Thanks — this has been sent to our team.</p>';
+  box.insertAdjacentElement("afterend", form);
+  requestAnimationFrame(() => form.classList.add("open"));
+
+  const textarea = form.querySelector("textarea");
+  const actions = form.querySelector(".helpful-feedback-actions");
+  const sentMsg = form.querySelector(".helpful-feedback-sent");
+
+  function finish(comment) {
+    if (comment) window.bizomSubmitGuideFeedback(guideId, guideTitle, "down", comment);
+    textarea.hidden = true;
+    actions.hidden = true;
+    form.querySelector("label").hidden = true;
+    sentMsg.hidden = false;
+    setTimeout(() => closeFeedbackForm(box), 2200);
+  }
+
+  form.querySelector(".helpful-feedback-send").addEventListener("click", () => finish(textarea.value.trim()));
+  form.querySelector(".helpful-feedback-skip").addEventListener("click", () => closeFeedbackForm(box));
+  textarea.focus();
+}
+
 function initHelpfulBox() {
   document.querySelectorAll(".helpful-box").forEach(box => {
-    const buttons = box.querySelectorAll("button");
-    buttons.forEach(btn => {
-      btn.addEventListener("click", () => {
-        buttons.forEach(b => b.classList.remove("picked"));
-        btn.classList.add("picked");
-      });
+    const upBtn = box.querySelector('button[aria-label^="Yes"]');
+    const downBtn = box.querySelector('button[aria-label^="No"]');
+    if (!upBtn || !downBtn) return;
+    const guideId = guideIdForFeedbackBox(box);
+    const guide = GUIDES.find(g => g.id === guideId);
+    const guideTitle = guide ? guide.title : (document.title || guideId);
+
+    function pick(btn) {
+      [upBtn, downBtn].forEach(b => b.classList.remove("picked"));
+      btn.classList.add("picked");
+    }
+
+    upBtn.addEventListener("click", () => {
+      pick(upBtn);
+      closeFeedbackForm(box);
+      if (window.bizomSubmitGuideFeedback) window.bizomSubmitGuideFeedback(guideId, guideTitle, "up", null);
+    });
+
+    downBtn.addEventListener("click", () => {
+      pick(downBtn);
+      if (window.bizomSubmitGuideFeedback) window.bizomSubmitGuideFeedback(guideId, guideTitle, "down", null);
+      openFeedbackForm(box, guideId, guideTitle);
     });
   });
 }
