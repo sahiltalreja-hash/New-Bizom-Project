@@ -461,6 +461,10 @@
     try {
       await window.bizomSetSettings({ caseStudiesVisibility: btn.dataset.value });
       renderVisibilityToggle();
+      // The header nav (Case Studies link) is only rebuilt on navigation —
+      // without this, the setting saves correctly but the nav looks stuck
+      // until you leave and come back to this page.
+      if (window.renderMainNav) window.renderMainNav();
       showMsg(msgEl, "Applied — live for everyone now.", false);
     } catch (err) {
       showMsg(msgEl, err.message, true);
