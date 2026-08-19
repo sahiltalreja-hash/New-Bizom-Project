@@ -369,6 +369,7 @@
         byUser[uid] = {
           username: ev.profiles ? ev.profiles.username : "(unknown)",
           customerName: ev.profiles ? ev.profiles.customer_name : "",
+          role: ev.profiles ? ev.profiles.role : "",
           count: 0,
           lastSeen: ev.occurred_at,
         };
@@ -396,12 +397,17 @@
     };
   }
 
+  const USAGE_ROLE_LABELS = { admin: "Admin", mobisy: "Mobisy", customer: "Customer" };
+  function roleTag(role) {
+    return role ? " (" + (USAGE_ROLE_LABELS[role] || role) + ")" : "";
+  }
+
   function renderUsageList(users, showOpens) {
     if (!users.length) return '<p class="section-desc">Nobody yet.</p>';
     return '<ul class="usage-list">' + users.map(function (u) {
       const sub = showOpens ? (u.count + " open" + (u.count === 1 ? "" : "s")) : formatTs(u.lastSeen);
       const customer = u.customerName ? ' <span class="overridden-tag">' + escapeHtml(u.customerName) + "</span>" : "";
-      return "<li><strong>" + escapeHtml(u.username) + "</strong>" + customer + '<span class="usage-sub">' + sub + "</span></li>";
+      return "<li><strong>" + escapeHtml(u.username) + escapeHtml(roleTag(u.role)) + "</strong>" + customer + '<span class="usage-sub">' + sub + "</span></li>";
     }).join("") + "</ul>";
   }
 
@@ -418,7 +424,10 @@
       body.innerHTML = renderUsageList(usageData.byOpens, true);
     } else {
       body.innerHTML = usageData.neverOpened.length
-        ? "<ul class=\"usage-list\">" + usageData.neverOpened.map(function (p) { return "<li><strong>" + escapeHtml(p.username) + "</strong></li>"; }).join("") + "</ul>"
+        ? "<ul class=\"usage-list\">" + usageData.neverOpened.map(function (p) {
+            const customer = p.customer_name ? ' <span class="overridden-tag">' + escapeHtml(p.customer_name) + "</span>" : "";
+            return "<li><strong>" + escapeHtml(p.username) + escapeHtml(roleTag(p.role)) + "</strong>" + customer + "</li>";
+          }).join("") + "</ul>"
         : '<p class="section-desc">Everyone has opened it at least once.</p>';
     }
   }

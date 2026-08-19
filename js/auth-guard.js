@@ -230,7 +230,7 @@ window.bizomGetUsageSummary = async function () {
   const client = await getSupabaseClient();
   const cutoff = new Date(Date.now() - 31 * 24 * 60 * 60 * 1000).toISOString();
   const [eventsRes, profilesRes] = await Promise.all([
-    client.from("login_events").select("occurred_at, user_id, profiles(username, customer_name)").gte("occurred_at", cutoff).order("occurred_at", { ascending: false }),
+    client.from("login_events").select("occurred_at, user_id, profiles(username, customer_name, role)").gte("occurred_at", cutoff).order("occurred_at", { ascending: false }),
     client.from("profiles").select("id, username, customer_name, role"),
   ]);
   if (eventsRes.error) throw new Error(eventsRes.error.message);
@@ -270,6 +270,40 @@ window.bizomGetGuideFeedback = async function () {
     .from("guide_feedback")
     .select("id, guide_id, guide_title, vote, comment, created_at, updated_at, profiles(username, customer_name)")
     .order("updated_at", { ascending: false });
+  if (error) throw new Error(error.message);
+  return data;
+};
+
+// Site-wide "Have you used the Guide?" survey — separate from the per-guide
+// thumbs up/down (guide_feedback). Each submission is its own row (a user
+// can submit more than once over time, unlike the one-vote-per-guide widget).
+window.bizomSubmitSurvey = async function (usedGuide, guideId, guideTitle, feedback) {
+  try {
+    const client = await getSupabaseClient();
+    const { data: sessionData } = await client.auth.getSession();
+    const userId = sessionData && sessionData.session ? sessionData.session.user.id : null;
+    if (!userId) return { ok: false, error: "Not signed in." };
+    const { error } = await client.from("guide_surveys").insert({
+      user_id: userId,
+      used_guide: !!usedGuide,
+      guide_id: usedGuide ? (guideId || null) : null,
+      guide_title: usedGuide ? (guideTitle || null) : null,
+      feedback: (feedback || "").trim() || null,
+    });
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: e.message };
+  }
+};
+
+// Admin-only — enforced by guide_surveys' RLS SELECT policy.
+window.bizomGetSurveys = async function () {
+  const client = await getSupabaseClient();
+  const { data, error } = await client
+    .from("guide_surveys")
+    .select("id, used_guide, guide_id, guide_title, feedback, created_at, profiles(username, customer_name)")
+    .order("created_at", { ascending: false });
   if (error) throw new Error(error.message);
   return data;
 };

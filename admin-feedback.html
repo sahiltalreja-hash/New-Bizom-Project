@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script src="js/auth-guard.js"></script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Feedback From People — Bizom Help Center</title>
+<meta name="robots" content="noindex, nofollow" />
+<link rel="icon" href="assets/img/logo/bizom-logo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<div class="reading-progress"></div>
+
+<header class="site-header">
+  <div class="container">
+    <a href="index.html" class="brand">
+      <img src="assets/img/logo/bizom-logo.png" alt="Bizom" />
+    </a>
+    <nav class="main-nav" id="main-nav"></nav>
+    <div class="header-actions">
+      <button id="logout-btn" class="icon-btn" title="Log out" aria-label="Log out"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg></button>
+      <a href="mailto:support@mobisytechnologies.zohodesk.in" class="btn btn-primary btn-sm">Contact Support</a>
+      <button class="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<div class="admin-shell">
+
+  <div class="admin-header">
+    <span class="module-tag accent-violet" style="display:inline-block;">ADMIN</span>
+    <h1>Feedback From People</h1>
+    <p style="color:var(--text-secondary); font-size:14.5px;">Responses to the "Have you used the Guide?" form — click a row for the full response.</p>
+  </div>
+
+  <div class="admin-stats" id="survey-stats"></div>
+
+  <section class="admin-section">
+    <div class="usage-header">
+      <h2 style="margin-bottom:0;">Responses</h2>
+      <div style="display:flex;gap:10px;">
+        <div class="segmented" id="survey-filter">
+          <button type="button" data-filter="all" class="active">All</button>
+          <button type="button" data-filter="yes">Used it</button>
+          <button type="button" data-filter="no">Hasn't yet</button>
+        </div>
+        <button id="survey-refresh-btn" class="btn btn-ghost">Refresh</button>
+      </div>
+    </div>
+    <div id="survey-list" style="margin-top:18px;"></div>
+  </section>
+
+</div>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-bottom">
+      <span>© 2026 Bizom · Mobisy Technologies. All rights reserved.</span>
+      <span>Internal help center — for Bizom client teams</span>
+    </div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+<script>
+  window.bizomRequireAdmin();
+
+  let surveyData = [];
+  let surveyFilter = "all";
+  let openSurveyId = null;
+
+  function formatTs(iso) {
+    const d = new Date(iso);
+    return d.toLocaleDateString(undefined, { month: "short", day: "numeric" }) + ", " + d.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
+  }
+
+  function renderStats() {
+    const used = surveyData.filter(function (s) { return s.used_guide; }).length;
+    const cards = [
+      { label: "Total responses", value: surveyData.length, accent: "accent-indigo" },
+      { label: "Used the guides", value: used, accent: "accent-mint" },
+      { label: "Haven't yet", value: surveyData.length - used, accent: "accent-amber" },
+    ];
+    document.getElementById("survey-stats").innerHTML = cards.map(function (c) {
+      return '<div class="admin-stat-card ' + c.accent + '"><b>' + c.value + '</b><span>' + c.label + '</span></div>';
+    }).join("");
+  }
+
+  function renderList() {
+    const list = document.getElementById("survey-list");
+    const rows = surveyFilter === "all" ? surveyData : surveyData.filter(function (s) { return (s.used_guide ? "yes" : "no") === surveyFilter; });
+
+    if (!rows.length) {
+      list.innerHTML = '<p class="section-desc">No responses yet.</p>';
+      return;
+    }
+
+    list.innerHTML = rows.map(function (s) {
+      const who = s.profiles ? s.profiles.username : "(unknown)";
+      const customer = s.profiles && s.profiles.customer_name ? ' <span class="overridden-tag">' + escapeHtml(s.profiles.customer_name) + "</span>" : "";
+      const badge = s.used_guide
+        ? '<span class="vote-badge vote-up">Used it</span>'
+        : '<span class="vote-badge vote-down">Hasn\'t yet</span>';
+      const isOpen = openSurveyId === s.id;
+
+      let detail = "";
+      if (isOpen) {
+        const guideLine = s.guide_title ? '<p><strong>Guide:</strong> ' + escapeHtml(s.guide_title) + "</p>" : "";
+        const feedbackLine = s.feedback
+          ? '<p><strong>Feedback:</strong> ' + escapeHtml(s.feedback) + "</p>"
+          : '<p style="color:var(--text-muted);">No written feedback left.</p>';
+        detail = '<div class="survey-detail">' + guideLine + feedbackLine + "</div>";
+      }
+
+      return '<div class="survey-row-wrap">' +
+        '<button type="button" class="survey-row" data-id="' + s.id + '">' +
+          '<span class="survey-row-who"><strong>' + escapeHtml(who) + '</strong>' + customer + '</span>' +
+          '<span class="survey-row-meta">' + badge + '<span class="usage-sub">' + formatTs(s.created_at) + '</span></span>' +
+        '</button>' +
+        detail +
+        '</div>';
+    }).join("");
+
+    list.querySelectorAll(".survey-row").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        const id = Number(btn.dataset.id);
+        openSurveyId = openSurveyId === id ? null : id;
+        renderList();
+      });
+    });
+  }
+
+  async function loadSurveys() {
+    document.getElementById("survey-list").innerHTML = '<p class="section-desc">Loading…</p>';
+    try {
+      surveyData = await window.bizomGetSurveys();
+      renderStats();
+      renderList();
+    } catch (err) {
+      document.getElementById("survey-list").innerHTML = '<p class="section-desc">Couldn\'t load: ' + escapeHtml(err.message) + "</p>";
+    }
+  }
+
+  document.getElementById("survey-filter").addEventListener("click", function (e) {
+    const btn = e.target.closest("button[data-filter]");
+    if (!btn) return;
+    surveyFilter = btn.dataset.filter;
+    document.querySelectorAll("#survey-filter button").forEach(function (b) { b.classList.toggle("active", b === btn); });
+    renderList();
+  });
+  document.getElementById("survey-refresh-btn").addEventListener("click", loadSurveys);
+
+  loadSurveys();
+</script>
+</body>
+</html>

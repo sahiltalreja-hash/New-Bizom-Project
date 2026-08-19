@@ -11,7 +11,7 @@
 // timestamp, commit hash, whatever). Powers the "new version available"
 // banner in initVersionCheck() below: open tabs poll for this string and
 // prompt a refresh the moment it changes on the server.
-const BIZOM_BUILD_ID = "2026-08-11.2";
+const BIZOM_BUILD_ID = "2026-08-19.1";
 
 const CATEGORY_ORDER = [
   "Outlets & Geography",
@@ -190,6 +190,8 @@ function renderMainNav() {
 
   const isAdminPage = /\/?admin\.html$/.test(location.pathname);
   const isCaseStudiesPage = /\/?case-studies\.html$/.test(location.pathname);
+  const isFeedbackPage = /\/?feedback\.html$/.test(location.pathname);
+  const isFeedbackReviewPage = /\/?admin-feedback\.html$/.test(location.pathname);
   const isAdminUser = !!(window.bizomIsAdmin && window.bizomIsAdmin());
   const siteSettings = window.bizomGetSettings ? window.bizomGetSettings() : { caseStudiesVisibility: "admin" };
   const showCaseStudies =
@@ -198,12 +200,16 @@ function renderMainNav() {
   const caseStudiesLink = showCaseStudies
     ? `<a href="${resolveUrl("case-studies.html")}"${isCaseStudiesPage ? ' class="active"' : ""}>Case Studies</a>`
     : "";
+  const feedbackLink = `<a href="${resolveUrl("feedback.html")}"${isFeedbackPage ? ' class="active"' : ""}>Feedback</a>`;
   const adminLink = isAdminUser
     ? `<a href="${resolveUrl("admin.html")}"${isAdminPage ? ' class="active"' : ""}>Admin</a>`
     : "";
+  const feedbackReviewLink = isAdminUser
+    ? `<a href="${resolveUrl("admin-feedback.html")}"${isFeedbackReviewPage ? ' class="active"' : ""}>Feedback From People</a>`
+    : "";
 
   nav.innerHTML = `
-    <a href="${resolveUrl("index.html")}"${isGuidePage() || isAdminPage || isCaseStudiesPage ? "" : ' class="active"'}>Home</a>
+    <a href="${resolveUrl("index.html")}"${isGuidePage() || isAdminPage || isCaseStudiesPage || isFeedbackPage || isFeedbackReviewPage ? "" : ' class="active"'}>Home</a>
     <div class="nav-item">
       <button type="button" class="nav-trigger" id="guides-trigger">
         Guides
@@ -218,7 +224,9 @@ function renderMainNav() {
       </div>
     </div>
     ${caseStudiesLink}
+    ${feedbackLink}
     ${adminLink}
+    ${feedbackReviewLink}
   `;
 }
 
@@ -811,7 +819,40 @@ function initLogout() {
   });
 }
 
+// ---------------- Fix anchor scroll after late-loading images shift layout ----------------
+// Guide screenshots are loading="lazy" with no width/height reserved, so as they load in
+// they push everything below them further down the page. The browser's one-time native
+// scroll-to-#hash on load fires before that settles, so a deep link (TOC, search result,
+// related guide) lands scrolled to where the target USED to be, not where it ended up.
+// If there were still images loading when we got here, re-scroll once they're all done.
+function initHashScrollFix() {
+  if (!location.hash) return;
+  let id;
+  try { id = decodeURIComponent(location.hash.slice(1)); } catch (e) { return; }
+  const target = document.getElementById(id);
+  if (!target) return;
+
+  const pending = Array.from(document.querySelectorAll("img")).filter(img => !img.complete);
+  if (!pending.length) return;
+
+  let remaining = pending.length;
+  let done = false;
+  function finish() {
+    if (done) return;
+    done = true;
+    target.scrollIntoView({ block: "start" });
+  }
+  pending.forEach(img => {
+    img.addEventListener("load", () => { if (--remaining <= 0) finish(); }, { once: true });
+    img.addEventListener("error", () => { if (--remaining <= 0) finish(); }, { once: true });
+  });
+  setTimeout(finish, 1500);
+}
+
 // Runs on every page (including the standalone build) regardless of the
 // SPA router — a separate DOMContentLoaded listener, so it doesn't touch
 // the bootstrap block above that build-with-auth.js pattern-matches on.
-document.addEventListener("DOMContentLoaded", initVersionCheck);
+document.addEventListener("DOMContentLoaded", function () {
+  initVersionCheck();
+  initHashScrollFix();
+});

@@ -511,11 +511,12 @@ table.data-table code { background: var(--surface-alt); padding: 2px 6px; border
 
 .form-field { margin-bottom: 16px; }
 .form-field label { display: block; font-size: 13px; font-weight: 600; color: var(--text-primary); margin-bottom: 6px; }
-.form-field input, .form-field select {
+.form-field input, .form-field select, .form-field textarea {
   width: 100%; padding: 11px 14px; border-radius: 10px; border: 1px solid var(--border); background: #fff;
   font-size: 14.5px; color: var(--text-primary); outline: none; font-family: inherit; transition: all 0.2s var(--ease);
 }
-.form-field input:focus, .form-field select:focus { border-color: var(--indigo); box-shadow: 0 0 0 3px rgba(62, 13, 234, 0.1); }
+.form-field textarea { resize: vertical; min-height: 90px; }
+.form-field input:focus, .form-field select:focus, .form-field textarea:focus { border-color: var(--indigo); box-shadow: 0 0 0 3px rgba(62, 13, 234, 0.1); }
 .form-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; align-items: end; }
 .form-row .form-field { margin-bottom: 0; }
 @media (max-width: 680px) { .form-row { grid-template-columns: 1fr; } }
@@ -558,6 +559,19 @@ table.data-table code { background: var(--surface-alt); padding: 2px 6px; border
 }
 .usage-list li:last-child { border-bottom: none; }
 .usage-list .usage-sub { font-size: 12.5px; color: var(--text-muted); }
+
+.survey-row-wrap { border-bottom: 1px solid var(--border); }
+.survey-row-wrap:last-child { border-bottom: none; }
+.survey-row {
+  width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 14px;
+  padding: 14px 4px; background: none; border: none; cursor: pointer; text-align: left; font-family: inherit;
+}
+.survey-row:hover { background: var(--surface-alt); }
+.survey-row-who { font-size: 14px; }
+.survey-row-meta { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+.survey-detail { padding: 4px 4px 18px; font-size: 13.5px; color: var(--text-secondary); }
+.survey-detail p { margin: 0 0 6px; }
+.survey-detail p:last-child { margin-bottom: 0; }
 
 .remove-user-btn, .edit-user-btn {
   font-size: 12.5px; font-weight: 700; background: none; border: none; padding: 4px 8px;

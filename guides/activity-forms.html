@@ -72,6 +72,7 @@
         <ol>
           <li><a href="#what-is">What is an Activity Form?</a></li>
           <li><a href="#create-activity-form">Steps to create one</a></li>
+          <li><a href="#mdm-mapping">Bulk-assign forms to users via MDM</a></li>
           <li><a href="#comparison">Activity Form vs Generic Form</a></li>
         </ol>
       </div>
@@ -118,19 +119,6 @@
               </table>
             </div>
           </li>
-          <li><h4>Configure execution settings</h4>
-            <div class="data-table-wrap">
-              <table class="data-table">
-                <thead><tr><th>Setting</th><th>What it controls</th></tr></thead>
-                <tbody>
-                  <tr><td><strong>Execution Point</strong></td><td>Start Call / Mid Call / End Call</td></tr>
-                  <tr><td><strong>Frequency</strong></td><td>Once per visit / Every visit</td></tr>
-                  <tr><td><strong>Outlet Type Filter</strong></td><td>Restrict to specific outlet types</td></tr>
-                  <tr><td><strong>Beat Filter</strong></td><td>Restrict to specific beats</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </li>
           <li><h4>Assign the form</h4><p>To the relevant Role (e.g. Salesman, ASM, RSM), Designation, User, or Warehouse.</p></li>
           <li><h4>Save &amp; publish</h4><p>It appears on the mobile app for assigned users during outlet visits.</p></li>
           <li><h4>Verify on the app</h4><p>Start an outlet call as a test user and confirm the form appears at the configured execution point.</p></li>
@@ -144,6 +132,27 @@
         <div class="callout callout-warn">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 9v4M12 17h.01M10.3 3.9 2.7 18a2 2 0 0 0 1.7 3h15.2a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>
           <p><strong>Note</strong>Activity Forms are tied to the outlet visit workflow. If a form isn't showing up, confirm that workflow is enabled for that user.</p>
+        </div>
+
+        <h2 id="mdm-mapping">Bulk-assign forms to users via MDM</h2>
+        <p>Assigning a form to many users at once? Instead of assigning one by one, map activity forms to users in bulk with the Activity Form Mapping MDM.</p>
+        <div class="data-table-wrap">
+          <table class="data-table">
+            <thead><tr><th>Column</th><th>What it means</th><th>Required</th></tr></thead>
+            <tbody>
+              <tr><td><code>user_id</code></td><td>The user the form is being assigned to</td><td>✅ Yes</td></tr>
+              <tr><td><code>activityformfield_id</code></td><td>The activity form field being assigned</td><td>✅ Yes</td></tr>
+              <tr><td><code>compulsory</code></td><td>Whether filling it in is mandatory</td><td>—</td></tr>
+              <tr><td><code>is_active</code></td><td>1 to enable the mapping, 0 to disable it</td><td>—</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="download-grid">
+          <a class="download-card" href="../assets/downloads/activity-form-mapping-mdm-template.xls" download>
+            <span class="dl-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 21h16"/></svg></span>
+            <span class="dl-info"><strong>Activity Form Mapping MDM Template</strong><span>.XLS · Ready to fill and upload</span></span>
+            <span class="dl-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M7 17 17 7M7 7h10v10"/></svg></span>
+          </a>
         </div>
 
         <h2 id="comparison">Activity Form vs Generic Form</h2>

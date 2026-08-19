@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script src="js/auth-guard.js"></script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Feedback — Bizom Help Center</title>
+<meta name="robots" content="noindex, nofollow" />
+<link rel="icon" href="assets/img/logo/bizom-logo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<div class="reading-progress"></div>
+
+<header class="site-header">
+  <div class="container">
+    <a href="index.html" class="brand">
+      <img src="assets/img/logo/bizom-logo.png" alt="Bizom" />
+    </a>
+    <nav class="main-nav" id="main-nav"></nav>
+    <div class="header-actions">
+      <button id="logout-btn" class="icon-btn" title="Log out" aria-label="Log out"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg></button>
+      <a href="mailto:support@mobisytechnologies.zohodesk.in" class="btn btn-primary btn-sm">Contact Support</a>
+      <button class="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<section class="hero" style="padding:64px 0 56px;">
+  <div class="container">
+    <div class="hero-eyebrow"><span class="dot"></span> Help us improve</div>
+    <h1>Tell us how we're <span>doing</span></h1>
+    <p class="lead">Two minutes, and it goes straight to the team that maintains this site.</p>
+  </div>
+</section>
+
+<section class="section" style="padding:56px 0 88px;">
+  <div class="container" style="max-width:600px;">
+
+    <div id="feedback-card" style="background:var(--white); border:1px solid var(--border); border-radius:var(--radius-lg); padding:36px; box-shadow:var(--shadow-sm);">
+
+      <form id="feedback-form">
+        <div class="form-field">
+          <label>Have you used the Help Center guides?</label>
+          <div class="segmented" id="used-guide-toggle">
+            <button type="button" data-value="yes">Yes</button>
+            <button type="button" data-value="no">No</button>
+          </div>
+        </div>
+
+        <div id="guide-picker-wrap" class="form-field" hidden>
+          <label for="guide-picker">Which guide?</label>
+          <select id="guide-picker">
+            <option value="">Select a guide…</option>
+          </select>
+        </div>
+
+        <div id="feedback-text-wrap" class="form-field" hidden>
+          <label id="feedback-text-label" for="feedback-text">Feedback on the guide</label>
+          <textarea id="feedback-text" placeholder="What worked, what didn't, what's missing…" maxlength="1000"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="feedback-submit-btn" style="width:100%; margin-top:6px;" disabled>Submit feedback</button>
+        <p id="feedback-msg" class="inline-msg"></p>
+      </form>
+
+      <div id="feedback-thanks" hidden style="text-align:center; padding:20px 0;">
+        <div style="width:56px; height:56px; border-radius:50%; background:var(--gradient-brand); display:flex; align-items:center; justify-content:center; margin:0 auto 18px;">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+        </div>
+        <h3 style="margin-bottom:8px;">Thanks — that's in.</h3>
+        <p style="color:var(--text-secondary); margin-bottom:20px;">Your feedback goes straight to the team maintaining this site.</p>
+        <button type="button" class="btn btn-ghost" id="feedback-again-btn">Submit more feedback</button>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-bottom">
+      <span>© 2026 Bizom · Mobisy Technologies. All rights reserved.</span>
+      <span>Internal help center — for Bizom client teams</span>
+    </div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+<script>
+  const usedToggle = document.getElementById("used-guide-toggle");
+  const guidePickerWrap = document.getElementById("guide-picker-wrap");
+  const guidePicker = document.getElementById("guide-picker");
+  const feedbackTextWrap = document.getElementById("feedback-text-wrap");
+  const feedbackTextLabel = document.getElementById("feedback-text-label");
+  const feedbackText = document.getElementById("feedback-text");
+  const submitBtn = document.getElementById("feedback-submit-btn");
+  const msgEl = document.getElementById("feedback-msg");
+  let usedGuideValue = null;
+
+  guidePicker.innerHTML += GUIDES.slice().sort((a, b) => a.title.localeCompare(b.title)).map(function (g) {
+    return '<option value="' + g.id + '">' + g.title + '</option>';
+  }).join("");
+
+  function updateSubmitState() {
+    if (usedGuideValue === "yes") {
+      submitBtn.disabled = !guidePicker.value;
+    } else {
+      submitBtn.disabled = usedGuideValue === null;
+    }
+  }
+
+  usedToggle.addEventListener("click", function (e) {
+    const btn = e.target.closest("button[data-value]");
+    if (!btn) return;
+    usedGuideValue = btn.dataset.value;
+    usedToggle.querySelectorAll("button").forEach(function (b) { b.classList.toggle("active", b === btn); });
+    const isYes = usedGuideValue === "yes";
+    guidePickerWrap.hidden = !isYes;
+    feedbackTextWrap.hidden = false;
+    feedbackTextLabel.textContent = isYes ? "Feedback on the guide" : "Anything we could improve?";
+    feedbackText.placeholder = isYes ? "What worked, what didn't, what's missing…" : "No worries — what's stopping you, or what would help?";
+    updateSubmitState();
+  });
+
+  guidePicker.addEventListener("change", updateSubmitState);
+
+  document.getElementById("feedback-form").addEventListener("submit", async function (e) {
+    e.preventDefault();
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Submitting…";
+
+    const isYes = usedGuideValue === "yes";
+    const guide = isYes ? GUIDES.find(function (g) { return g.id === guidePicker.value; }) : null;
+    const result = await window.bizomSubmitSurvey(isYes, guide ? guide.id : null, guide ? guide.title : null, feedbackText.value);
+
+    if (result.ok) {
+      document.getElementById("feedback-form").hidden = true;
+      document.getElementById("feedback-thanks").hidden = false;
+    } else {
+      msgEl.textContent = result.error;
+      msgEl.className = "inline-msg show msg-error";
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Submit feedback";
+    }
+  });
+
+  document.getElementById("feedback-again-btn").addEventListener("click", function () {
+    document.getElementById("feedback-form").reset();
+    document.getElementById("feedback-form").hidden = false;
+    document.getElementById("feedback-thanks").hidden = true;
+    usedGuideValue = null;
+    usedToggle.querySelectorAll("button").forEach(function (b) { b.classList.remove("active"); });
+    guidePickerWrap.hidden = true;
+    feedbackTextWrap.hidden = true;
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Submit feedback";
+    msgEl.textContent = "";
+    msgEl.className = "inline-msg";
+  });
+</script>
+</body>
+</html>
