@@ -11,7 +11,7 @@
 // timestamp, commit hash, whatever). Powers the "new version available"
 // banner in initVersionCheck() below: open tabs poll for this string and
 // prompt a refresh the moment it changes on the server.
-const BIZOM_BUILD_ID = "2026-08-19.2";
+const BIZOM_BUILD_ID = "2026-08-19.3";
 
 const CATEGORY_ORDER = [
   "Outlets & Geography",
@@ -193,7 +193,21 @@ function renderMainNav() {
   const isFeedbackPage = /\/?feedback\.html$/.test(location.pathname);
   const isFeedbackReviewPage = /\/?admin-feedback\.html$/.test(location.pathname);
   const isAdminUser = !!(window.bizomIsAdmin && window.bizomIsAdmin());
-  const siteSettings = window.bizomGetSettings ? window.bizomGetSettings() : { caseStudiesVisibility: "admin" };
+  const siteSettings = window.bizomGetSettings ? window.bizomGetSettings() : { caseStudiesVisibility: "admin", guidesHidden: false };
+  const guidesNav = siteSettings.guidesHidden ? "" : `
+    <div class="nav-item">
+      <button type="button" class="nav-trigger" id="guides-trigger">
+        Guides
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+      <div class="mega-menu" id="guides-menu">
+        ${cols}
+        <div class="mega-menu-footer">
+          <span>${GUIDES.length} guides and counting</span>
+          <a href="mailto:sahil.talreja@mobisy.com">Request a guide →</a>
+        </div>
+      </div>
+    </div>`;
   const showCaseStudies =
     siteSettings.caseStudiesVisibility === "public" ||
     (isAdminUser && siteSettings.caseStudiesVisibility !== "hidden");
@@ -210,19 +224,7 @@ function renderMainNav() {
 
   nav.innerHTML = `
     <a href="${resolveUrl("index.html")}"${isGuidePage() || isAdminPage || isCaseStudiesPage || isFeedbackPage || isFeedbackReviewPage ? "" : ' class="active"'}>Home</a>
-    <div class="nav-item">
-      <button type="button" class="nav-trigger" id="guides-trigger">
-        Guides
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-      </button>
-      <div class="mega-menu" id="guides-menu">
-        ${cols}
-        <div class="mega-menu-footer">
-          <span>${GUIDES.length} guides and counting</span>
-          <a href="mailto:sahil.talreja@mobisy.com">Request a guide →</a>
-        </div>
-      </div>
-    </div>
+    ${guidesNav}
     ${caseStudiesLink}
     ${feedbackLink}
     ${adminLink}
@@ -342,8 +344,17 @@ const CATEGORY_ACCENTS = {
 };
 
 function renderDirectory() {
+  const startHere = document.getElementById("start-here-section");
+  const guidesHidden = !!(window.bizomGetSettings && window.bizomGetSettings().guidesHidden);
+  if (startHere) startHere.style.display = guidesHidden ? "none" : "";
+
   const container = document.getElementById("guide-directory");
   if (!container) return;
+
+  if (guidesHidden) {
+    container.innerHTML = '<p class="section-desc">Guides are temporarily unavailable — check back soon.</p>';
+    return;
+  }
 
   container.innerHTML = CATEGORY_ORDER.map(cat => {
     const items = GUIDES.filter(g => g.category === cat);
@@ -384,6 +395,13 @@ function buildSearchIndex() {
 }
 const SEARCH_INDEX = buildSearchIndex();
 
+// Every entry in SEARCH_INDEX is guide-derived — when guides are hidden
+// site-wide, search should turn up nothing rather than links that just
+// bounce the visitor home.
+function activeSearchIndex() {
+  return (window.bizomGetSettings && window.bizomGetSettings().guidesHidden) ? [] : SEARCH_INDEX;
+}
+
 // Matches if every word in the query appears somewhere in the haystack —
 // so "add outlet" matches text containing "Add" ... "outlets" in any order.
 function matchesQuery(haystack, query) {
@@ -411,7 +429,7 @@ function initSearch(inputId, panelId) {
   function render(query) {
     const q = query.trim().toLowerCase();
     if (!q) { panel.classList.remove("open"); panel.innerHTML = ""; return; }
-    const results = SEARCH_INDEX.filter(item =>
+    const results = activeSearchIndex().filter(item =>
       matchesQuery(item.title + " " + item.section + " " + item.tags, q)
     ).slice(0, 6);
 
@@ -479,7 +497,7 @@ function initSearchResultsPage() {
     const query = (input.value || "").trim();
     const q = query.toLowerCase();
 
-    let results = SEARCH_INDEX.filter(item => {
+    let results = activeSearchIndex().filter(item => {
       const isMatch = !q || matchesQuery(item.title + " " + item.section + " " + item.tags + " " + (item.snippet || ""), q);
       const matchesCat = activeCategory === "All" || item.category === activeCategory;
       return isMatch && matchesCat;

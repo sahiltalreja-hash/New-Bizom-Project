@@ -118,6 +118,16 @@
     </div>
     <p class="settings-live-desc" id="case-studies-visibility-desc"></p>
     <p id="settings-msg" class="inline-msg"></p>
+
+    <div style="height:24px;"></div>
+
+    <p class="section-desc">Guides visibility — hides every guide for Admins, Mobisy and Customers alike, no exceptions. Use this while a big content update is in progress.</p>
+    <div class="segmented" id="guides-visibility-toggle">
+      <button type="button" data-value="visible">Visible</button>
+      <button type="button" data-value="hidden">Hidden</button>
+    </div>
+    <p class="settings-live-desc" id="guides-visibility-desc"></p>
+    <p id="guides-settings-msg" class="inline-msg"></p>
   </section>
 
   <section class="admin-section">
@@ -290,6 +300,21 @@
       btn.classList.toggle("active", btn.dataset.value === settings.caseStudiesVisibility);
     });
     document.getElementById("case-studies-visibility-desc").textContent = VISIBILITY_DESCRIPTIONS[settings.caseStudiesVisibility] || "";
+  }
+
+  const GUIDES_VISIBILITY_DESCRIPTIONS = {
+    visible: "Guides work normally for everyone.",
+    hidden: "Every guide is hidden — for Admins, Mobisy and Customers alike. The Guides link disappears from the nav and direct links redirect home.",
+  };
+
+  function renderGuidesVisibilityToggle() {
+    const settings = window.bizomGetSettings();
+    const value = settings.guidesHidden ? "hidden" : "visible";
+    const toggle = document.getElementById("guides-visibility-toggle");
+    toggle.querySelectorAll("button").forEach(function (btn) {
+      btn.classList.toggle("active", btn.dataset.value === value);
+    });
+    document.getElementById("guides-visibility-desc").textContent = GUIDES_VISIBILITY_DESCRIPTIONS[value] || "";
   }
 
   // ---------------- Bulk import ----------------
@@ -544,6 +569,20 @@
     }
   });
 
+  document.getElementById("guides-visibility-toggle").addEventListener("click", async function (e) {
+    const btn = e.target.closest("button[data-value]");
+    if (!btn) return;
+    const msgEl = document.getElementById("guides-settings-msg");
+    try {
+      await window.bizomSetSettings({ guidesHidden: btn.dataset.value === "hidden" });
+      renderGuidesVisibilityToggle();
+      if (window.renderMainNav) window.renderMainNav();
+      showMsg(msgEl, "Applied — live for everyone now.", false);
+    } catch (err) {
+      showMsg(msgEl, err.message, true);
+    }
+  });
+
   document.getElementById("bulk-upload-input").addEventListener("change", function (e) {
     const file = e.target.files[0];
     if (file) handleBulkUpload(file);
@@ -577,6 +616,7 @@
   renderStats();
   renderUsers();
   renderVisibilityToggle();
+  renderGuidesVisibilityToggle();
   loadUsage();
   loadGuideFeedback();
 </script>

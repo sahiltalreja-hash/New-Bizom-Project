@@ -127,7 +127,7 @@ window.bizomCurrentUser = function () {
 
 window.bizomGetSettings = function () {
   const cached = getCachedSettings();
-  return { caseStudiesVisibility: cached.caseStudiesVisibility || "admin" };
+  return { caseStudiesVisibility: cached.caseStudiesVisibility || "admin", guidesHidden: !!cached.guidesHidden };
 };
 
 window.bizomLogout = async function () {
@@ -201,6 +201,7 @@ window.bizomSetSettings = async function (partial) {
   const client = await getSupabaseClient();
   const updates = {};
   if (partial.caseStudiesVisibility) updates.case_studies_visibility = partial.caseStudiesVisibility;
+  if (typeof partial.guidesHidden === "boolean") updates.guides_hidden = partial.guidesHidden;
   const { data, error } = await client.from("site_settings").update(updates).eq("id", 1).select();
   if (error) throw new Error(error.message);
   if (!data || !data.length) throw new Error("Only an admin can change site settings.");
@@ -377,12 +378,28 @@ window.bizomRemoveUser = async function (username) {
   }
 };
 
+function isGuidePagePath() {
+  return location.pathname.includes("/guides/");
+}
+
+// Guides can be switched off site-wide from Admin → Site Settings — applies to
+// every role with no exception (unlike Case Studies, which admins can always
+// still preview). Checked against the local cache, same as the auth check
+// above, so it's synchronous and never flashes hidden content first.
+function guidesBlocked() {
+  return isGuidePagePath() && window.bizomGetSettings().guidesHidden;
+}
+
 // ---------------- Guard: redirect immediately if not authenticated --------
 function runGuard() {
   if (isLoginPage()) return;
   if (!isAuthed()) {
     const next = encodeURIComponent(location.pathname + location.search + location.hash);
     window.location.replace(loginUrl() + "?next=" + next);
+    return;
+  }
+  if (guidesBlocked()) {
+    window.location.replace(homeUrl());
     return;
   }
   // Background: keep the local cache honest against the real session/settings.
@@ -411,14 +428,18 @@ async function revalidateSession() {
 async function refreshSettingsCache() {
   try {
     const client = await getSupabaseClient();
-    const { data, error } = await client.from("site_settings").select("case_studies_visibility").eq("id", 1).maybeSingle();
+    const { data, error } = await client.from("site_settings").select("case_studies_visibility, guides_hidden").eq("id", 1).maybeSingle();
     if (!error && data) {
       const before = JSON.stringify(getCachedSettings());
-      const fresh = { caseStudiesVisibility: data.case_studies_visibility };
+      const fresh = { caseStudiesVisibility: data.case_studies_visibility, guidesHidden: data.guides_hidden };
       setCachedSettings(fresh);
       if (JSON.stringify(fresh) !== before) {
+        // Another admin may have hidden guides while this tab was already sitting
+        // on one — the synchronous check in runGuard() only runs on page load.
+        if (guidesBlocked()) { window.location.replace(homeUrl()); return; }
         if (window.renderMainNav) window.renderMainNav();
         if (window.initCaseStudiesCarousel) window.initCaseStudiesCarousel();
+        if (window.renderDirectory) window.renderDirectory();
       }
     }
   } catch (e) {
