@@ -11,7 +11,7 @@
 // timestamp, commit hash, whatever). Powers the "new version available"
 // banner in initVersionCheck() below: open tabs poll for this string and
 // prompt a refresh the moment it changes on the server.
-const BIZOM_BUILD_ID = "2026-08-19.3";
+const BIZOM_BUILD_ID = "2026-08-20.1";
 
 const CATEGORY_ORDER = [
   "Outlets & Geography",
@@ -175,13 +175,25 @@ function escapeHtml(str) {
 }
 
 // ---------------- Header mega menu ----------------
+// Guides can be hidden individually from Admin → Site Settings, on top of the
+// all-or-nothing switch — this is the single place that applies both, so nav,
+// homepage, sidebar, related-guides and search all stay in sync automatically.
+function visibleGuides() {
+  const settings = window.bizomGetSettings ? window.bizomGetSettings() : null;
+  if (!settings || settings.guidesHidden) return [];
+  if (!settings.hiddenGuideIds.length) return GUIDES;
+  return GUIDES.filter(g => settings.hiddenGuideIds.indexOf(g.id) === -1);
+}
+
 function renderMainNav() {
   const nav = document.getElementById("main-nav");
   if (!nav) return;
   const current = currentGuideId();
+  const guides = visibleGuides();
 
   const cols = CATEGORY_ORDER.map(cat => {
-    const items = GUIDES.filter(g => g.category === cat);
+    const items = guides.filter(g => g.category === cat);
+    if (!items.length) return "";
     const links = items.map(g =>
       `<a href="${resolveUrl(g.url)}"${g.id === current ? ' class="active"' : ''}>${escapeHtml(g.title)}</a>`
     ).join("");
@@ -193,8 +205,8 @@ function renderMainNav() {
   const isFeedbackPage = /\/?feedback\.html$/.test(location.pathname);
   const isFeedbackReviewPage = /\/?admin-feedback\.html$/.test(location.pathname);
   const isAdminUser = !!(window.bizomIsAdmin && window.bizomIsAdmin());
-  const siteSettings = window.bizomGetSettings ? window.bizomGetSettings() : { caseStudiesVisibility: "admin", guidesHidden: false };
-  const guidesNav = siteSettings.guidesHidden ? "" : `
+  const siteSettings = window.bizomGetSettings ? window.bizomGetSettings() : { caseStudiesVisibility: "admin", guidesHidden: false, hiddenGuideIds: [] };
+  const guidesNav = !guides.length ? "" : `
     <div class="nav-item">
       <button type="button" class="nav-trigger" id="guides-trigger">
         Guides
@@ -203,7 +215,7 @@ function renderMainNav() {
       <div class="mega-menu" id="guides-menu">
         ${cols}
         <div class="mega-menu-footer">
-          <span>${GUIDES.length} guides and counting</span>
+          <span>${guides.length} guides and counting</span>
           <a href="mailto:sahil.talreja@mobisy.com">Request a guide →</a>
         </div>
       </div>
@@ -277,8 +289,10 @@ function renderSidebar() {
   if (!container) return;
   const current = currentGuideId();
 
+  const guides = visibleGuides();
   container.innerHTML = CATEGORY_ORDER.map(cat => {
-    const items = GUIDES.filter(g => g.category === cat);
+    const items = guides.filter(g => g.category === cat);
+    if (!items.length) return "";
     const containsCurrent = items.some(g => g.id === current);
     const links = items.map(g =>
       `<a href="${guideRelativeHref(g.url)}"${g.id === current ? ' class="active"' : ''}><span class="dot"></span>${escapeHtml(g.title)}</a>`
@@ -309,16 +323,18 @@ function renderRelatedGuides() {
   const current = currentGuideId();
   if (!current) return;
 
-  let relatedIds = RELATED_GUIDES[current] || [];
+  const guides = visibleGuides();
+  const visibleIds = guides.map(g => g.id);
+  let relatedIds = (RELATED_GUIDES[current] || []).filter(id => visibleIds.indexOf(id) !== -1);
   if (!relatedIds.length) {
     const me = GUIDES.find(g => g.id === current);
     if (me) {
-      relatedIds = GUIDES.filter(g => g.category === me.category && g.id !== me.id).slice(0, 3).map(g => g.id);
+      relatedIds = guides.filter(g => g.category === me.category && g.id !== me.id).slice(0, 3).map(g => g.id);
     }
   }
 
   const cards = relatedIds.slice(0, 3).map(id => {
-    const g = GUIDES.find(x => x.id === id);
+    const g = guides.find(x => x.id === id);
     if (!g) return "";
     return `
       <a class="related-card" href="${guideRelativeHref(g.url)}">
@@ -344,20 +360,27 @@ const CATEGORY_ACCENTS = {
 };
 
 function renderDirectory() {
-  const startHere = document.getElementById("start-here-section");
-  const guidesHidden = !!(window.bizomGetSettings && window.bizomGetSettings().guidesHidden);
-  if (startHere) startHere.style.display = guidesHidden ? "none" : "";
+  const guides = visibleGuides();
+  const visibleIds = guides.map(g => g.id);
+
+  // "Start Here" cards link to six specific guides by id — hide each one
+  // individually rather than the whole section, so it still works fine when
+  // only some of those six happen to be hidden.
+  document.querySelectorAll("#start-here-section [data-guide-id]").forEach(card => {
+    card.style.display = visibleIds.indexOf(card.getAttribute("data-guide-id")) === -1 ? "none" : "";
+  });
 
   const container = document.getElementById("guide-directory");
   if (!container) return;
 
-  if (guidesHidden) {
+  if (!guides.length) {
     container.innerHTML = '<p class="section-desc">Guides are temporarily unavailable — check back soon.</p>';
     return;
   }
 
   container.innerHTML = CATEGORY_ORDER.map(cat => {
-    const items = GUIDES.filter(g => g.category === cat);
+    const items = guides.filter(g => g.category === cat);
+    if (!items.length) return "";
     const links = items.map(g => `
       <a href="${g.url}">
         ${escapeHtml(g.title)}
@@ -395,11 +418,15 @@ function buildSearchIndex() {
 }
 const SEARCH_INDEX = buildSearchIndex();
 
-// Every entry in SEARCH_INDEX is guide-derived — when guides are hidden
-// site-wide, search should turn up nothing rather than links that just
-// bounce the visitor home.
+// Every entry in SEARCH_INDEX is guide-derived — filter out whichever guides
+// are currently hidden (all-at-once or one at a time) so search never turns
+// up a result that just bounces the visitor home.
 function activeSearchIndex() {
-  return (window.bizomGetSettings && window.bizomGetSettings().guidesHidden) ? [] : SEARCH_INDEX;
+  const visibleIds = visibleGuides().map(g => g.id);
+  return SEARCH_INDEX.filter(item => {
+    const m = item.url.match(/^guides\/([^\/#]+)\.html/);
+    return !m || visibleIds.indexOf(m[1]) !== -1;
+  });
 }
 
 // Matches if every word in the query appears somewhere in the haystack —

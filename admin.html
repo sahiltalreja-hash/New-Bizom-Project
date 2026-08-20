@@ -131,6 +131,12 @@
   </section>
 
   <section class="admin-section">
+    <h2>Guide visibility</h2>
+    <p class="section-desc">Turn individual guides on or off — hidden ones disappear from the nav, homepage and search for everyone, and the page itself redirects home. Changes apply instantly.</p>
+    <div id="guide-toggle-list"></div>
+  </section>
+
+  <section class="admin-section">
     <div class="usage-header">
       <h2 style="margin-bottom:0;">Who's logged in <span style="font-weight:400;color:var(--text-muted);font-size:13.5px;">· today / this week / this month</span></h2>
       <div style="display:flex;gap:10px;">
@@ -315,6 +321,22 @@
       btn.classList.toggle("active", btn.dataset.value === value);
     });
     document.getElementById("guides-visibility-desc").textContent = GUIDES_VISIBILITY_DESCRIPTIONS[value] || "";
+  }
+
+  function renderGuideToggleList() {
+    const settings = window.bizomGetSettings();
+    const hidden = settings.hiddenGuideIds || [];
+    const list = document.getElementById("guide-toggle-list");
+    list.innerHTML = CATEGORY_ORDER.map(function (cat) {
+      const items = GUIDES.filter(function (g) { return g.category === cat; });
+      if (!items.length) return "";
+      const rows = items.map(function (g) {
+        const checked = hidden.indexOf(g.id) === -1;
+        return '<div class="guide-toggle-row"><span>' + escapeHtml(g.title) + '</span>' +
+          '<label class="switch"><input type="checkbox" data-guide-id="' + g.id + '"' + (checked ? " checked" : "") + '/><span class="switch-track"></span></label></div>';
+      }).join("");
+      return '<div class="guide-toggle-group"><h4>' + escapeHtml(cat) + '</h4>' + rows + '</div>';
+    }).join("");
   }
 
   // ---------------- Bulk import ----------------
@@ -583,6 +605,24 @@
     }
   });
 
+  document.getElementById("guide-toggle-list").addEventListener("change", async function (e) {
+    const input = e.target.closest("input[data-guide-id]");
+    if (!input) return;
+    const id = input.dataset.guideId;
+    const settings = window.bizomGetSettings();
+    const hidden = settings.hiddenGuideIds || [];
+    const next = input.checked ? hidden.filter(function (h) { return h !== id; }) : hidden.concat([id]);
+    input.disabled = true;
+    try {
+      await window.bizomSetSettings({ hiddenGuideIds: next });
+      if (window.renderMainNav) window.renderMainNav();
+    } catch (err) {
+      alert(err.message);
+      input.checked = !input.checked;
+    }
+    input.disabled = false;
+  });
+
   document.getElementById("bulk-upload-input").addEventListener("change", function (e) {
     const file = e.target.files[0];
     if (file) handleBulkUpload(file);
@@ -617,6 +657,7 @@
   renderUsers();
   renderVisibilityToggle();
   renderGuidesVisibilityToggle();
+  renderGuideToggleList();
   loadUsage();
   loadGuideFeedback();
 </script>

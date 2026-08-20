@@ -127,7 +127,11 @@ window.bizomCurrentUser = function () {
 
 window.bizomGetSettings = function () {
   const cached = getCachedSettings();
-  return { caseStudiesVisibility: cached.caseStudiesVisibility || "admin", guidesHidden: !!cached.guidesHidden };
+  return {
+    caseStudiesVisibility: cached.caseStudiesVisibility || "admin",
+    guidesHidden: !!cached.guidesHidden,
+    hiddenGuideIds: Array.isArray(cached.hiddenGuideIds) ? cached.hiddenGuideIds : [],
+  };
 };
 
 window.bizomLogout = async function () {
@@ -202,6 +206,7 @@ window.bizomSetSettings = async function (partial) {
   const updates = {};
   if (partial.caseStudiesVisibility) updates.case_studies_visibility = partial.caseStudiesVisibility;
   if (typeof partial.guidesHidden === "boolean") updates.guides_hidden = partial.guidesHidden;
+  if (Array.isArray(partial.hiddenGuideIds)) updates.hidden_guide_ids = partial.hiddenGuideIds;
   const { data, error } = await client.from("site_settings").update(updates).eq("id", 1).select();
   if (error) throw new Error(error.message);
   if (!data || !data.length) throw new Error("Only an admin can change site settings.");
@@ -382,12 +387,24 @@ function isGuidePagePath() {
   return location.pathname.includes("/guides/");
 }
 
-// Guides can be switched off site-wide from Admin → Site Settings — applies to
-// every role with no exception (unlike Case Studies, which admins can always
-// still preview). Checked against the local cache, same as the auth check
-// above, so it's synchronous and never flashes hidden content first.
+// document.body isn't parsed yet when this runs (auth-guard.js loads in
+// <head>), so the guide id has to come from the URL, not data-guide. The
+// guide's filename (minus .html) always matches its id in GUIDES.
+function currentGuideIdFromPath() {
+  const m = location.pathname.match(/\/guides\/([^\/]+)\.html$/);
+  return m ? m[1] : "";
+}
+
+// Guides can be hidden two ways from Admin → Site Settings: all at once (applies
+// to every role, no exception — unlike Case Studies, which admins can always
+// still preview), or one at a time. Checked against the local cache, same as
+// the auth check above, so it's synchronous and never flashes hidden content.
 function guidesBlocked() {
-  return isGuidePagePath() && window.bizomGetSettings().guidesHidden;
+  if (!isGuidePagePath()) return false;
+  const settings = window.bizomGetSettings();
+  if (settings.guidesHidden) return true;
+  const id = currentGuideIdFromPath();
+  return !!id && settings.hiddenGuideIds.indexOf(id) !== -1;
 }
 
 // ---------------- Guard: redirect immediately if not authenticated --------
@@ -428,10 +445,10 @@ async function revalidateSession() {
 async function refreshSettingsCache() {
   try {
     const client = await getSupabaseClient();
-    const { data, error } = await client.from("site_settings").select("case_studies_visibility, guides_hidden").eq("id", 1).maybeSingle();
+    const { data, error } = await client.from("site_settings").select("case_studies_visibility, guides_hidden, hidden_guide_ids").eq("id", 1).maybeSingle();
     if (!error && data) {
       const before = JSON.stringify(getCachedSettings());
-      const fresh = { caseStudiesVisibility: data.case_studies_visibility, guidesHidden: data.guides_hidden };
+      const fresh = { caseStudiesVisibility: data.case_studies_visibility, guidesHidden: data.guides_hidden, hiddenGuideIds: data.hidden_guide_ids || [] };
       setCachedSettings(fresh);
       if (JSON.stringify(fresh) !== before) {
         // Another admin may have hidden guides while this tab was already sitting
