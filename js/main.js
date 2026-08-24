@@ -11,7 +11,7 @@
 // timestamp, commit hash, whatever). Powers the "new version available"
 // banner in initVersionCheck() below: open tabs poll for this string and
 // prompt a refresh the moment it changes on the server.
-const BIZOM_BUILD_ID = "2026-08-20.1";
+const BIZOM_BUILD_ID = "2026-08-24.1";
 
 const CATEGORY_ORDER = [
   "Outlets & Geography",
@@ -248,23 +248,39 @@ function initGuidesDropdown() {
   const trigger = document.getElementById("guides-trigger");
   const menu = document.getElementById("guides-menu");
   if (!trigger || !menu) return;
+  const navItem = trigger.closest(".nav-item") || trigger.parentElement;
+
+  function open() {
+    menu.classList.add("open");
+    trigger.classList.add("open");
+  }
+  function close() {
+    menu.classList.remove("open");
+    trigger.classList.remove("open");
+  }
 
   trigger.addEventListener("click", (e) => {
     e.stopPropagation();
-    const open = menu.classList.toggle("open");
-    trigger.classList.toggle("open", open);
+    menu.classList.contains("open") ? close() : open();
   });
+
+  // Desktop-mouse convenience — opens on hover, with a short delay before
+  // closing so moving the cursor from the trigger down into the menu
+  // (a diagonal path) doesn't get read as "left the dropdown".
+  let closeTimer = null;
+  navItem.addEventListener("mouseenter", () => {
+    if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
+    open();
+  });
+  navItem.addEventListener("mouseleave", () => {
+    closeTimer = setTimeout(close, 150);
+  });
+
   document.addEventListener("click", (e) => {
-    if (!menu.contains(e.target) && e.target !== trigger) {
-      menu.classList.remove("open");
-      trigger.classList.remove("open");
-    }
+    if (!menu.contains(e.target) && e.target !== trigger) close();
   });
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") {
-      menu.classList.remove("open");
-      trigger.classList.remove("open");
-    }
+    if (e.key === "Escape") close();
   });
 }
 
