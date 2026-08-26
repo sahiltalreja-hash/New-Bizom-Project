@@ -149,9 +149,13 @@ code {
 .mega-menu {
   /* Left-aligned to the trigger, not centered — "Guides" sits near the left
      edge of the header, so centering a 720px-wide menu on it pushed half of
-     it off-screen to the left and clipped the first column. */
+     it off-screen to the left and clipped the first column. The trigger
+     itself sits roughly 250px in from the edge at any desktop width (it's
+     fixed-width content — logo + Home link — ahead of it, not proportional
+     layout), so capping width at 100vw minus that offset keeps the menu
+     fluid with the viewport/zoom level without ever needing to reposition it. */
   position: absolute; top: calc(100% + 14px); left: 0;
-  width: 720px; max-width: min(90vw, calc(100vw - 32px)); background: #fff; border-radius: var(--radius-lg); border: 1px solid var(--border);
+  width: 720px; max-width: calc(100vw - 280px); background: #fff; border-radius: var(--radius-lg); border: 1px solid var(--border);
   box-shadow: var(--shadow-lg); padding: 26px; display: none; grid-template-columns: repeat(3, 1fr); gap: 22px 28px;
   z-index: 600;
 }
@@ -166,6 +170,10 @@ code {
 }
 .mega-menu-footer span { font-size: 13px; color: var(--text-muted); }
 .mega-menu-footer a { font-size: 13.5px; font-weight: 700; color: var(--indigo); }
+
+@media (max-width: 980px) {
+  .mega-menu { width: 480px; grid-template-columns: repeat(2, 1fr); padding: 22px; gap: 18px 22px; }
+}
 
 @media (max-width: 760px) {
   .mega-menu { position: static; transform: none; width: 100%; max-width: none; box-shadow: none; border: none; padding: 14px 0 0; grid-template-columns: 1fr; margin-top: 6px; }

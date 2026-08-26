@@ -11,7 +11,7 @@
 // timestamp, commit hash, whatever). Powers the "new version available"
 // banner in initVersionCheck() below: open tabs poll for this string and
 // prompt a refresh the moment it changes on the server.
-const BIZOM_BUILD_ID = "2026-08-26.3";
+const BIZOM_BUILD_ID = "2026-08-26.4";
 
 const CATEGORY_ORDER = [
   "Outlets & Geography",
@@ -251,22 +251,8 @@ function initGuidesDropdown() {
   const navItem = trigger.closest(".nav-item") || trigger.parentElement;
 
   function open() {
-    // CSS left-aligns the menu to the trigger by default, which works fine
-    // since "Guides" sits near the left edge of the header — but on a
-    // narrower desktop window the fixed-width menu can then run past the
-    // right edge. Since the menu is absolutely positioned relative to the
-    // (narrow) trigger, "right: 0" isn't a fix here — that's still relative
-    // to the trigger, so it just overflows left instead. Clamp with an
-    // actual pixel offset against the viewport instead.
-    menu.style.left = "0px";
     menu.classList.add("open");
     trigger.classList.add("open");
-    const margin = 16;
-    const rect = menu.getBoundingClientRect();
-    let shift = 0;
-    if (rect.right > window.innerWidth - margin) shift = (window.innerWidth - margin) - rect.right;
-    if (rect.left + shift < margin) shift = margin - rect.left;
-    if (shift) menu.style.left = shift + "px";
   }
   function close() {
     menu.classList.remove("open");
