@@ -314,6 +314,47 @@ window.bizomGetSurveys = async function () {
   return data;
 };
 
+// Live-editable guide content — admins tweak a paragraph/heading/cell/caption
+// directly on the page, everyone else sees the saved version on their next
+// load. Every editable element gets a data-edit-id at build time; these
+// functions just read/write {editId: html} rows keyed by that id, scoped to
+// one guide. Anyone signed in can read (so the override actually shows for
+// customers/mobisy too); only admins can write.
+window.bizomGetGuideContentEdits = async function (guideId) {
+  const client = await getSupabaseClient();
+  const { data, error } = await client.from("guide_content_edits").select("edit_id, content_html").eq("guide_id", guideId);
+  if (error) throw new Error(error.message);
+  return data;
+};
+
+window.bizomSaveGuideContentEdits = async function (guideId, edits) {
+  try {
+    const client = await getSupabaseClient();
+    const { data: sessionData } = await client.auth.getSession();
+    const userId = sessionData && sessionData.session ? sessionData.session.user.id : null;
+    const rows = edits.map(function (e) {
+      return { guide_id: guideId, edit_id: e.editId, content_html: e.html, updated_by: userId, updated_at: new Date().toISOString() };
+    });
+    const { error } = await client.from("guide_content_edits").upsert(rows, { onConflict: "guide_id,edit_id" });
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: e.message };
+  }
+};
+
+// Reverts one edited block back to the guide's original (baked-in) text.
+window.bizomResetGuideContentEdit = async function (guideId, editId) {
+  try {
+    const client = await getSupabaseClient();
+    const { error } = await client.from("guide_content_edits").delete().eq("guide_id", guideId).eq("edit_id", editId);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: e.message };
+  }
+};
+
 async function callManageUsers(action, payload) {
   const client = await getSupabaseClient();
   const { data: sessionData } = await client.auth.getSession();

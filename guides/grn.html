@@ -78,53 +78,53 @@
 
       <article class="guide-content">
 
-        <p>GRN sits at the receiving end of the DMS stock-transfer flow, stock leaves a warehouse, and isn't credited to the distributor's inventory until it's reviewed and approved on arrival.</p>
+        <p data-edit-id="e1">GRN sits at the receiving end of the DMS stock-transfer flow, stock leaves a warehouse, and isn't credited to the distributor's inventory until it's reviewed and approved on arrival.</p>
         <figure class="shot">
           <img src="../assets/img/screenshots/g2-image1.png" alt="GRN flow diagram in the DMS" loading="lazy" />
-          <figcaption>GRN, DMS flow</figcaption>
+          <figcaption data-edit-id="e2">GRN, DMS flow</figcaption>
         </figure>
 
-        <h2 id="key-concepts">Key concepts</h2>
+        <h2 data-edit-id="e3" id="key-concepts">Key concepts</h2>
         <div class="data-table-wrap">
           <table class="data-table">
-            <thead><tr><th>Term</th><th>What it means</th></tr></thead>
+            <thead><tr><th data-edit-id="e4">Term</th><th data-edit-id="e5">What it means</th></tr></thead>
             <tbody>
-              <tr><td><strong>Transfer History</strong></td><td>List of all stock transfers sent to a distributor</td></tr>
-              <tr><td><strong>GRN Pending</strong></td><td>Transfer received but not yet acknowledged</td></tr>
-              <tr><td><strong>GRN Approved</strong></td><td>Stock confirmed received; inventory updated</td></tr>
-              <tr><td><strong>Discarded Units</strong></td><td>Units damaged or rejected during receipt</td></tr>
+              <tr><td data-edit-id="e6"><strong>Transfer History</strong></td><td data-edit-id="e7">List of all stock transfers sent to a distributor</td></tr>
+              <tr><td data-edit-id="e8"><strong>GRN Pending</strong></td><td data-edit-id="e9">Transfer received but not yet acknowledged</td></tr>
+              <tr><td data-edit-id="e10"><strong>GRN Approved</strong></td><td data-edit-id="e11">Stock confirmed received; inventory updated</td></tr>
+              <tr><td data-edit-id="e12"><strong>Discarded Units</strong></td><td data-edit-id="e13">Units damaged or rejected during receipt</td></tr>
             </tbody>
           </table>
         </div>
 
-        <h2 id="grn-approval">GRN approval, step by step</h2>
+        <h2 data-edit-id="e14" id="grn-approval">GRN approval, step by step</h2>
         <ol class="step-list">
-          <li><h4>Go to Transfer History</h4><p>Filter by warehouse, date range and GRN status (Pending), <code>/inventories/transferhistory</code>.</p></li>
-          <li><h4>Review SKU quantities</h4><p>Check each pending transfer's quantities against what physically arrived.</p></li>
-          <li><h4>Discard units if needed</h4><p>Optionally discard damaged or short units with a reason: Discard, Damaged, No Required as Damaged, or Cancel Invoice. Add a comment if useful.</p></li>
-          <li><h4>Submit approval</h4><p>Stock is credited to the distributor's inventory.</p></li>
+          <li><h4 data-edit-id="e15">Go to Transfer History</h4><p data-edit-id="e16">Filter by warehouse, date range and GRN status (Pending), <code>/inventories/transferhistory</code>.</p></li>
+          <li><h4 data-edit-id="e17">Review SKU quantities</h4><p data-edit-id="e18">Check each pending transfer's quantities against what physically arrived.</p></li>
+          <li><h4 data-edit-id="e19">Discard units if needed</h4><p data-edit-id="e20">Optionally discard damaged or short units with a reason: Discard, Damaged, No Required as Damaged, or Cancel Invoice. Add a comment if useful.</p></li>
+          <li><h4 data-edit-id="e21">Submit approval</h4><p data-edit-id="e22">Stock is credited to the distributor's inventory.</p></li>
         </ol>
 
         <div class="callout callout-warn">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 9v4M12 17h.01M10.3 3.9 2.7 18a2 2 0 0 0 1.7 3h15.2a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>
-          <p><strong>Note</strong>If discarded units have an approval flow configured, the GRN enters a pending-approval state and must be reviewed by an approver before stock updates.</p>
+          <p data-edit-id="e23"><strong>Note</strong>If discarded units have an approval flow configured, the GRN enters a pending-approval state and must be reviewed by an approver before stock updates.</p>
         </div>
 
-        <h2 id="status-indicators">Portal status indicators</h2>
+        <h2 data-edit-id="e24" id="status-indicators">Portal status indicators</h2>
         <div class="data-table-wrap">
           <table class="data-table">
-            <thead><tr><th>Indicator</th><th>Meaning</th></tr></thead>
+            <thead><tr><th data-edit-id="e25">Indicator</th><th data-edit-id="e26">Meaning</th></tr></thead>
             <tbody>
-              <tr><td>🟡 Yellow</td><td>Pending GRN, less than 10 days old</td></tr>
-              <tr><td>🔴 Red</td><td>Pending GRN, more than 10 days old (overdue)</td></tr>
-              <tr><td>🟠 Amber tick</td><td>Approved, with discarded units</td></tr>
-              <tr><td>🟢 Green tick</td><td>Approved, no discards</td></tr>
+              <tr><td data-edit-id="e27">🟡 Yellow</td><td data-edit-id="e28">Pending GRN, less than 10 days old</td></tr>
+              <tr><td data-edit-id="e29">🔴 Red</td><td data-edit-id="e30">Pending GRN, more than 10 days old (overdue)</td></tr>
+              <tr><td data-edit-id="e31">🟠 Amber tick</td><td data-edit-id="e32">Approved, with discarded units</td></tr>
+              <tr><td data-edit-id="e33">🟢 Green tick</td><td data-edit-id="e34">Approved, no discards</td></tr>
             </tbody>
           </table>
         </div>
 
         <div class="helpful-box">
-          <p>Was this guide helpful?</p>
+          <p data-edit-id="e35">Was this guide helpful?</p>
           <div class="helpful-actions">
             <button aria-label="Yes, helpful"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M7 10v11M2 12v7a2 2 0 0 0 2 2h11.5a2 2 0 0 0 2-1.6l1.4-7A2 2 0 0 0 17 10H13V5a2 2 0 0 0-4 0v1.5L7 10Z"/></svg></button>
             <button aria-label="No, not helpful"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M17 14V3M22 12V5a2 2 0 0 0-2-2H8.5a2 2 0 0 0-2 1.6l-1.4 7A2 2 0 0 0 7 14h4v5a2 2 0 0 0 4 0v-1.5l4-3.5Z"/></svg></button>

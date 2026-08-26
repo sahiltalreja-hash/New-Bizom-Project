@@ -11,7 +11,7 @@
 // timestamp, commit hash, whatever). Powers the "new version available"
 // banner in initVersionCheck() below: open tabs poll for this string and
 // prompt a refresh the moment it changes on the server.
-const BIZOM_BUILD_ID = "2026-08-26.5";
+const BIZOM_BUILD_ID = "2026-08-26.6";
 
 const CATEGORY_ORDER = [
   "Outlets & Geography",
@@ -910,10 +910,109 @@ function initHashScrollFix() {
   setTimeout(finish, 1500);
 }
 
+// ---------------- Live-editable guide content ----------------
+// Every editable block (paragraph, heading, table cell, caption, plain list
+// item) inside .guide-content has a data-edit-id baked in at build time.
+// Admins get a toggle that makes those specific elements directly editable;
+// saving writes each changed block to Supabase keyed by guide id + edit id.
+// Every visitor's page load checks for saved overrides and swaps them in —
+// same live-sync pattern as site_settings, no redeploy needed. Deliberately
+// has no persistent global state (snapshots live in a closure per call) so
+// this is safe to call once per guide id on the standalone build too, where
+// every guide's .guide-content coexists in the same DOM at once.
+async function applyGuideContentEdits() {
+  const guideId = currentGuideId();
+  if (!guideId) return;
+  // On the regular site there's exactly one .guide-content on the page. On
+  // the standalone build every guide's .guide-content coexists in the same
+  // DOM at once (just hidden), so a bare querySelector would always grab
+  // whichever guide happens to be first — scope to the current guide's own
+  // [data-page] wrapper there, matching the SPA router's own guide id.
+  const scoped = document.querySelector('[data-page="' + guideId + '"] .guide-content');
+  const article = scoped || document.querySelector(".guide-content");
+  if (!article || !window.bizomGetGuideContentEdits) return;
+
+  try {
+    const edits = await window.bizomGetGuideContentEdits(guideId);
+    edits.forEach(e => {
+      const el = article.querySelector('[data-edit-id="' + e.edit_id + '"]');
+      if (el) el.innerHTML = e.content_html;
+    });
+  } catch (err) {
+    // best-effort — page just shows the guide's baked-in default text
+  }
+
+  if (window.bizomIsAdmin && window.bizomIsAdmin()) initGuideEditModeToggle(guideId, article);
+}
+
+function initGuideEditModeToggle(guideId, article) {
+  // Scoped to this specific article (not a single global id) — the
+  // standalone build keeps every guide's .guide-content in the DOM at once,
+  // so a fixed id would only ever let the first guide get a toggle bar.
+  if (article.previousElementSibling && article.previousElementSibling.classList.contains("edit-mode-bar")) return;
+
+  const bar = document.createElement("div");
+  bar.className = "edit-mode-bar";
+  article.parentNode.insertBefore(bar, article);
+
+  function showToggleButton() {
+    bar.innerHTML = '<button type="button" class="btn btn-ghost btn-sm">✏️ Edit this page</button>';
+    bar.querySelector("button").addEventListener("click", enterEditMode);
+  }
+
+  function enterEditMode() {
+    article.classList.add("editing");
+    const snapshot = {};
+    article.querySelectorAll("[data-edit-id]").forEach(el => {
+      snapshot[el.getAttribute("data-edit-id")] = el.innerHTML;
+      el.setAttribute("contenteditable", "true");
+    });
+
+    bar.innerHTML =
+      '<span class="edit-mode-hint">Editing — click any text to change it.</span>' +
+      '<button type="button" class="btn btn-primary btn-sm" data-action="save">Save changes</button>' +
+      '<button type="button" class="btn btn-ghost btn-sm" data-action="cancel">Cancel</button>';
+    bar.querySelector('[data-action="save"]').addEventListener("click", () => saveChanges(snapshot));
+    bar.querySelector('[data-action="cancel"]').addEventListener("click", () => exitEditMode(snapshot, true));
+  }
+
+  async function saveChanges(snapshot) {
+    const saveBtn = bar.querySelector('[data-action="save"]');
+    saveBtn.disabled = true;
+    saveBtn.textContent = "Saving…";
+    const changed = [];
+    article.querySelectorAll("[data-edit-id]").forEach(el => {
+      const id = el.getAttribute("data-edit-id");
+      if (el.innerHTML !== snapshot[id]) changed.push({ editId: id, html: el.innerHTML });
+    });
+    if (!changed.length) { exitEditMode(snapshot, false); return; }
+    const result = await window.bizomSaveGuideContentEdits(guideId, changed);
+    if (result.ok) {
+      exitEditMode(snapshot, false);
+    } else {
+      alert(result.error);
+      saveBtn.disabled = false;
+      saveBtn.textContent = "Save changes";
+    }
+  }
+
+  function exitEditMode(snapshot, revert) {
+    article.classList.remove("editing");
+    article.querySelectorAll("[data-edit-id]").forEach(el => {
+      el.removeAttribute("contenteditable");
+      if (revert) el.innerHTML = snapshot[el.getAttribute("data-edit-id")];
+    });
+    showToggleButton();
+  }
+
+  showToggleButton();
+}
+
 // Runs on every page (including the standalone build) regardless of the
 // SPA router — a separate DOMContentLoaded listener, so it doesn't touch
 // the bootstrap block above that build-with-auth.js pattern-matches on.
 document.addEventListener("DOMContentLoaded", function () {
   initVersionCheck();
   initHashScrollFix();
+  if (isGuidePage()) applyGuideContentEdits();
 });

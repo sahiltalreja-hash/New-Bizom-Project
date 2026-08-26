@@ -78,35 +78,35 @@
 
       <article class="guide-content">
 
-        <h2 id="what-are-workflows">What are Master User Workflows?</h2>
-        <p>Think of them as master switches at the platform level. Each workflow corresponds to a feature, Attendance, Sale, Order, Claims, and more. If a workflow is turned off, that feature is unavailable to the user entirely, regardless of their role.</p>
+        <h2 data-edit-id="e1" id="what-are-workflows">What are Master User Workflows?</h2>
+        <p data-edit-id="e2">Think of them as master switches at the platform level. Each workflow corresponds to a feature, Attendance, Sale, Order, Claims, and more. If a workflow is turned off, that feature is unavailable to the user entirely, regardless of their role.</p>
 
-        <h3>Common workflows</h3>
+        <h3 data-edit-id="e3">Common workflows</h3>
         <div class="data-table-wrap">
           <table class="data-table">
-            <thead><tr><th>Workflow</th><th>Controls</th></tr></thead>
+            <thead><tr><th data-edit-id="e4">Workflow</th><th data-edit-id="e5">Controls</th></tr></thead>
             <tbody>
-              <tr><td><code>attendance</code></td><td>Attendance marking on the app</td></tr>
-              <tr><td><code>attendanceimage</code></td><td>Photo capture during attendance</td></tr>
-              <tr><td><code>sale</code></td><td>Secondary sales transactions</td></tr>
-              <tr><td><code>order</code></td><td>Order placement by field users</td></tr>
-              <tr><td><code>claims</code></td><td>Expense / travel claims</td></tr>
-              <tr><td><code>beatplanning</code></td><td>PJP / tour program planning</td></tr>
-              <tr><td><code>lms</code></td><td>Lead Management System</td></tr>
-              <tr><td><code>tasks</code></td><td>Task module for field users</td></tr>
+              <tr><td data-edit-id="e6"><code>attendance</code></td><td data-edit-id="e7">Attendance marking on the app</td></tr>
+              <tr><td data-edit-id="e8"><code>attendanceimage</code></td><td data-edit-id="e9">Photo capture during attendance</td></tr>
+              <tr><td data-edit-id="e10"><code>sale</code></td><td data-edit-id="e11">Secondary sales transactions</td></tr>
+              <tr><td data-edit-id="e12"><code>order</code></td><td data-edit-id="e13">Order placement by field users</td></tr>
+              <tr><td data-edit-id="e14"><code>claims</code></td><td data-edit-id="e15">Expense / travel claims</td></tr>
+              <tr><td data-edit-id="e16"><code>beatplanning</code></td><td data-edit-id="e17">PJP / tour program planning</td></tr>
+              <tr><td data-edit-id="e18"><code>lms</code></td><td data-edit-id="e19">Lead Management System</td></tr>
+              <tr><td data-edit-id="e20"><code>tasks</code></td><td data-edit-id="e21">Task module for field users</td></tr>
             </tbody>
           </table>
         </div>
         <figure class="shot">
           <img src="../assets/img/screenshots/g3-image4.png" alt="List of Master User Workflows" loading="lazy" />
-          <figcaption>Master User Workflows, platform-level toggles</figcaption>
+          <figcaption data-edit-id="e22">Master User Workflows, platform-level toggles</figcaption>
         </figure>
 
-        <h2 id="update-web">Updating via the user edit page</h2>
-        <p>The simplest way to switch a workflow on or off for one user is directly from their user record, open the user, find the Workflows section, and toggle the feature you need.</p>
+        <h2 data-edit-id="e23" id="update-web">Updating via the user edit page</h2>
+        <p data-edit-id="e24">The simplest way to switch a workflow on or off for one user is directly from their user record, open the user, find the Workflows section, and toggle the feature you need.</p>
 
-        <h2 id="mdm-workflows">Updating via MDM</h2>
-        <p>Changing workflows for many users at once? Use the Upload/Update User Workflow MDM.</p>
+        <h2 data-edit-id="e25" id="mdm-workflows">Updating via MDM</h2>
+        <p data-edit-id="e26">Changing workflows for many users at once? Use the Upload/Update User Workflow MDM.</p>
 
         <div class="download-grid">
           <a class="download-card" href="../assets/downloads/user-workflow-mdm-template.xls" download>
@@ -117,24 +117,24 @@
         </div>
 
         <ol class="step-list">
-          <li><h4>Download the template</h4></li>
-          <li><h4>Enter the User ID</h4><p>One row per user you're updating.</p></li>
-          <li><h4>Enter <code>1</code> in the workflow column</h4><p>Against whichever workflow (e.g. <code>attendance</code>, <code>claims</code>) you want to switch on for that user.</p>
+          <li><h4 data-edit-id="e27">Download the template</h4></li>
+          <li><h4 data-edit-id="e28">Enter the User ID</h4><p data-edit-id="e29">One row per user you're updating.</p></li>
+          <li><h4 data-edit-id="e30">Enter <code>1</code> in the workflow column</h4><p data-edit-id="e31">Against whichever workflow (e.g. <code>attendance</code>, <code>claims</code>) you want to switch on for that user.</p>
             <figure class="shot">
               <img src="../assets/img/screenshots/g3-image5.png" alt="Filled user workflow MDM template" loading="lazy" />
-              <figcaption>User ID + workflow column set to 1</figcaption>
+              <figcaption data-edit-id="e32">User ID + workflow column set to 1</figcaption>
             </figure>
           </li>
-          <li><h4>Upload via <code>/mdms</code></h4></li>
+          <li><h4 data-edit-id="e33">Upload via <code>/mdms</code></h4></li>
         </ol>
 
         <div class="callout callout-tip">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 18h6M10 22h4M12 2a6 6 0 0 0-4 10.5c.7.6 1 1.3 1 2.5h6c0-1.2.3-1.9 1-2.5A6 6 0 0 0 12 2Z"/></svg>
-          <p><strong>Tip</strong>If a feature you've configured (a form, a scheme, a target) isn't showing up on the app for a user, check the relevant workflow here first, it's a common root cause.</p>
+          <p data-edit-id="e34"><strong>Tip</strong>If a feature you've configured (a form, a scheme, a target) isn't showing up on the app for a user, check the relevant workflow here first, it's a common root cause.</p>
         </div>
 
         <div class="helpful-box">
-          <p>Was this guide helpful?</p>
+          <p data-edit-id="e35">Was this guide helpful?</p>
           <div class="helpful-actions">
             <button aria-label="Yes, helpful"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M7 10v11M2 12v7a2 2 0 0 0 2 2h11.5a2 2 0 0 0 2-1.6l1.4-7A2 2 0 0 0 17 10H13V5a2 2 0 0 0-4 0v1.5L7 10Z"/></svg></button>
             <button aria-label="No, not helpful"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M17 14V3M22 12V5a2 2 0 0 0-2-2H8.5a2 2 0 0 0-2 1.6l-1.4 7A2 2 0 0 0 7 14h4v5a2 2 0 0 0 4 0v-1.5l4-3.5Z"/></svg></button>

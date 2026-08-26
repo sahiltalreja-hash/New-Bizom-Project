@@ -78,75 +78,75 @@
 
       <article class="guide-content">
 
-        <h2 id="new-target">Setting a new target</h2>
-        <p>Follow these steps to view and set a target for a user from the portal.</p>
+        <h2 data-edit-id="e1" id="new-target">Setting a new target</h2>
+        <p data-edit-id="e2">Follow these steps to view and set a target for a user from the portal.</p>
         <ol class="step-list">
-          <li><h4>Open the user's page</h4><p>Go to <code>http://&lt;DomainName&gt;.bizom.in/users/view/user_id</code>, for example, <code>http://stagingtraining.bizom.in/users/view/17</code>.</p></li>
-          <li><h4>Click "New Target"</h4>
+          <li><h4 data-edit-id="e3">Open the user's page</h4><p data-edit-id="e4">Go to <code>http://&lt;DomainName&gt;.bizom.in/users/view/user_id</code>, for example, <code>http://stagingtraining.bizom.in/users/view/17</code>.</p></li>
+          <li><h4 data-edit-id="e5">Click "New Target"</h4>
             <figure class="shot">
               <img src="../assets/img/screenshots/g3-image6.png" alt="Setting a new target for a user" loading="lazy" />
-              <figcaption>New Target on the user's page</figcaption>
+              <figcaption data-edit-id="e6">New Target on the user's page</figcaption>
             </figure>
           </li>
-          <li><h4>Enter the SKU to set the target for</h4></li>
-          <li><h4>Review existing targets</h4><p>Click <strong>Manage Targets</strong>, then <strong>View</strong>, to see every target already uploaded for this user.</p>
+          <li><h4 data-edit-id="e7">Enter the SKU to set the target for</h4></li>
+          <li><h4 data-edit-id="e8">Review existing targets</h4><p data-edit-id="e9">Click <strong>Manage Targets</strong>, then <strong>View</strong>, to see every target already uploaded for this user.</p>
             <figure class="shot">
               <img src="../assets/img/screenshots/g3-image7.png" alt="Viewing targets set for a user" loading="lazy" />
-              <figcaption>Manage Targets → View</figcaption>
+              <figcaption data-edit-id="e10">Manage Targets → View</figcaption>
             </figure>
           </li>
-          <li><h4>Click a target to see its full details</h4><p>Opens Id, User, Start/End date, Amount, TLSD, Total Calls, LPSC, Drop Size, % Productivity and New Call for that specific target.</p>
+          <li><h4 data-edit-id="e11">Click a target to see its full details</h4><p data-edit-id="e12">Opens Id, User, Start/End date, Amount, TLSD, Total Calls, LPSC, Drop Size, % Productivity and New Call for that specific target.</p>
             <figure class="shot">
               <img src="../assets/img/screenshots/target-view-detail.png" alt="Target detail popup with Id, User, dates, Amount and productivity metrics" loading="lazy" />
-              <figcaption>Target detail view</figcaption>
+              <figcaption data-edit-id="e13">Target detail view</figcaption>
             </figure>
           </li>
         </ol>
 
-        <h2 id="target-achievement">Target Achievement</h2>
-        <p>Once orders are placed and fulfilled, targets are considered achieved. Achievement against a target can be reviewed per user, for any date range.</p>
+        <h2 data-edit-id="e14" id="target-achievement">Target Achievement</h2>
+        <p data-edit-id="e15">Once orders are placed and fulfilled, targets are considered achieved. Achievement against a target can be reviewed per user, for any date range.</p>
         <ol class="step-list">
-          <li><h4>Open the user's page</h4><p>Same URL as above: <code>http://&lt;DomainName&gt;.bizom.in/users/view/UserId</code>.</p></li>
-          <li><h4>Select a date range</h4></li>
-          <li><h4>Click Update</h4><p>The user's achievement for that date range is displayed.</p>
+          <li><h4 data-edit-id="e16">Open the user's page</h4><p data-edit-id="e17">Same URL as above: <code>http://&lt;DomainName&gt;.bizom.in/users/view/UserId</code>.</p></li>
+          <li><h4 data-edit-id="e18">Select a date range</h4></li>
+          <li><h4 data-edit-id="e19">Click Update</h4><p data-edit-id="e20">The user's achievement for that date range is displayed.</p>
             <figure class="shot">
               <img src="../assets/img/screenshots/g3-image8.png" alt="Target Achievement view for a user" loading="lazy" />
-              <figcaption>Target Achievement</figcaption>
+              <figcaption data-edit-id="e21">Target Achievement</figcaption>
             </figure>
           </li>
         </ol>
 
-        <h2 id="mdm-targets">Bulk upload via MDM</h2>
-        <p>Setting targets for many users and SKUs at once? Use the User Targets MDM.</p>
+        <h2 data-edit-id="e22" id="mdm-targets">Bulk upload via MDM</h2>
+        <p data-edit-id="e23">Setting targets for many users and SKUs at once? Use the User Targets MDM.</p>
 
         <details class="field-ref">
           <summary>Key fields for the User Targets MDM</summary>
           <div class="field-ref-body">
             <div class="data-table-wrap">
               <table class="data-table">
-                <thead><tr><th>Field</th><th>Notes</th></tr></thead>
+                <thead><tr><th data-edit-id="e24">Field</th><th data-edit-id="e25">Notes</th></tr></thead>
                 <tbody>
-                  <tr><td><code>user_id</code></td><td>Mandatory. Must exist and be active in the system.</td></tr>
-                  <tr><td><code>skunit_id</code></td><td>Mandatory. The SKU the target applies to, must exist and be active.</td></tr>
-                  <tr><td><code>quantity</code></td><td>Target quantity, in cases. Mandatory when <code>skunit_id</code> is set.</td></tr>
-                  <tr><td><code>startdate</code> / <code>enddate</code></td><td>Both mandatory, in YYYY-MM-DD format. The start date can't fall after the end date, and the two can't overlap with an existing target for the same user and SKU.</td></tr>
-                  <tr><td><code>is_active</code></td><td>Boolean. New inactive-target entries aren't allowed.</td></tr>
-                  <tr><td><code>dropsize</code>, <code>totalcalls</code>, <code>percentproductivecall</code></td><td>Optional productivity metrics tied to the target period.</td></tr>
-                  <tr><td><code>uniqueskuperaccounts</code>, <code>uniqueoutlettarget</code></td><td>Optional reach-based target metrics.</td></tr>
+                  <tr><td data-edit-id="e26"><code>user_id</code></td><td data-edit-id="e27">Mandatory. Must exist and be active in the system.</td></tr>
+                  <tr><td data-edit-id="e28"><code>skunit_id</code></td><td data-edit-id="e29">Mandatory. The SKU the target applies to, must exist and be active.</td></tr>
+                  <tr><td data-edit-id="e30"><code>quantity</code></td><td data-edit-id="e31">Target quantity, in cases. Mandatory when <code>skunit_id</code> is set.</td></tr>
+                  <tr><td data-edit-id="e32"><code>startdate</code> / <code>enddate</code></td><td data-edit-id="e33">Both mandatory, in YYYY-MM-DD format. The start date can't fall after the end date, and the two can't overlap with an existing target for the same user and SKU.</td></tr>
+                  <tr><td data-edit-id="e34"><code>is_active</code></td><td data-edit-id="e35">Boolean. New inactive-target entries aren't allowed.</td></tr>
+                  <tr><td data-edit-id="e36"><code>dropsize</code>, <code>totalcalls</code>, <code>percentproductivecall</code></td><td data-edit-id="e37">Optional productivity metrics tied to the target period.</td></tr>
+                  <tr><td data-edit-id="e38"><code>uniqueskuperaccounts</code>, <code>uniqueoutlettarget</code></td><td data-edit-id="e39">Optional reach-based target metrics.</td></tr>
                 </tbody>
               </table>
             </div>
-            <p style="margin-top:14px;"><strong>Not supported:</strong> amount-based targets, <code>amount</code> is accepted in the sheet but there's no functional support for it yet.</p>
+            <p data-edit-id="e40" style="margin-top:14px;"><strong>Not supported:</strong> amount-based targets, <code>amount</code> is accepted in the sheet but there's no functional support for it yet.</p>
           </div>
         </details>
 
         <div class="callout callout-warn">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 9v4M12 17h.01M10.3 3.9 2.7 18a2 2 0 0 0 1.7 3h15.2a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>
-          <p><strong>Common validation errors</strong>Overlapping date ranges for the same user + SKU, an inactive SKU or user, and a quantity entered without a matching <code>skunit_id</code> are the most frequent upload failures, the row-level error will name the exact user/SKU/date conflict.</p>
+          <p data-edit-id="e41"><strong>Common validation errors</strong>Overlapping date ranges for the same user + SKU, an inactive SKU or user, and a quantity entered without a matching <code>skunit_id</code> are the most frequent upload failures, the row-level error will name the exact user/SKU/date conflict.</p>
         </div>
 
         <div class="helpful-box">
-          <p>Was this guide helpful?</p>
+          <p data-edit-id="e42">Was this guide helpful?</p>
           <div class="helpful-actions">
             <button aria-label="Yes, helpful"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M7 10v11M2 12v7a2 2 0 0 0 2 2h11.5a2 2 0 0 0 2-1.6l1.4-7A2 2 0 0 0 17 10H13V5a2 2 0 0 0-4 0v1.5L7 10Z"/></svg></button>
             <button aria-label="No, not helpful"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M17 14V3M22 12V5a2 2 0 0 0-2-2H8.5a2 2 0 0 0-2 1.6l-1.4 7A2 2 0 0 0 7 14h4v5a2 2 0 0 0 4 0v-1.5l4-3.5Z"/></svg></button>

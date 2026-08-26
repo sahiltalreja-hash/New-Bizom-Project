@@ -769,6 +769,13 @@ table.data-table code { background: var(--surface-alt); padding: 2px 6px; border
 .helpful-feedback-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 10px; }
 .helpful-feedback-sent { margin: 0; font-size: 13.5px; font-weight: 600; color: var(--indigo); }
 
+/* Admin: live-editable guide content */
+.edit-mode-bar { display: flex; align-items: center; gap: 12px; margin: 0 0 20px; flex-wrap: wrap; }
+.edit-mode-bar .edit-mode-hint { font-size: 13px; font-weight: 600; color: var(--indigo); }
+.guide-content.editing [data-edit-id] { outline: 1px dashed rgba(62, 13, 234, 0.4); outline-offset: 3px; border-radius: 4px; cursor: text; transition: background 0.15s; }
+.guide-content.editing [data-edit-id]:hover { background: rgba(62, 13, 234, 0.05); }
+.guide-content.editing [data-edit-id]:focus { outline: 2px solid var(--indigo); background: rgba(62, 13, 234, 0.07); }
+
 /* Lightbox */
 .lightbox { position: fixed; inset: 0; background: rgba(16, 5, 35, 0.88); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 40px; backdrop-filter: blur(4px); }
 .lightbox.open { display: flex; }
