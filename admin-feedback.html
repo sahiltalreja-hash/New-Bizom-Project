@@ -48,6 +48,7 @@
           <button type="button" data-filter="yes">Used it</button>
           <button type="button" data-filter="no">Hasn't yet</button>
         </div>
+        <button id="survey-download-btn" class="btn btn-ghost">Download</button>
         <button id="survey-refresh-btn" class="btn btn-ghost">Refresh</button>
       </div>
     </div>
@@ -145,6 +146,27 @@
     }
   }
 
+  function downloadSurveyCsv() {
+    const rows = surveyFilter === "all" ? surveyData : surveyData.filter(function (s) { return (s.used_guide ? "yes" : "no") === surveyFilter; });
+    const csvRows = [["User", "Customer", "Used Guide", "Guide", "Feedback", "Date"]].concat(rows.map(function (s) {
+      const who = s.profiles ? s.profiles.username : "";
+      const customer = s.profiles && s.profiles.customer_name ? s.profiles.customer_name : "";
+      return [who, customer, s.used_guide ? "Yes" : "No", s.guide_title || "", s.feedback || "", formatTs(s.created_at)];
+    }));
+    const csv = csvRows.map(function (r) {
+      return r.map(function (v) { return '"' + String(v).replace(/"/g, '""') + '"'; }).join(",");
+    }).join("\n");
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "feedback-from-people.csv";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
+
   document.getElementById("survey-filter").addEventListener("click", function (e) {
     const btn = e.target.closest("button[data-filter]");
     if (!btn) return;
@@ -152,6 +174,7 @@
     document.querySelectorAll("#survey-filter button").forEach(function (b) { b.classList.toggle("active", b === btn); });
     renderList();
   });
+  document.getElementById("survey-download-btn").addEventListener("click", downloadSurveyCsv);
   document.getElementById("survey-refresh-btn").addEventListener("click", loadSurveys);
 
   loadSurveys();
