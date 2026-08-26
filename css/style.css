@@ -147,8 +147,11 @@ code {
 .nav-trigger.open svg { transform: rotate(180deg); }
 
 .mega-menu {
-  position: absolute; top: calc(100% + 14px); left: 50%; transform: translateX(-50%);
-  width: 720px; max-width: 90vw; background: #fff; border-radius: var(--radius-lg); border: 1px solid var(--border);
+  /* Left-aligned to the trigger, not centered — "Guides" sits near the left
+     edge of the header, so centering a 720px-wide menu on it pushed half of
+     it off-screen to the left and clipped the first column. */
+  position: absolute; top: calc(100% + 14px); left: 0;
+  width: 720px; max-width: min(90vw, calc(100vw - 32px)); background: #fff; border-radius: var(--radius-lg); border: 1px solid var(--border);
   box-shadow: var(--shadow-lg); padding: 26px; display: none; grid-template-columns: repeat(3, 1fr); gap: 22px 28px;
   z-index: 600;
 }
