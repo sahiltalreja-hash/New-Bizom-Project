@@ -4,7 +4,7 @@
 <script src="../js/auth-guard.js"></script>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>User Targets — Bizom Help Center</title>
+<title>User Targets · Bizom Help Center</title>
 <meta name="description" content="How to set, view and track sales targets for users in Bizom, via the web and via MDM." />
 <link rel="icon" href="../assets/img/logo/bizom-logo.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -58,7 +58,7 @@
       <div class="guide-header">
         <span class="module-tag accent-violet" style="display:inline-block;">FIELD FORCE</span>
         <h1>User Targets</h1>
-        <p class="lead">Targets can be set for users over a given period to improve sales performance — for example, sell 1,000 cases across outlets this month to hit a bonus.</p>
+        <p class="lead">Targets can be set for users over a given period to improve sales performance, for example, sell 1,000 cases across outlets this month to hit a bonus.</p>
       </div>
 
       <div class="guide-meta-row">
@@ -81,7 +81,7 @@
         <h2 id="new-target">Setting a new target</h2>
         <p>Follow these steps to view and set a target for a user from the portal.</p>
         <ol class="step-list">
-          <li><h4>Open the user's page</h4><p>Go to <code>http://&lt;DomainName&gt;.bizom.in/users/view/user_id</code> — for example, <code>http://stagingtraining.bizom.in/users/view/17</code>.</p></li>
+          <li><h4>Open the user's page</h4><p>Go to <code>http://&lt;DomainName&gt;.bizom.in/users/view/user_id</code>, for example, <code>http://stagingtraining.bizom.in/users/view/17</code>.</p></li>
           <li><h4>Click "New Target"</h4>
             <figure class="shot">
               <img src="../assets/img/screenshots/g3-image6.png" alt="Setting a new target for a user" loading="lazy" />
@@ -127,7 +127,7 @@
                 <thead><tr><th>Field</th><th>Notes</th></tr></thead>
                 <tbody>
                   <tr><td><code>user_id</code></td><td>Mandatory. Must exist and be active in the system.</td></tr>
-                  <tr><td><code>skunit_id</code></td><td>Mandatory. The SKU the target applies to — must exist and be active.</td></tr>
+                  <tr><td><code>skunit_id</code></td><td>Mandatory. The SKU the target applies to, must exist and be active.</td></tr>
                   <tr><td><code>quantity</code></td><td>Target quantity, in cases. Mandatory when <code>skunit_id</code> is set.</td></tr>
                   <tr><td><code>startdate</code> / <code>enddate</code></td><td>Both mandatory, in YYYY-MM-DD format. The start date can't fall after the end date, and the two can't overlap with an existing target for the same user and SKU.</td></tr>
                   <tr><td><code>is_active</code></td><td>Boolean. New inactive-target entries aren't allowed.</td></tr>
@@ -136,13 +136,13 @@
                 </tbody>
               </table>
             </div>
-            <p style="margin-top:14px;"><strong>Not supported:</strong> amount-based targets — <code>amount</code> is accepted in the sheet but there's no functional support for it yet.</p>
+            <p style="margin-top:14px;"><strong>Not supported:</strong> amount-based targets, <code>amount</code> is accepted in the sheet but there's no functional support for it yet.</p>
           </div>
         </details>
 
         <div class="callout callout-warn">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 9v4M12 17h.01M10.3 3.9 2.7 18a2 2 0 0 0 1.7 3h15.2a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>
-          <p><strong>Common validation errors</strong>Overlapping date ranges for the same user + SKU, an inactive SKU or user, and a quantity entered without a matching <code>skunit_id</code> are the most frequent upload failures — the row-level error will name the exact user/SKU/date conflict.</p>
+          <p><strong>Common validation errors</strong>Overlapping date ranges for the same user + SKU, an inactive SKU or user, and a quantity entered without a matching <code>skunit_id</code> are the most frequent upload failures, the row-level error will name the exact user/SKU/date conflict.</p>
         </div>
 
         <div class="helpful-box">
@@ -158,7 +158,7 @@
       <div id="related-guides"></div>
 
       <div class="guide-footer-nav">
-        <a href="pjp.html"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></span><span><span class="label">Previous</span>PJP — Journey Planning</span></a>
+        <a href="pjp.html"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></span><span><span class="label">Previous</span>PJP, Journey Planning</span></a>
         <a href="generic-forms.html" class="to-next"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span><span><span class="label">Next Guide</span>Generic Forms</span></a>
       </div>
 
@@ -170,7 +170,7 @@
   <div class="container">
     <div class="footer-bottom">
       <span>© 2026 Bizom · Mobisy Technologies. All rights reserved.</span>
-      <span>Internal help center — for Bizom client teams</span>
+      <span>Internal help center, for Bizom client teams</span>
     </div>
   </div>
 </footer>

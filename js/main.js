@@ -11,7 +11,7 @@
 // timestamp, commit hash, whatever). Powers the "new version available"
 // banner in initVersionCheck() below: open tabs poll for this string and
 // prompt a refresh the moment it changes on the server.
-const BIZOM_BUILD_ID = "2026-08-26.4";
+const BIZOM_BUILD_ID = "2026-08-26.5";
 
 const CATEGORY_ORDER = [
   "Outlets & Geography",

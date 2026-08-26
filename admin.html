@@ -4,7 +4,7 @@
 <script src="js/auth-guard.js"></script>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Admin · User Management — Bizom Help Center</title>
+<title>Admin · User Management · Bizom Help Center</title>
 <meta name="robots" content="noindex, nofollow" />
 <link rel="icon" href="assets/img/logo/bizom-logo.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -42,7 +42,7 @@
 
   <div class="callout callout-tip">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 6 9 17l-5-5"/></svg>
-    <p><strong>Live now</strong>Users, roles and site settings here are stored in Supabase — changes take effect immediately for everyone, on any device. No publish step.</p>
+    <p><strong>Live now</strong>Users, roles and site settings here are stored in Supabase, changes take effect immediately for everyone, on any device. No publish step.</p>
   </div>
 
   <section class="admin-section">
@@ -95,7 +95,7 @@
 
   <section class="admin-section">
     <h2>Bulk import via Excel</h2>
-    <p class="section-desc">Columns: <strong>Name</strong>, <strong>Password</strong>, <strong>Email</strong>, <strong>Customer</strong>, <strong>Role</strong> (1 = Admin, 2 = Mobisy, 3 = Customer — the words work too). One row per person.</p>
+    <p class="section-desc">Columns: <strong>Name</strong>, <strong>Password</strong>, <strong>Email</strong>, <strong>Customer</strong>, <strong>Role</strong> (1 = Admin, 2 = Mobisy, 3 = Customer; the words work too). One row per person.</p>
     <a class="download-card" href="assets/downloads/user-bulk-import-template.xlsx" download style="margin-bottom:18px;">
       <span class="dl-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 21h16"/></svg></span>
       <span class="dl-info"><strong>Bulk User Import Template</strong><span>.XLSX · Ready to fill and upload</span></span>
@@ -110,7 +110,7 @@
 
   <section class="admin-section">
     <h2>Site settings</h2>
-    <p class="section-desc">Who can see the Case Studies page — changes apply instantly.</p>
+    <p class="section-desc">Who can see the Case Studies page, changes apply instantly.</p>
     <div class="segmented" id="case-studies-visibility-toggle">
       <button type="button" data-value="hidden">Hidden</button>
       <button type="button" data-value="admin">Admin only</button>
@@ -121,7 +121,7 @@
 
     <div style="height:24px;"></div>
 
-    <p class="section-desc">Guides visibility — hides every guide for Admins, Mobisy and Customers alike, no exceptions. Use this while a big content update is in progress.</p>
+    <p class="section-desc">Guides visibility, hides every guide for Admins, Mobisy and Customers alike, no exceptions. Use this while a big content update is in progress.</p>
     <div class="segmented" id="guides-visibility-toggle">
       <button type="button" data-value="visible">Visible</button>
       <button type="button" data-value="hidden">Hidden</button>
@@ -132,7 +132,7 @@
 
   <section class="admin-section">
     <h2>Guide visibility</h2>
-    <p class="section-desc">Turn individual guides on or off — hidden ones disappear from the nav, homepage and search for everyone, and the page itself redirects home. Changes apply instantly.</p>
+    <p class="section-desc">Turn individual guides on or off, hidden ones disappear from the nav, homepage and search for everyone, and the page itself redirects home. Changes apply instantly.</p>
     <div id="guide-toggle-list"></div>
   </section>
 
@@ -178,7 +178,7 @@
   <div class="container">
     <div class="footer-bottom">
       <span>© 2026 Bizom · Mobisy Technologies. All rights reserved.</span>
-      <span>Internal help center — for Bizom client teams</span>
+      <span>Internal help center, for Bizom client teams</span>
     </div>
   </div>
 </footer>
@@ -249,7 +249,7 @@
 
     tbody.querySelectorAll(".remove-user-btn:not(:disabled)").forEach(function (btn) {
       btn.addEventListener("click", async function () {
-        if (!confirm('Remove "' + btn.dataset.username + '"? This deletes their login — it can\'t be undone.')) return;
+        if (!confirm('Remove "' + btn.dataset.username + '"? This deletes their login, it can\'t be undone.')) return;
         btn.disabled = true;
         const result = await window.bizomRemoveUser(btn.dataset.username);
         if (result.ok) { renderUsers(); renderStats(); }
@@ -294,7 +294,7 @@
 
   // ---------------- Site settings toggle ----------------
   const VISIBILITY_DESCRIPTIONS = {
-    hidden: "Nobody sees the Case Studies link — not even admins. It stays reachable at case-studies.html for admins only, but doesn't show in the nav.",
+    hidden: "Nobody sees the Case Studies link, not even admins. It stays reachable at case-studies.html for admins only, but doesn't show in the nav.",
     admin: "Only admins see the Case Studies link and page. This is the current default.",
     public: "Everyone signed in sees the Case Studies link and page.",
   };
@@ -310,7 +310,7 @@
 
   const GUIDES_VISIBILITY_DESCRIPTIONS = {
     visible: "Guides work normally for everyone.",
-    hidden: "Every guide is hidden — for Admins, Mobisy and Customers alike. The Guides link disappears from the nav and direct links redirect home.",
+    hidden: "Every guide is hidden, for Admins, Mobisy and Customers alike. The Guides link disappears from the nav and direct links redirect home.",
   };
 
   function renderGuidesVisibilityToggle() {
@@ -592,7 +592,7 @@
       // without this, the setting saves correctly but the nav looks stuck
       // until you leave and come back to this page.
       if (window.renderMainNav) window.renderMainNav();
-      showMsg(msgEl, "Applied — live for everyone now.", false);
+      showMsg(msgEl, "Applied, live for everyone now.", false);
     } catch (err) {
       showMsg(msgEl, err.message, true);
     }
@@ -606,7 +606,7 @@
       await window.bizomSetSettings({ guidesHidden: btn.dataset.value === "hidden" });
       renderGuidesVisibilityToggle();
       if (window.renderMainNav) window.renderMainNav();
-      showMsg(msgEl, "Applied — live for everyone now.", false);
+      showMsg(msgEl, "Applied, live for everyone now.", false);
     } catch (err) {
       showMsg(msgEl, err.message, true);
     }
