@@ -11,7 +11,7 @@
 // timestamp, commit hash, whatever). Powers the "new version available"
 // banner in initVersionCheck() below: open tabs poll for this string and
 // prompt a refresh the moment it changes on the server.
-const BIZOM_BUILD_ID = "2026-08-26.6";
+const BIZOM_BUILD_ID = "2026-08-26.7";
 
 const CATEGORY_ORDER = [
   "Outlets & Geography",
@@ -37,7 +37,7 @@ const GUIDES = [
   { id: "user-workflows", title: "User Workflows", url: "guides/user-workflows.html", category: "Product & Master Data", desc: "Platform-level feature toggles per user." },
 
   { id: "attendance", title: "Attendance & Shift Timing", url: "guides/attendance.html", category: "Sales & Field Force", desc: "Configure login/logout windows." },
-  { id: "pjp", title: "PJP — Journey Planning", url: "guides/pjp.html", category: "Sales & Field Force", desc: "Pre-defined outlet visit schedules." },
+  { id: "pjp", title: "PJP (Permanent Journey Planning)", url: "guides/pjp.html", category: "Sales & Field Force", desc: "Pre-defined outlet visit schedules." },
   { id: "user-targets", title: "User Targets", url: "guides/user-targets.html", category: "Sales & Field Force", desc: "Set and track sales targets per user." },
   { id: "generic-forms", title: "Generic Forms", url: "guides/generic-forms.html", category: "Sales & Field Force", desc: "Custom data-capture forms." },
   { id: "activity-forms", title: "Activity Forms", url: "guides/activity-forms.html", category: "Sales & Field Force", desc: "Capture activities during outlet visits." },
@@ -102,8 +102,8 @@ const SEARCH_INDEX_EXTRA = [
   { title: "SKU Upload & Update", section: "Update SKU pricing", url: "guides/sku-management.html#sku-pricing", tags: "mrp landing price focus sku pricing", snippet: "MRP, Landing Price, Min LP, Max LP and the Focus SKU flag are managed separately from the core SKU record, per warehouse." },
   { title: "Outlet Categories", section: "Bulk upload via MDM", url: "guides/outlet-categories.html#mdm-outlet-categories", tags: "mdm bulk outlet category upload", snippet: "Adding several outlet categories at once? Use the MDM upload instead of the web form." },
   { title: "User Creation & Update", section: "Bulk upload via MDM", url: "guides/user-management.html#mdm-users", tags: "mdm bulk user upload", snippet: "Onboarding a whole team at once? Use the Users MDM to create many users in one upload." },
-  { title: "PJP — Journey Planning", section: "Bulk upload via MDM", url: "guides/pjp.html#mdm-pjp", tags: "mdm bulk pjp upload journey plan", snippet: "Setting up PJPs for a whole team? Use the PJP MDM instead of creating them one at a time." },
-  { title: "PJP — Journey Planning", section: "Create a PJP", url: "guides/pjp.html#create-pjp", tags: "create pjp journey plan schedule beat day", snippet: "Assign beats to specific days of the week or month to build a salesman's journey plan." },
+  { title: "PJP (Permanent Journey Planning)", section: "Bulk upload via MDM", url: "guides/pjp.html#mdm-pjp", tags: "mdm bulk pjp upload journey plan", snippet: "Setting up PJPs for a whole team? Use the PJP MDM instead of creating them one at a time." },
+  { title: "PJP (Permanent Journey Planning)", section: "Create a PJP", url: "guides/pjp.html#create-pjp", tags: "create pjp journey plan schedule beat day", snippet: "Assign beats to specific days of the week or month to build a salesman's journey plan." },
   { title: "Generic Forms", section: "Create a generic form", url: "guides/generic-forms.html#create-generic-form", tags: "create generic form field survey audit", snippet: "A Generic Form captures any type of field data during an outlet visit or a standalone activity — surveys, feedback, audits." },
   { title: "Activity Forms", section: "Create an activity form", url: "guides/activity-forms.html#create-activity-form", tags: "create activity form execution point call", snippet: "An Activity Form is a structured form used to capture specific activities during an outlet visit." },
   { title: "Activity Forms", section: "Activity vs Generic form", url: "guides/activity-forms.html#comparison", tags: "activity form generic form compare difference", snippet: "Activity Forms are tied to an outlet visit and can be made mandatory; Generic Forms are standalone and not enforced." },
@@ -926,9 +926,13 @@ async function applyGuideContentEdits() {
   // On the regular site there's exactly one .guide-content on the page. On
   // the standalone build every guide's .guide-content coexists in the same
   // DOM at once (just hidden), so a bare querySelector would always grab
-  // whichever guide happens to be first — scope to the current guide's own
-  // [data-page] wrapper there, matching the SPA router's own guide id.
-  const scoped = document.querySelector('[data-page="' + guideId + '"] .guide-content');
+  // whichever guide happens to be first. Scope to the guide's own .spa-page
+  // wrapper specifically (not a bare [data-page] selector): the SPA router
+  // also stamps data-page on <body> for the active page, and body is an
+  // ancestor of every .guide-content, so a bare attribute selector matched
+  // via body regardless of guideId and always resolved to the first guide
+  // in the document instead of the one actually being viewed.
+  const scoped = document.querySelector('.spa-page[data-page="' + guideId + '"] .guide-content');
   const article = scoped || document.querySelector(".guide-content");
   if (!article || !window.bizomGetGuideContentEdits) return;
 
