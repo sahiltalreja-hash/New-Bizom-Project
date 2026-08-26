@@ -11,7 +11,7 @@
 // timestamp, commit hash, whatever). Powers the "new version available"
 // banner in initVersionCheck() below: open tabs poll for this string and
 // prompt a refresh the moment it changes on the server.
-const BIZOM_BUILD_ID = "2026-08-26.1";
+const BIZOM_BUILD_ID = "2026-08-26.2";
 
 const CATEGORY_ORDER = [
   "Outlets & Geography",
@@ -776,7 +776,7 @@ function initBackToTop() {
   const btn = document.createElement("button");
   btn.className = "back-to-top";
   btn.setAttribute("aria-label", "Back to top");
-  btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>';
+  btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>';
   document.body.appendChild(btn);
   window.addEventListener("scroll", () => btn.classList.toggle("show", window.scrollY > 500));
   btn.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));

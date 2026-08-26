@@ -827,8 +827,8 @@ table.data-table code { background: var(--surface-alt); padding: 2px 6px; border
 
 /* Back to top */
 .back-to-top {
-  position: fixed; bottom: 28px; right: 28px; width: 46px; height: 46px; border-radius: 50%;
-  background: var(--navy); color: #fff; display: flex; align-items: center; justify-content: center;
+  position: fixed; bottom: 24px; right: 24px; width: 36px; height: 36px; border-radius: 50%;
+  background: var(--gradient-brand); color: #fff; display: flex; align-items: center; justify-content: center;
   box-shadow: var(--shadow-lg); opacity: 0; pointer-events: none; transition: all 0.3s var(--ease); z-index: 400;
 }
 .back-to-top.show { opacity: 1; pointer-events: auto; }
