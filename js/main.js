@@ -11,7 +11,7 @@
 // timestamp, commit hash, whatever). Powers the "new version available"
 // banner in initVersionCheck() below: open tabs poll for this string and
 // prompt a refresh the moment it changes on the server.
-const BIZOM_BUILD_ID = "2026-08-26.7";
+const BIZOM_BUILD_ID = "2026-08-26.8";
 
 const CATEGORY_ORDER = [
   "Outlets & Geography",
@@ -132,6 +132,7 @@ document.addEventListener("DOMContentLoaded", () => {
   renderSidebar();
   renderRelatedGuides();
   renderDirectory();
+  renderHomeStats();
   initGuidesDropdown();
   initSidebarCategories();
   initNavToggle();
@@ -183,6 +184,11 @@ function visibleGuides() {
   if (!settings || settings.guidesHidden) return [];
   if (!settings.hiddenGuideIds.length) return GUIDES;
   return GUIDES.filter(g => settings.hiddenGuideIds.indexOf(g.id) === -1);
+}
+
+function renderHomeStats() {
+  const stat = document.getElementById("guides-live-stat");
+  if (stat) stat.textContent = String(visibleGuides().length);
 }
 
 function renderMainNav() {
