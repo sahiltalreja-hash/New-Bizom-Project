@@ -407,8 +407,15 @@
   }
 
   function bucketUsage(events, profiles) {
-    const now = Date.now();
-    const DAY = 24 * 60 * 60 * 1000;
+    // Calendar boundaries in the viewer's own local time, not rolling windows —
+    // "Today" means since local midnight today, not "in the last 24 hours"
+    // (which mislabels yesterday-evening activity as today for anyone checking
+    // this in the morning).
+    const nowDate = new Date();
+    const startOfToday = new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate()).getTime();
+    const daysSinceMonday = (nowDate.getDay() + 6) % 7;
+    const startOfWeek = new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate() - daysSinceMonday).getTime();
+    const startOfMonth = new Date(nowDate.getFullYear(), nowDate.getMonth(), 1).getTime();
     const byUser = {};
     events.forEach(function (ev) {
       const uid = ev.user_id;
@@ -436,9 +443,9 @@
     const neverOpened = profiles.filter(function (p) { return activeIds.indexOf(p.id) === -1; });
 
     return {
-      today: since(now - DAY),
-      week: since(now - 7 * DAY),
-      month: since(now - 30 * DAY),
+      today: since(startOfToday),
+      week: since(startOfWeek),
+      month: since(startOfMonth),
       byOpens: byOpens,
       neverOpened: neverOpened,
     };
