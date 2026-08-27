@@ -11,7 +11,7 @@
 // timestamp, commit hash, whatever). Powers the "new version available"
 // banner in initVersionCheck() below: open tabs poll for this string and
 // prompt a refresh the moment it changes on the server.
-const BIZOM_BUILD_ID = "2026-08-26.8";
+const BIZOM_BUILD_ID = "2026-08-27.1";
 
 const CATEGORY_ORDER = [
   "Outlets & Geography",
@@ -384,6 +384,9 @@ const CATEGORY_ACCENTS = {
 function renderDirectory() {
   const guides = visibleGuides();
   const visibleIds = guides.map(g => g.id);
+
+  const countEl = document.getElementById("guide-directory-count");
+  if (countEl) countEl.textContent = String(guides.length);
 
   // "Start Here" cards link to six specific guides by id — hide each one
   // individually rather than the whole section, so it still works fine when
