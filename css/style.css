@@ -219,7 +219,7 @@ code {
 }
 .hero::before {
   content: ""; position: absolute; inset: 0;
-  background-image: url('../assets/img/hero/hero-wave.png');
+  background-image: url('../assets/img/hero/hero-wave.webp');
   background-size: cover; background-position: center;
   opacity: 0.55;
 }
