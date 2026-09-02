@@ -11,7 +11,7 @@
 // timestamp, commit hash, whatever). Powers the "new version available"
 // banner in initVersionCheck() below: open tabs poll for this string and
 // prompt a refresh the moment it changes on the server.
-const BIZOM_BUILD_ID = "2026-08-27.1";
+const BIZOM_BUILD_ID = "2026-09-01.1";
 
 const CATEGORY_ORDER = [
   "Outlets & Geography",
@@ -89,7 +89,7 @@ const SEARCH_INDEX_EXTRA = [
   { title: "Area Creation & Assigning", section: "Area MDM templates", url: "guides/area-creation.html#mdm-area", tags: "mdm bulk area beat mapping transfer", snippet: "Four MDM templates cover everything related to area management — Areas, Area Update, Beat Area Mapping and Transfer Areas." },
   { title: "Beat Creation & Assigning", section: "Beat MDM templates", url: "guides/beat-creation.html#mdm-beat", tags: "mdm bulk beat area mapping", snippet: "Two MDM templates cover beat management: Beats, and Beat Area Mapping." },
   { title: "Beat Creation & Assigning", section: "Assigning beats to users", url: "guides/beat-creation.html#assign-beats", tags: "assign beat user pjp outlet mapping", snippet: "Creating a beat is only half the job — it needs outlets mapped to it, and a salesperson assigned to cover it." },
-  { title: "Schemes", section: "Quantity based schemes", url: "guides/schemes.html#quantity-schemes", tags: "quantity scheme free sku cash discount", snippet: "Quantity based schemes trigger a benefit once a certain number of units is purchased — Free SKU, Free Cash and Discount (%) schemes." },
+  { title: "Schemes", section: "Quantity based schemes", url: "guides/schemes.html#quantity-schemes", tags: "quantity scheme free sku cash discount qps", snippet: "Quantity based schemes trigger a benefit once a certain number of units is purchased — Free SKU, Free Cash and Discount (%) schemes." },
   { title: "Schemes", section: "Value based schemes", url: "guides/schemes.html#value-schemes", tags: "value scheme amount purchase free sku", snippet: "Value based schemes work the same way as quantity based schemes, except eligibility is based on order value." },
   { title: "Schemes", section: "Multi / slab schemes", url: "guides/schemes.html#multi-schemes", tags: "multi scheme slab benefit", snippet: "Multi schemes let you configure several purchase slabs with different benefits under one scheme." },
   { title: "Schemes", section: "Assigning schemes", url: "guides/schemes.html#assign-schemes", tags: "assign scheme warehouse distributor outlet zone", snippet: "A scheme isn't visible to anyone until you assign it to a warehouse, distributor or outlet." },
