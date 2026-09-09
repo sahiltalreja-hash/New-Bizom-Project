@@ -221,6 +221,38 @@
               <figcaption data-edit-id="e64">Confirmation summary before finalising</figcaption>
             </figure>
           </li>
+          <li><h4 data-edit-id="e105">Or, bulk-audit many SKUs and warehouses at once via MDM</h4><p data-edit-id="e106">Instead of the web form above, go to <code>/mdms</code> and search "Inventory audit mdm".</p>
+            <details class="field-ref">
+              <summary>Key fields for the Inventory Audit MDM</summary>
+              <div class="field-ref-body">
+                <div class="data-table-wrap">
+                  <table class="data-table">
+                    <thead><tr><th data-edit-id="e107">Field</th><th data-edit-id="e108">Notes</th></tr></thead>
+                    <tbody>
+                      <tr><td data-edit-id="e109"><code>warehouse_id</code></td><td data-edit-id="e110">Mandatory. The warehouse this audit line applies to. <code>warehouse_erpid</code> works as an alternative, if your warehouses are matched by ERP ID instead.</td></tr>
+                      <tr><td data-edit-id="e111"><code>skunit_id</code></td><td data-edit-id="e112">Mandatory. The SKU being audited.</td></tr>
+                      <tr><td data-edit-id="e113"><code>stock(in cases)</code> / <code>stock(in pieces)</code></td><td data-edit-id="e114">The new closing stock for that SKU at that warehouse. <code>stock(in pieces)</code> is mandatory. Same as picking Saleable on the web form.</td></tr>
+                      <tr><td data-edit-id="e115"><code>nonsaleableinventory(cases)</code> / <code>nonsaleableinventory(units)</code></td><td data-edit-id="e116">Same idea, but sets the NonSaleable stock bucket instead, same as switching to NonSaleable on the web form.</td></tr>
+                      <tr><td data-edit-id="e117"><code>batch_id</code> / <code>batch_name</code></td><td data-edit-id="e118">Optional. Target a specific batch, when the SKU is tracked by batch.</td></tr>
+                      <tr><td data-edit-id="e119"><code>reason_id</code></td><td data-edit-id="e120">The audit reason's id from Reasons (<code>/reasons/add</code>, category "inventory_audit"), the same reason you'd otherwise pick on the web form.</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+                <p data-edit-id="e121" style="margin-top:14px;">The template also has <code>nonsaleableinventory</code>, <code>deliverychallan_in_inventory</code>, <code>deliverychallan_out_inventory</code> and <code>available_transit_inventory</code> columns for more advanced reconciliation, leave them blank unless your team already relies on them.</p>
+              </div>
+            </details>
+            <div class="download-grid">
+              <a class="download-card" href="../assets/downloads/inventory-audit-mdm-template.xls" download>
+                <span class="dl-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 21h16"/></svg></span>
+                <span class="dl-info"><strong>Inventory Audit MDM Template</strong><span>.XLS · Ready to fill and upload</span></span>
+                <span class="dl-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M7 17 17 7M7 7h10v10"/></svg></span>
+              </a>
+            </div>
+            <div class="callout callout-warn" style="margin-top:14px;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 9v4M12 17h.01M10.3 3.9 2.7 18a2 2 0 0 0 1.7 3h15.2a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>
+              <p data-edit-id="e122"><strong>This overwrites the closing stock, it doesn't add to it.</strong> If a SKU currently shows 20 cases and you upload the MDM with 15, its stock becomes 15, not 35. Double-check every row's quantity reflects the actual physical count before uploading.</p>
+            </div>
+          </li>
         </ol>
 
         <h2 data-edit-id="e65" id="add-inventory">4. Adding inventory</h2>
